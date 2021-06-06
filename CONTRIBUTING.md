@@ -14,12 +14,11 @@ If you are interested in working on something, those tasks generally
 fall into two categories.
 
 If the task you want to work on is a large task or a new task,
-that is a task not recorded and prioritized in our [Issues List](/issues.md),
 please [create an issue](https://github.com/jackdewinter/pymarkdown/issues),
 explain the change you want to make, and include why you believe that change
 is needed or is important.
 
 If you are not sure of what task you want to do and you just want to help,
-take a look at our [Issues List](/issues.md) and see if anything grabs your
-attention.  If not, contact us and we can have a conversation about how you
-can best contribute.
+take a look at our [issue list](https://github.com/jackdewinter/pymarkdown/issues)
+and see if anything grabs your attention.  If not, contact us and we can have a
+conversation about how you can best contribute.

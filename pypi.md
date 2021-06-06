@@ -15,12 +15,15 @@ The `application_properties` library has the following advnatages:
   - The package was created with the intention of being as easy to use as possbile.
   - To that extent, there are 4 basic usage examples and over 10 advanced usage examples.
 - Complex When Required
-  - xxx
+  - The default is simplicity, but the package can step up when required to do so.
+  - Any actions outside of the simple scenario of getting an optional string value should
+    be relatively easy to request of the package API.
 - Hierarchically Aware
-  - By default, uses the `.` in the key names to define levels of hierarchy, which can then
-    be used to find only properties that exist under a given key.
-  - If desired, the `ApplicationPropertiesFacade` object can restrict access to only those
-    properties that exist under a given hierarchy.
+  - By default, uses the `.` character in the property names to define levels of hierarchy.
+  - Hierarchy levels can be used to find only those properties that exist under a
+    given hierarchy.
+  - If desired, the `ApplicationPropertiesFacade` object can be used to restrict access
+    to only those properties that exist under a given hierarchy.
 - Command Line Aware
   - The `set_manual_property` function allows for one or more individual properties to be
     supplied by the command line.

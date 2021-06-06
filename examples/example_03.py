@@ -12,4 +12,4 @@ properties = ApplicationProperties()
 ApplicationPropertiesJsonLoader.load_and_set(
     properties, os.path.join(os.path.dirname(__file__), "example_data.json")
 )
-print(properties.get_string_property("my_other_property", default="2"))
+print(properties.get_string_property("my_other_property", default="default value"))

@@ -50,7 +50,7 @@ PACKAGE_NAME = "application_properties"
 SEMANTIC_VERSION = get_semantic_version()
 MINIMUM_PYTHON_VERSION = "3.8.0"
 
-ONE_LINE_DESCRIPTION = "A prop."
+ONE_LINE_DESCRIPTION = "A simple, easy to use, unified manner of accessing program properties."
 LONG_DESCRIPTION = load_readme_file()
 LONG_DESCRIPTION_CONTENT_TYPE = "text/markdown"
 
@@ -88,9 +88,5 @@ setup(
     classifiers=PROJECT_CLASSIFIERS,
     packages=PACKAGE_MODULES,
     data_files=[
-        (
-            "Lib/site-packages/pymarkdown/resources",
-            ["pymarkdown/resources/entities.json"],
-        )
     ],
 )
