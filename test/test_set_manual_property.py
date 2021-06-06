@@ -1,7 +1,7 @@
 """
 Tests for the set_manual_property related functions of the ApplicationProperties class
 """
-from application_properties.application_properties import ApplicationProperties
+from application_properties import ApplicationProperties
 
 
 def test_properties_set_manual_property_with_non_string():

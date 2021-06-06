@@ -2,7 +2,6 @@
 Module that provides for an encapsulation of properties for an application.
 """
 import copy
-import json
 import logging
 
 LOGGER = logging.getLogger(__name__)
@@ -11,12 +10,6 @@ LOGGER = logging.getLogger(__name__)
 class ApplicationProperties:
     """
     Class that provides for an encapsulation of properties for an application.
-
-    Eventually want to add:
-    - set from command line
-    - exposure to command line: i.e. list all properties, values, etc.
-    - transformers, both per call and registered, to change from one value to another
-      - i.e. what if a property is given on the command line as a string, but an integer is required?
     """
 
     __separator = "."
@@ -325,6 +318,17 @@ class ApplicationProperties:
 
     # pylint: enable=too-many-arguments
 
+    def property_names_under(self, key_name):
+        """
+        List of each of the properties in the map under the specified key.
+        """
+        ApplicationProperties.verify_full_key_form(key_name)
+        return [
+            next_key_name
+            for next_key_name in self.__flat_property_map
+            if next_key_name.startswith(key_name)
+        ]
+
     def __scan_map(self, config_map, current_prefix):
         for next_key in config_map:
             if not isinstance(next_key, str):
@@ -347,156 +351,3 @@ class ApplicationProperties:
                 LOGGER.debug(
                     "Adding configuration '%s' : {%s}", new_key, str(next_value)
                 )
-
-
-class ApplicationPropertiesFacade:
-    """
-    Class to provide for a facade in front of an ApplicationProperties instance that
-    only exposes part of the properties tree.
-    """
-
-    def __init__(self, base_properties, property_prefix):
-        """
-        Initializes an new instance of the ApplicationPropertiesFacade class.
-        """
-        if not isinstance(base_properties, ApplicationProperties):
-            raise ValueError(
-                "The base_properties of the facade must be an ApplicationProperties instance."
-            )
-        self.__base_properties = base_properties
-
-        if not isinstance(property_prefix, str):
-            raise ValueError("The property_prefix argument must be a string.")
-        if not property_prefix.endswith(base_properties.separator):
-            raise ValueError(
-                f"The property_prefix argument must end with the separator character '{base_properties.separator}'."
-            )
-        self.__property_prefix = property_prefix
-
-    # pylint: disable=too-many-arguments
-    def get_property(
-        self,
-        property_name,
-        property_type,
-        default_value=None,
-        valid_value_fn=None,
-        is_required=False,
-        strict_mode=False,
-    ):
-        """
-        Get an property of a generic type from the configuration.
-        """
-
-        return self.__base_properties.get_property(
-            f"{self.__property_prefix}{property_name}",
-            property_type,
-            default_value=default_value,
-            valid_value_fn=valid_value_fn,
-            is_required=is_required,
-            strict_mode=strict_mode,
-        )
-
-    # pylint: enable=too-many-arguments
-
-    def get_boolean_property(
-        self, property_name, default_value=None, is_required=False
-    ):
-        """
-        Get a boolean property from the configuration.
-        """
-        return self.__base_properties.get_boolean_property(
-            f"{self.__property_prefix}{property_name}",
-            default_value=default_value,
-            is_required=is_required,
-        )
-
-    # pylint: disable=too-many-arguments
-    def get_integer_property(
-        self,
-        property_name,
-        default_value=None,
-        valid_value_fn=None,
-        is_required=False,
-        strict_mode=None,
-    ):
-        """
-        Get an integer property from the configuration.
-        """
-        return self.__base_properties.get_integer_property(
-            f"{self.__property_prefix}{property_name}",
-            default_value=default_value,
-            valid_value_fn=valid_value_fn,
-            is_required=is_required,
-            strict_mode=strict_mode,
-        )
-
-    # pylint: enable=too-many-arguments
-
-    # pylint: disable=too-many-arguments
-    def get_string_property(
-        self,
-        property_name,
-        default_value=None,
-        valid_value_fn=None,
-        is_required=False,
-        strict_mode=None,
-    ):
-        """
-        Get a string property from the configuration.
-        """
-        return self.__base_properties.get_string_property(
-            f"{self.__property_prefix}{property_name}",
-            default_value=default_value,
-            valid_value_fn=valid_value_fn,
-            is_required=is_required,
-            strict_mode=strict_mode,
-        )
-
-    # pylint: enable=too-many-arguments
-
-    @property
-    def property_names(self):
-        """
-        List of each of the properties in the map.
-        """
-        facade_property_names = []
-        for next_property_name in self.__base_properties.property_names:
-            if next_property_name.startswith(self.__property_prefix):
-                facade_property_names.append(
-                    next_property_name[len(self.__property_prefix) :]
-                )
-        return facade_property_names
-
-
-# pylint: disable=too-few-public-methods
-class ApplicationPropertiesJsonLoader:
-    """
-    Class to provide for a manner to load an ApplicationProperties object from a JSON file.
-    """
-
-    @staticmethod
-    def load_and_set(properties_object, configuration_file, handle_error_fn):
-        """
-        Load the specified file and set it into the given properties object.
-        """
-
-        configuration_map = None
-        try:
-            with open(configuration_file) as infile:
-                configuration_map = json.load(infile)
-        except json.decoder.JSONDecodeError as this_exception:
-            formatted_error = f"Specified configuration file '{configuration_file}' is not a valid JSON file ({str(this_exception)})."
-            handle_error_fn(formatted_error, this_exception)
-        except IOError as this_exception:
-            formatted_error = f"Specified configuration file '{configuration_file}' was not loaded ({str(this_exception)})."
-            handle_error_fn(formatted_error, this_exception)
-
-        if configuration_map:
-            try:
-                properties_object.load_from_dict(configuration_map)
-            except ValueError as this_exception:
-                formatted_error = f"Specified configuration file '{configuration_file}' is not valid ({str(this_exception)})."
-                handle_error_fn(formatted_error, this_exception)
-
-
-# pylint: enable=too-few-public-methods

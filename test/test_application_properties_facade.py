@@ -1,10 +1,7 @@
 """
 Tests for the ApplicationPropertiesFacade class
 """
-from application_properties.application_properties import (
-    ApplicationProperties,
-    ApplicationPropertiesFacade,
-)
+from application_properties import ApplicationProperties, ApplicationPropertiesFacade
 
 
 def test_properties_facade_base_not_properties_object():
@@ -197,3 +194,78 @@ def test_properties_facade_get_property_names_with_no_values():
     print(str(type(expected_value)))
     print(str(type(actual_value)))
     assert expected_value == actual_value
+
+
+def test_properties_facade_get_properties_under_at_top_level_partial():
+    """
+    Test calling the `property_names_under` function specifying only part of the top level.
+    """
+
+    # Arrange
+    config_map = {
+        "upper": {
+            "feature": {"enabled": True},
+            "other_feature": {"enabled": False, "other": 1},
+        }
+    }
+    application_properties = ApplicationProperties()
+    application_properties.load_from_dict(config_map)
+    facade = ApplicationPropertiesFacade(application_properties, "upper.")
+
+    # Act
+    found_names = facade.property_names_under("other_feature")
+
+    # Assert
+    assert len(found_names) == len(config_map["upper"]["other_feature"])
+    assert "other_feature.enabled" in found_names
+    assert "other_feature.other" in found_names
+
+
+def test_properties_facade_get_properties_under_at_top_level_none():
+    """
+    Test calling the `property_names_under` function specifying none of the top level.
+    """
+
+    # Arrange
+    config_map = {
+        "upper": {
+            "feature": {"enabled": True},
+            "other_feature": {"enabled": False, "other": 1},
+        }
+    }
+    application_properties = ApplicationProperties()
+    application_properties.load_from_dict(config_map)
+    facade = ApplicationPropertiesFacade(application_properties, "upper.")
+
+    # Act
+    found_names = facade.property_names_under("missing_feature")
+
+    # Assert
+    assert not found_names
+    assert "missing_feature" not in config_map["upper"]
+
+
+def test_properties_facade_get_properties_under_at_sub_level():
+    """
+    Test calling the `property_names_under` function specifying none of the top level.
+    """
+
+    # Arrange
+    config_map = {
+        "upper": {
+            "new_top_level": {
+                "feature": {"enabled": True},
+                "other_feature": {"enabled": False, "other": 1},
+            }
+        }
+    }
+    application_properties = ApplicationProperties()
+    application_properties.load_from_dict(config_map)
+    facade = ApplicationPropertiesFacade(application_properties, "upper.")
+
+    # Act
+    found_names = facade.property_names_under("new_top_level.feature")
+
+    # Assert
+    assert len(found_names) == len(config_map["upper"]["new_top_level"]["feature"])
+    assert "new_top_level.feature.enabled" in found_names

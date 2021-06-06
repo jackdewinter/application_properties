@@ -1,7 +1,7 @@
 """
 Tests for the get_string* functions of the ApplicationProperties class
 """
-from application_properties.application_properties import ApplicationProperties
+from application_properties import ApplicationProperties
 
 
 def test_properties_get_string_with_found_value():

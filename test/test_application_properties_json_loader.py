@@ -1,11 +1,13 @@
 """
 Tests for the ApplicationProperties class
 """
+import io
 import json
 import os
+import sys
 import tempfile
 
-from application_properties.application_properties import (
+from application_properties import (
     ApplicationProperties,
     ApplicationPropertiesJsonLoader,
 )
@@ -154,6 +156,47 @@ def test_json_loader_valid_json_but_invalid_key():
             in handled_error_parameters[0]
         )
         assert isinstance(handled_error_parameters[1], ValueError)
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)
+
+
+def test_json_loader_valid_json_but_invalid_key_xx():
+    """
+    Test to make sure that we can load a valid Json file, but fail when there is an invalid key.
+    """
+
+    # Arrange
+    supplied_configuration = {"plugins": {"md999": {"test.value": 2}}}
+
+    configuration_file = None
+    try:
+        configuration_file = write_temporary_configuration(supplied_configuration)
+        application_properties = ApplicationProperties()
+
+        # Act
+        saved_stdout = sys.stdout
+        saved_stderr = sys.stderr
+        new_stdout = io.StringIO()
+        new_stderr = io.StringIO()
+        try:
+            sys.stdout = new_stdout
+            sys.stderr = new_stderr
+
+            ApplicationPropertiesJsonLoader.load_and_set(
+                application_properties, configuration_file
+            )
+        finally:
+            sys.stdout = saved_stdout
+            sys.stderr = saved_stderr
+
+        # Assert
+        assert new_stdout.getvalue().startswith("Specified configuration file '")
+        assert (
+            "' is not valid (Keys strings cannot contain the separator character '.'.)."
+            in new_stdout.getvalue()
+        )
+        assert not new_stderr.getvalue()
     finally:
         if configuration_file and os.path.exists(configuration_file):
             os.remove(configuration_file)

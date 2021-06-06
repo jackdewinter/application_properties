@@ -1,7 +1,7 @@
 """
 Tests for the ApplicationProperties class
 """
-from application_properties.application_properties import ApplicationProperties
+from application_properties import ApplicationProperties
 
 # pylint: disable=too-many-lines
 
@@ -104,6 +104,72 @@ def test_properties_with_mixed_properties():
     assert "feature.enabled" in found_names
     assert "other_feature.enabled" in found_names
     assert "other_feature.other" in found_names
+
+
+def test_get_properties_under_at_top_level_partial():
+    """
+    Test calling the `property_names_under` function specifying only part of the top level.
+    """
+
+    # Arrange
+    config_map = {
+        "feature": {"enabled": True},
+        "other_feature": {"enabled": False, "other": 1},
+    }
+    application_properties = ApplicationProperties()
+    application_properties.load_from_dict(config_map)
+
+    # Act
+    found_names = application_properties.property_names_under("other_feature")
+
+    # Assert
+    assert len(found_names) == len(config_map["other_feature"])
+    assert "other_feature.enabled" in found_names
+    assert "other_feature.other" in found_names
+
+
+def test_get_properties_under_at_top_level_none():
+    """
+    Test calling the `property_names_under` function specifying none of the top level.
+    """
+
+    # Arrange
+    config_map = {
+        "feature": {"enabled": True},
+        "other_feature": {"enabled": False, "other": 1},
+    }
+    application_properties = ApplicationProperties()
+    application_properties.load_from_dict(config_map)
+
+    # Act
+    found_names = application_properties.property_names_under("missing_feature")
+
+    # Assert
+    assert not found_names
+    assert "missing_feature" not in config_map
+
+
+def test_get_properties_under_at_sub_level():
+    """
+    Test calling the `property_names_under` function specifying none of the top level.
+    """
+
+    # Arrange
+    config_map = {
+        "new_top_level": {
+            "feature": {"enabled": True},
+            "other_feature": {"enabled": False, "other": 1},
+        }
+    }
+    application_properties = ApplicationProperties()
+    application_properties.load_from_dict(config_map)
+
+    # Act
+    found_names = application_properties.property_names_under("new_top_level.feature")
+
+    # Assert
+    assert len(found_names) == len(config_map["new_top_level"]["feature"])
+    assert "new_top_level.feature.enabled" in found_names
 
 
 def test_properties_load_from_non_dictionary():
