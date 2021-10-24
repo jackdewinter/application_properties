@@ -1,0 +1,7 @@
+default_stages: [commit]
+
+repos:
+repo: https://github.com/jackdewinter/pymarkdown
+    rev: main
+    hooks:
+      - id: pymarkdown
