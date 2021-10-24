@@ -61,7 +61,7 @@ This project required Python 3.8 or later to function.
 ## Installation
 
 ```sh
-pip install app_prop
+pip install application_properties
 ```
 
 ## How To Use This Package
