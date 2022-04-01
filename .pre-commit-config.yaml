@@ -1,5 +1,5 @@
 repos:
-  # - repo: https://github.com/jackdewinter/pymarkdown
-  #   rev: main
-  #   hooks:
-  #     - id: pymarkdown
+  - repo: https://github.com/jackdewinter/pymarkdown
+    rev: v0.9.5
+    hooks:
+      - id: pymarkdown
