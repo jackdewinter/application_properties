@@ -1,1 +1,2 @@
 include install-requirements.txt
+include application_properties/py.typed

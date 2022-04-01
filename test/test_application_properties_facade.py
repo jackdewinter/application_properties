@@ -15,7 +15,7 @@ def test_properties_facade_base_not_properties_object():
     raised_exception = None
     try:
         ApplicationPropertiesFacade(1, 1)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -41,7 +41,7 @@ def test_properties_facade_prefix_not_string():
     raised_exception = None
     try:
         ApplicationPropertiesFacade(application_properties, 1)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -66,7 +66,7 @@ def test_properties_facade_prefix_not_terminated_with_separator():
     raised_exception = None
     try:
         ApplicationPropertiesFacade(application_properties, "my")
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -170,8 +170,8 @@ def test_properties_facade_get_property_names_with_one_value():
     actual_value = facade.property_names
 
     # Assert
-    print(str(type(expected_value)))
-    print(str(type(actual_value)))
+    print(type(expected_value))
+    print(type(actual_value))
     assert expected_value == actual_value
 
 
@@ -191,8 +191,8 @@ def test_properties_facade_get_property_names_with_no_values():
     actual_value = facade.property_names
 
     # Assert
-    print(str(type(expected_value)))
-    print(str(type(actual_value)))
+    print(type(expected_value))
+    print(type(actual_value))
     assert expected_value == actual_value
 
 
