@@ -89,7 +89,7 @@ def test_properties_get_boolean_with_a_bad_property_name():
     raised_exception = None
     try:
         application_properties.get_boolean_property(1, 1)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -114,7 +114,7 @@ def test_properties_get_boolean_with_a_bad_default():
     raised_exception = None
     try:
         application_properties.get_boolean_property("property", 1)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 

@@ -127,7 +127,8 @@ def bad_validation_function(property_value):
     """
     Test validation function that always throws an exception.
     """
-    raise Exception("huh? " + str(property_value))
+    # sourcery skip: raise-specific-error
+    raise Exception(f"huh? {str(property_value)}")
 
 
 def test_properties_get_string_with_found_value_validation_raises_error():
@@ -164,7 +165,7 @@ def test_properties_get_string_with_a_bad_property_name():
     raised_exception = None
     try:
         application_properties.get_string_property(1, "3")
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -189,7 +190,7 @@ def test_properties_get_string_with_a_bad_default():
     raised_exception = None
     try:
         application_properties.get_string_property("property", True)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 

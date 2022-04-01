@@ -13,7 +13,7 @@
 ![GitHub Pipenv locked dependency version (branch)](https://img.shields.io/github/pipenv/locked/dependency-version/jackdewinter/application_properties/flake8/master)
 ![GitHub Pipenv locked dependency version (branch)](https://img.shields.io/github/pipenv/locked/dependency-version/jackdewinter/application_properties/pylint/master)
 [![Stars](https://img.shields.io/github/stars/jackdewinter/application_properties.svg)](https://github.com/jackdewinter/application_properties/stargazers)
-[![Downloads](https://img.shields.io/pypi/dm/xxxx.svg)](https://pypistats.org/packages/xxxx)
+[![Downloads](https://img.shields.io/pypi/dm/application_properties.svg)](https://pypistats.org/packages/application_properties)
 
 [![Issues](https://img.shields.io/github/issues/jackdewinter/application_properties.svg)](https://github.com/jackdewinter/application_properties/issues)
 [![License](https://img.shields.io/github/license/jackdewinter/application_properties.svg)](https://github.com/jackdewinter/application_properties/blob/main/LICENSE.txt)
@@ -220,16 +220,16 @@ TBD
 
 ### Advanced Examples
 
-As mentioned before, while the bulk of property accessing and loading operations can be
-accomplished using information from the above basic examples, more advanced
+As mentioned before, while the bulk of property accessing and loading operations
+can be accomplished using information from the above basic examples, more advanced
 examples are available in the
 [Advanced Examples document](https://github.com/jackdewinter/application_properties/blob/main/docs/advanced_examples.md).
 
 ## Finding Issues
 
-If you find any issues, please report them using the standard GitHub issues process. When
-our team looks at your issue and triages it, we will assign it a priority and try our best
-to make that priority transparent within the project's repository.
+If you find any issues, please report them using the standard GitHub issues process.
+When our team looks at your issue and triages it, we will assign it a priority and
+try our best to make that priority transparent within the project's repository.
 
 ## When Did Things Change?
 
@@ -250,13 +250,13 @@ that includes what you want to add, why you want to add it, and why it is import
 Please note that the filing of your issue will usually be the start of a conversation,
 and be ready for more questions.
 
-If you would like to contribute to the project in a more substantial manner, please contact me
-at jack.de.winter at outlook.com.
+If you would like to contribute to the project in a more substantial manner, please
+contact me at jack.de.winter at outlook.com.
 
 ## Instructions For Contributing
 
 Developer notes on various topics are kept in the the
 [Developer Notes document](docs\developer.md).
 
-If you attempting to contribute something to this project, please follow the steps outlined
-in the [CONTRIBUTING.md file](CONTRIBUTING.md).
+If you attempting to contribute something to this project, please follow the steps
+outlined in the [CONTRIBUTING.md file](CONTRIBUTING.md).

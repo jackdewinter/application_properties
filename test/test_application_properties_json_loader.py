@@ -25,8 +25,9 @@ def write_temporary_configuration(supplied_configuration):
                 json.dump(supplied_configuration, outfile)
             return outfile.name
     except IOError as ex:
-        assert False, "Test configuration file was not written (" + str(ex) + ")."
-        return None
+        raise AssertionError(
+            f"Test configuration file was not written ({str(ex)})."
+        ) from ex
 
 
 def test_json_loader_valid_json():

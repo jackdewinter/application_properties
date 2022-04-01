@@ -3,6 +3,7 @@ Module that provides for an encapsulation of properties for an application.
 """
 import copy
 import logging
+from typing import Any, Callable, Dict, List, Optional, cast
 
 LOGGER = logging.getLogger(__name__)
 
@@ -23,48 +24,48 @@ class ApplicationProperties:
     Class to provide for a container of properties that belong to the application.
     """
 
-    def __init__(self, strict_mode=False):
+    def __init__(self, strict_mode: bool = False) -> None:
         """
         Initializes an new instance of the ApplicationProperties class.
         """
-        self.__flat_property_map = {}
-        self.__strict_mode = strict_mode
+        self.__flat_property_map: Dict[str, Any] = {}
+        self.__strict_mode: bool = strict_mode
 
     @property
-    def separator(self):
+    def separator(self) -> str:
         """
         Separator used to split the hierarchy of the property names.
         """
         return self.__separator
 
     @property
-    def number_of_properties(self):
+    def number_of_properties(self) -> int:
         """
         Number of properties that exist in the map.
         """
         return len(self.__flat_property_map)
 
     @property
-    def property_names(self):
+    def property_names(self) -> List[str]:
         """
         List of each of the properties in the map.
         """
-        return self.__flat_property_map.keys()
+        return list(self.__flat_property_map.keys())
 
     @property
-    def strict_mode(self):
+    def strict_mode(self) -> bool:
         """
         Gets whether strict mode is on by default.
         """
         return self.__strict_mode
 
-    def enable_strict_mode(self):
+    def enable_strict_mode(self) -> None:
         """
         Sets struct mode to True to enable it.
         """
         self.__strict_mode = True
 
-    def load_from_dict(self, config_map):
+    def load_from_dict(self, config_map: Dict[Any, Any]) -> None:
         """
         Load the properties from a provided dictionary.
         """
@@ -77,7 +78,7 @@ class ApplicationProperties:
         self.__scan_map(config_map, "")
 
     @staticmethod
-    def verify_full_part_form(property_key):
+    def verify_full_part_form(property_key: str) -> str:
         """
         Given one part of a full key, verify that it is composed properly.
         """
@@ -89,7 +90,8 @@ class ApplicationProperties:
             or ApplicationProperties.__assignment_operator in property_key
         ):
             raise ValueError(
-                f"Each part of the property key must not contain a whitespace character or the '{ApplicationProperties.__separator}' character."
+                "Each part of the property key must not contain a "
+                + f"whitespace character or the '{ApplicationProperties.__separator}' character."
             )
         if not property_key:
             raise ValueError(
@@ -98,7 +100,7 @@ class ApplicationProperties:
         return property_key
 
     @staticmethod
-    def verify_full_key_form(property_key):
+    def verify_full_key_form(property_key: str) -> str:
         """
         Given a full key, verify that it is composed properly.
         """
@@ -115,7 +117,8 @@ class ApplicationProperties:
         doubles_index = property_key.find(doubles)
         if doubles_index != -1:
             raise ValueError(
-                f"Full property key cannot contain multiples of the {ApplicationProperties.__separator} without any text between them."
+                "Full property key cannot contain multiples of "
+                + f"the {ApplicationProperties.__separator} without any text between them."
             )
         split_key = property_key.split(ApplicationProperties.__separator)
         for next_key in split_key:
@@ -123,7 +126,7 @@ class ApplicationProperties:
         return property_key
 
     @staticmethod
-    def verify_manual_property_form(string_to_verify):
+    def verify_manual_property_form(string_to_verify: str) -> str:
         """
         Verify the general form of a manual property string. i.e. key=value
         """
@@ -137,11 +140,11 @@ class ApplicationProperties:
             raise ValueError(
                 "Manual property key and value must be separated by the '=' character."
             )
-        property_key = string_to_verify[0:equals_index]
+        property_key = string_to_verify[:equals_index]
         ApplicationProperties.verify_full_key_form(property_key)
         return string_to_verify
 
-    def set_manual_property(self, combined_string):
+    def set_manual_property(self, combined_string: str) -> None:
         """
         Manually set a property for the object.
         """
@@ -160,8 +163,9 @@ class ApplicationProperties:
 
         ApplicationProperties.verify_manual_property_form(combined_string)
         equals_index = combined_string.find(ApplicationProperties.__assignment_operator)
-        property_key = combined_string[0:equals_index].lower()
+        property_key = combined_string[:equals_index].lower()
         property_value = combined_string[equals_index + 1 :]
+        composed_property_value: Any = property_value
 
         if (
             property_value.startswith(
@@ -170,13 +174,13 @@ class ApplicationProperties:
             and len(property_value) >= 2
         ):
             if property_value[1] == ApplicationProperties.__manual_property_type_string:
-                property_value = property_value[2:]
+                composed_property_value = property_value[2:]
             elif (
                 property_value[1]
                 == ApplicationProperties.__manual_property_type_integer
             ):
                 try:
-                    property_value = int(property_value[2:])
+                    composed_property_value = int(property_value[2:])
                 except ValueError as this_exception:
                     raise ValueError(
                         f"Manual property value '{property_value}' cannot be translated into an integer."
@@ -185,12 +189,14 @@ class ApplicationProperties:
                 property_value[1]
                 == ApplicationProperties.__manual_property_type_boolean
             ):
-                property_value = property_value[2:].lower() == "true"
+                composed_property_value = property_value[2:].lower() == "true"
             else:
-                property_value = property_value[1:]
-        self.__flat_property_map[property_key] = copy.deepcopy(property_value)
+                composed_property_value = property_value[1:]
+        self.__flat_property_map[property_key] = copy.deepcopy(composed_property_value)
         LOGGER.debug(
-            "Adding configuration '%s' : {%s}", property_key, str(property_value)
+            "Adding configuration '%s' : {%s}",
+            property_key,
+            str(composed_property_value),
         )
 
     # pylint: disable=unidiomatic-typecheck
@@ -199,13 +205,13 @@ class ApplicationProperties:
     # pylint: disable=raise-missing-from
     def get_property(
         self,
-        property_name,
-        property_type,
-        default_value=None,
-        valid_value_fn=None,
-        is_required=False,
-        strict_mode=None,
-    ):
+        property_name: str,
+        property_type: type,
+        default_value: Any = None,
+        valid_value_fn: Optional[Callable[[Any], Any]] = None,
+        is_required: bool = False,
+        strict_mode: Optional[Any] = None,
+    ) -> Any:
         """
         Get an property of a generic type from the configuration.
         """
@@ -222,7 +228,8 @@ class ApplicationProperties:
             )
         if default_value is not None and type(default_value) != property_type:
             raise ValueError(
-                f"The default value for property '{property_name}' must either be None or a '{property_type.__name__}' value."
+                f"The default value for property '{property_name}' must "
+                + f"either be None or a '{property_type.__name__}' value."
             )
 
         property_value = default_value
@@ -243,7 +250,7 @@ class ApplicationProperties:
                     if strict_mode:
                         raise ValueError(
                             f"The value for property '{property_name}' is not valid: {str(this_exception)}"
-                        )
+                        ) from this_exception
             if is_eligible:
                 property_value = found_value
         elif is_required:
@@ -258,39 +265,49 @@ class ApplicationProperties:
     # pylint: enable=raise-missing-from
 
     def get_boolean_property(
-        self, property_name, default_value=None, is_required=False, strict_mode=None
-    ):
+        self,
+        property_name: str,
+        default_value: Optional[bool] = None,
+        is_required: bool = False,
+        strict_mode: Optional[bool] = None,
+    ) -> bool:
         """
         Get a boolean property from the configuration.
         """
-        return self.get_property(
-            property_name,
+        return cast(
             bool,
-            default_value=default_value,
-            valid_value_fn=None,
-            is_required=is_required,
-            strict_mode=strict_mode,
+            self.get_property(
+                property_name,
+                bool,
+                default_value=default_value,
+                valid_value_fn=None,
+                is_required=is_required,
+                strict_mode=strict_mode,
+            ),
         )
 
     # pylint: disable=too-many-arguments
     def get_integer_property(
         self,
-        property_name,
-        default_value=None,
-        valid_value_fn=None,
-        is_required=False,
-        strict_mode=None,
-    ):
+        property_name: str,
+        default_value: Optional[int] = None,
+        valid_value_fn: Optional[Callable[[int], Any]] = None,
+        is_required: bool = False,
+        strict_mode: Optional[bool] = None,
+    ) -> int:
         """
         Get an integer property from the configuration.
         """
-        return self.get_property(
-            property_name,
+        return cast(
             int,
-            default_value=default_value,
-            valid_value_fn=valid_value_fn,
-            is_required=is_required,
-            strict_mode=strict_mode,
+            self.get_property(
+                property_name,
+                int,
+                default_value=default_value,
+                valid_value_fn=valid_value_fn,
+                is_required=is_required,
+                strict_mode=strict_mode,
+            ),
         )
 
     # pylint: enable=too-many-arguments
@@ -298,27 +315,30 @@ class ApplicationProperties:
     # pylint: disable=too-many-arguments
     def get_string_property(
         self,
-        property_name,
-        default_value=None,
-        valid_value_fn=None,
-        is_required=False,
-        strict_mode=None,
-    ):
+        property_name: str,
+        default_value: Optional[str] = None,
+        valid_value_fn: Optional[Callable[[str], Any]] = None,
+        is_required: bool = False,
+        strict_mode: Optional[bool] = None,
+    ) -> str:
         """
         Get a string property from the configuration.
         """
-        return self.get_property(
-            property_name,
+        return cast(
             str,
-            default_value=default_value,
-            valid_value_fn=valid_value_fn,
-            is_required=is_required,
-            strict_mode=strict_mode,
+            self.get_property(
+                property_name,
+                str,
+                default_value=default_value,
+                valid_value_fn=valid_value_fn,
+                is_required=is_required,
+                strict_mode=strict_mode,
+            ),
         )
 
     # pylint: enable=too-many-arguments
 
-    def property_names_under(self, key_name):
+    def property_names_under(self, key_name: str) -> List[str]:
         """
         List of each of the properties in the map under the specified key.
         """
@@ -329,8 +349,8 @@ class ApplicationProperties:
             if next_key_name.startswith(key_name)
         ]
 
-    def __scan_map(self, config_map, current_prefix):
-        for next_key in config_map:
+    def __scan_map(self, config_map: Dict[Any, Any], current_prefix: str) -> None:
+        for next_key, next_value in config_map.items():
             if not isinstance(next_key, str):
                 raise ValueError(
                     "All keys in the main dictionary and nested dictionaries must be strings."
@@ -340,7 +360,6 @@ class ApplicationProperties:
                     f"Keys strings cannot contain the separator character '{self.__separator}'."
                 )
 
-            next_value = config_map[next_key]
             if isinstance(next_value, dict):
                 self.__scan_map(
                     next_value, f"{current_prefix}{next_key}{self.__separator}"

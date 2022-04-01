@@ -17,7 +17,7 @@ def test_properties_set_manual_property_with_non_string():
     raised_exception = None
     try:
         application_properties.set_manual_property(full_string)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -42,7 +42,7 @@ def test_properties_set_manual_property_with_no_equals():
     raised_exception = None
     try:
         application_properties.set_manual_property(full_string)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -75,7 +75,8 @@ def test_properties_set_manual_property_with_single_part_string():
 
 def test_properties_set_manual_property_with_only_format_indicator():
     """
-    Test to make sure that a full key specifying an string format but with no format character following is handled properly.
+    Test to make sure that a full key specifying an string format but with no
+    format character following is handled properly.
     """
 
     # Arrange
@@ -138,6 +139,7 @@ def test_properties_set_manual_property_with_integer_indicator_and_bad_integer()
     # Arrange
     application_properties = ApplicationProperties()
     full_property_key = "a"
+    # sourcery skip: inline-variable, remove-unnecessary-cast, simplify-fstring-formatting
     property_value = 123
     full_string = f"{full_property_key}=$#{property_value}a"
 
@@ -145,7 +147,7 @@ def test_properties_set_manual_property_with_integer_indicator_and_bad_integer()
     raised_exception = None
     try:
         application_properties.set_manual_property(full_string)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -222,6 +224,7 @@ def test_properties_set_manual_property_with_bad_key_start():
     # Arrange
     application_properties = ApplicationProperties()
     full_property_key = ".a"
+    # sourcery skip: inline-variable, simplify-fstring-formatting
     property_value = 123
     full_string = f"{full_property_key}=$#{property_value}"
 
@@ -229,7 +232,7 @@ def test_properties_set_manual_property_with_bad_key_start():
     raised_exception = None
     try:
         application_properties.set_manual_property(full_string)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -249,6 +252,7 @@ def test_properties_set_manual_property_with_bad_key_end():
     # Arrange
     application_properties = ApplicationProperties()
     full_property_key = "a."
+    # sourcery skip: inline-variable, simplify-fstring-formatting
     property_value = 123
     full_string = f"{full_property_key}=$#{property_value}"
 
@@ -256,7 +260,7 @@ def test_properties_set_manual_property_with_bad_key_end():
     raised_exception = None
     try:
         application_properties.set_manual_property(full_string)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -276,6 +280,7 @@ def test_properties_set_manual_property_with_empty_key_middle():
     # Arrange
     application_properties = ApplicationProperties()
     full_property_key = "a..a"
+    # sourcery skip: inline-variable, simplify-fstring-formatting
     property_value = 123
     full_string = f"{full_property_key}=$#{property_value}"
 
@@ -283,7 +288,7 @@ def test_properties_set_manual_property_with_empty_key_middle():
     raised_exception = None
     try:
         application_properties.set_manual_property(full_string)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -303,6 +308,7 @@ def test_properties_set_manual_property_with_empty_key():
     # Arrange
     application_properties = ApplicationProperties()
     full_property_key = ""
+    # sourcery skip: inline-variable, simplify-fstring-formatting
     property_value = 123
     full_string = f"{full_property_key}=$#{property_value}"
 
@@ -310,7 +316,7 @@ def test_properties_set_manual_property_with_empty_key():
     raised_exception = None
     try:
         application_properties.set_manual_property(full_string)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -330,6 +336,7 @@ def test_properties_set_manual_property_with_whitespace_key():
     # Arrange
     application_properties = ApplicationProperties()
     full_property_key = "a a"
+    # sourcery skip: inline-variable, simplify-fstring-formatting
     property_value = 123
     full_string = f"{full_property_key}=$#{property_value}"
 
@@ -337,7 +344,7 @@ def test_properties_set_manual_property_with_whitespace_key():
     raised_exception = None
     try:
         application_properties.set_manual_property(full_string)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -362,7 +369,7 @@ def test_properties_verify_manual_property_form_with_non_string():
     raised_exception = None
     try:
         ApplicationProperties.verify_manual_property_form(full_string)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 

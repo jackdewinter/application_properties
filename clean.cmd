@@ -5,8 +5,6 @@ pushd %~dp0
 rem Set needed environment variables.
 set CLEAN_TEMPFILE=temp_clean.txt
 set PYTHON_MODULE_NAME=application_properties
-set "PROJECT_DIRECTORY=%cd%"
-set PYTHONPATH=%PROJECT_DIRECTORY%
 
 rem Look for options on the command line.
 
@@ -60,7 +58,7 @@ if ERRORLEVEL 1 (
 )
 
 echo {Executing flake8 static analyzer on Python code.}
-pipenv run flake8 --exclude dist,build %MY_VERBOSE%
+pipenv run flake8 -j 4 --exclude dist,build %MY_VERBOSE%
 if ERRORLEVEL 1 (
 	echo.
 	echo {Executing static analyzer on Python code failed.}
@@ -68,15 +66,23 @@ if ERRORLEVEL 1 (
 )
 
 echo {Executing pylint static analyzer on source Python code.}
-pipenv run pylint -j 1 --rcfile=setup.cfg %MY_VERBOSE% %PYTHON_MODULE_NAME%
+pipenv run pylint -j 4 --rcfile=setup.cfg %MY_VERBOSE% %PYTHON_MODULE_NAME%
 if ERRORLEVEL 1 (
 	echo.
 	echo {Executing pylint static analyzer on source Python code failed.}
 	goto error_end
 )
 
+echo {Executing mypy static analyzer on Python source code.}
+pipenv run mypy --strict %PYTHON_MODULE_NAME%
+if ERRORLEVEL 1 (
+	echo.
+	echo {Executing mypy static analyzer on Python source code failed.}
+	goto error_end
+)
+
 echo {Executing pylint static analyzer on test Python code.}
-pipenv run pylint -j 1 --rcfile=setup.cfg test %MY_VERBOSE%
+pipenv run pylint -j 4 --rcfile=setup.cfg test --ignore test\resources %MY_VERBOSE%
 if ERRORLEVEL 1 (
 	echo.
 	echo {Executing pylint static analyzer on test Python code failed.}
@@ -92,7 +98,7 @@ if ERRORLEVEL 1 (
 @REM )
 
 echo {Executing unit tests on Python code.}
-call ptest.cmd
+call ptest.cmd -c -m
 if ERRORLEVEL 1 (
 	echo.
 	echo {Executing unit tests on Python code failed.}

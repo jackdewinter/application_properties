@@ -185,7 +185,7 @@ def test_properties_load_from_non_dictionary():
     raised_exception = None
     try:
         application_properties.load_from_dict(config_map)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -209,7 +209,7 @@ def test_properties_load_with_non_string_key():
     raised_exception = None
     try:
         application_properties.load_from_dict(config_map)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -234,7 +234,7 @@ def test_properties_load_with_key_containing_dot():
     raised_exception = None
     try:
         application_properties.load_from_dict(config_map)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -261,7 +261,7 @@ def test_properties_get_generic_with_bad_type():
     raised_exception = None
     try:
         application_properties.get_property("property", False)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -307,7 +307,7 @@ def test_properties_get_generic_with_required_and_not_found():
     raised_exception = None
     try:
         application_properties.get_property("other_property", bool, is_required=True)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -333,7 +333,7 @@ def test_properties_get_generic_with_strict_mode_and_bad_type():
     raised_exception = None
     try:
         application_properties.get_property("property", str, strict_mode=True)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -359,7 +359,7 @@ def test_properties_get_generic_with_global_strict_mode_and_bad_type():
     raised_exception = None
     try:
         application_properties.get_property("property", str)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -374,7 +374,8 @@ def test_properties_get_generic_with_global_strict_mode_and_bad_type():
 
 def test_properties_get_generic_with_delayed_global_strict_mode_and_bad_type():
     """
-    Test a fetching a configuration value where strict mode is on through the delayed mechanism and the type is not correct.
+    Test a fetching a configuration value where strict mode is on through the
+    delayed mechanism and the type is not correct.
     """
 
     # Arrange
@@ -387,7 +388,7 @@ def test_properties_get_generic_with_delayed_global_strict_mode_and_bad_type():
     raised_exception = None
     try:
         application_properties.get_property("property", str)
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
@@ -427,7 +428,7 @@ def test_properties_get_generic_with_strict_mode_and_bad_validity():
             strict_mode=True,
             valid_value_fn=__sample_string_validation_function,
         )
-        assert False, "Should have raised an exception by now."
+        raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
 
