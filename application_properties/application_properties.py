@@ -137,7 +137,7 @@ class ApplicationProperties:
             raise ValueError(
                 "Manual property key and value must be separated by the '=' character."
             )
-        property_key = string_to_verify[0:equals_index]
+        property_key = string_to_verify[:equals_index]
         ApplicationProperties.verify_full_key_form(property_key)
         return string_to_verify
 
@@ -160,7 +160,7 @@ class ApplicationProperties:
 
         ApplicationProperties.verify_manual_property_form(combined_string)
         equals_index = combined_string.find(ApplicationProperties.__assignment_operator)
-        property_key = combined_string[0:equals_index].lower()
+        property_key = combined_string[:equals_index].lower()
         property_value = combined_string[equals_index + 1 :]
 
         if (

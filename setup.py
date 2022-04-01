@@ -38,7 +38,7 @@ def ensure_scripts(linux_scripts):
     Creates the proper script names required for each platform (taken from PyLint)
     """
     if util.get_platform()[:3] == "win":
-        return linux_scripts + [script + ".bat" for script in linux_scripts]
+        return linux_scripts + [f'{script}.bat' for script in linux_scripts]
     return linux_scripts
 
 
@@ -74,7 +74,7 @@ PACKAGE_MODULES = [
 setup(
     name=PACKAGE_NAME,
     version=SEMANTIC_VERSION,
-    python_requires=">=" + MINIMUM_PYTHON_VERSION,
+    python_requires=f">={MINIMUM_PYTHON_VERSION}",
     install_requires=parse_requirements(),
     author=AUTHOR,
     author_email=AUTHOR_EMAIL,
@@ -87,6 +87,5 @@ setup(
     keywords=KEYWORDS,
     classifiers=PROJECT_CLASSIFIERS,
     packages=PACKAGE_MODULES,
-    data_files=[
-    ],
+    data_files=[],
 )

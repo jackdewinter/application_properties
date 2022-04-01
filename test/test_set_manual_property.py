@@ -138,8 +138,7 @@ def test_properties_set_manual_property_with_integer_indicator_and_bad_integer()
     # Arrange
     application_properties = ApplicationProperties()
     full_property_key = "a"
-    property_value = 123
-    full_string = f"{full_property_key}=$#{property_value}a"
+    full_string = f"{full_property_key}=$#123a"
 
     # Act
     raised_exception = None
@@ -222,8 +221,7 @@ def test_properties_set_manual_property_with_bad_key_start():
     # Arrange
     application_properties = ApplicationProperties()
     full_property_key = ".a"
-    property_value = 123
-    full_string = f"{full_property_key}=$#{property_value}"
+    full_string = f"{full_property_key}=$#123"
 
     # Act
     raised_exception = None
@@ -249,8 +247,7 @@ def test_properties_set_manual_property_with_bad_key_end():
     # Arrange
     application_properties = ApplicationProperties()
     full_property_key = "a."
-    property_value = 123
-    full_string = f"{full_property_key}=$#{property_value}"
+    full_string = f"{full_property_key}=$#123"
 
     # Act
     raised_exception = None
@@ -276,8 +273,7 @@ def test_properties_set_manual_property_with_empty_key_middle():
     # Arrange
     application_properties = ApplicationProperties()
     full_property_key = "a..a"
-    property_value = 123
-    full_string = f"{full_property_key}=$#{property_value}"
+    full_string = f"{full_property_key}=$#123"
 
     # Act
     raised_exception = None
@@ -303,8 +299,7 @@ def test_properties_set_manual_property_with_empty_key():
     # Arrange
     application_properties = ApplicationProperties()
     full_property_key = ""
-    property_value = 123
-    full_string = f"{full_property_key}=$#{property_value}"
+    full_string = f"{full_property_key}=$#123"
 
     # Act
     raised_exception = None
@@ -330,8 +325,7 @@ def test_properties_set_manual_property_with_whitespace_key():
     # Arrange
     application_properties = ApplicationProperties()
     full_property_key = "a a"
-    property_value = 123
-    full_string = f"{full_property_key}=$#{property_value}"
+    full_string = f"{full_property_key}=$#123"
 
     # Act
     raised_exception = None

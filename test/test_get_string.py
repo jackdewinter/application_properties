@@ -127,7 +127,7 @@ def bad_validation_function(property_value):
     """
     Test validation function that always throws an exception.
     """
-    raise Exception("huh? " + str(property_value))
+    raise Exception(f"huh? {str(property_value)}")
 
 
 def test_properties_get_string_with_found_value_validation_raises_error():

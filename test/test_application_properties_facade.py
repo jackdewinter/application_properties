@@ -170,8 +170,8 @@ def test_properties_facade_get_property_names_with_one_value():
     actual_value = facade.property_names
 
     # Assert
-    print(str(type(expected_value)))
-    print(str(type(actual_value)))
+    print(type(expected_value))
+    print(type(actual_value))
     assert expected_value == actual_value
 
 
@@ -191,8 +191,8 @@ def test_properties_facade_get_property_names_with_no_values():
     actual_value = facade.property_names
 
     # Assert
-    print(str(type(expected_value)))
-    print(str(type(actual_value)))
+    print(type(expected_value))
+    print(type(actual_value))
     assert expected_value == actual_value
 
 
