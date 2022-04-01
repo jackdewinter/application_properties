@@ -3,3 +3,9 @@ repos:
     rev: v0.9.5
     hooks:
       - id: pymarkdown
+        args:
+          - --config
+          - clean.json
+          - scan
+          - .
+          - ./docs

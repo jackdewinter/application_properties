@@ -22,4 +22,3 @@ at our API document's section on
 If you still cannot find a loader that fits your needs, you can write your
 own custom loader by following the instructions located in our
 [Developer's Notes](docs/developer.md#loaders).
-

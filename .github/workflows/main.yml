@@ -1,0 +1,79 @@
+name: Main
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * *'  # daily at midnight
+
+jobs:
+  scenario-tests:
+    strategy:
+      matrix:
+        #python: [3.8, 3.9]
+        python: [3.8]
+        platform: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@master
+      - name: Setup Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install PipEnv
+        run: |
+          pip install pipenv==2022.1.8
+      - name: Sync With Repository
+        run: |
+          pipenv lock
+          pipenv sync
+          pipenv graph
+      - name: Execute Tests
+        run: pipenv run pytest --cov-fail-under=90 --cov --cov-branch --cov-report xml:report/coverage.xml --cov-report html:report/coverage
+      - name: Archive coverage artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.platform }} Coverage
+          path: |
+            ./report/coverage.xml
+            ./report/coverage
+      - name: Report Coverage
+        uses: codecov/codecov-action@v1
+        if: github.event_name != 'schedule'
+        with:
+          file: ./report/coverage.xml
+          name: ${{ matrix.python }} - ${{ matrix.platform }}
+          fail_ci_if_error: true
+  lint:
+    strategy:
+      matrix:
+        python: [3.8]
+        platform: [ubuntu-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@master
+      - name: Setup Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install PipEnv
+        run: |
+          pip install pipenv==2022.1.8
+      - name: Sync With Repository
+        run: |
+          pipenv lock
+          pipenv sync
+          pipenv graph
+      - name: Execute Flake8
+        run: pipenv run flake8 --exclude dist,build
+      - name: Execute PyLint on Source
+        run: |
+          pipenv run pylint --rcfile=${{github.workspace}}/setup.cfg ${{github.workspace}}/pymarkdown
+      - name: Execute PyLint on Tests
+        run: pipenv run pylint --rcfile=${{github.workspace}}/setup.cfg ${{github.workspace}}/test
