@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "064c005aac9da618877f1631c3a75fdbe2b4f006dffc41975d52a8f4201b9183"
+            "sha256": "0b3b9528c02a35690be106bc073dd85c1709335dbfa75086a989474a0738552a"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -610,11 +610,11 @@
         },
         "pylint": {
             "hashes": [
-                "sha256:8b1265173abaf37c2e7a21989d05fd6b0f8032c6772f85abe3b0652903aac66c",
-                "sha256:939e67253d1b8569a4c827d933debf603f999ba745775c66e36463922d4e320b"
+                "sha256:13ddbbd8872c804574149e81197c28877eba75224ba6b76cd8652fc31df55c1c",
+                "sha256:911d3a97c808f7554643bcc5416028cfdc42eae34ed129b150741888c688d5d5"
             ],
             "index": "pypi",
-            "version": "==2.13.6"
+            "version": "==2.13.7"
         },
         "pyparsing": {
             "hashes": [
@@ -827,7 +827,7 @@
                 "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
                 "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"
             ],
-            "markers": "python_version >= '3.7'",
+            "markers": "python_full_version < '3.11.0'",
             "version": "==2.0.1"
         },
         "toolz": {
