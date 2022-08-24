@@ -41,6 +41,14 @@ echo {Analysis of project started.}
 
 rem Cleanly start the main part of the script
 
+echo {Syncing python packages with PipEnv 'pipfile'.}
+pipenv sync
+if ERRORLEVEL 1 (
+	echo.
+	echo {Syncing python packages with PipEnv failed.}
+	goto error_end
+)
+
 echo {Executing black formatter on Python code.}
 pipenv run black %MY_VERBOSE% .
 if ERRORLEVEL 1 (
