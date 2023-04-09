@@ -65,7 +65,9 @@ class ApplicationProperties:
         """
         self.__strict_mode = True
 
-    def load_from_dict(self, config_map: Dict[Any, Any]) -> None:
+    def load_from_dict(
+        self, config_map: Dict[Any, Any], clear_map: bool = True
+    ) -> None:
         """
         Load the properties from a provided dictionary.
         """
@@ -74,7 +76,8 @@ class ApplicationProperties:
             raise ValueError("Specified parameter was not a dictionary.")
 
         LOGGER.debug("Loading from dictionary: {%s}", str(config_map))
-        self.__flat_property_map.clear()
+        if clear_map:
+            self.__flat_property_map.clear()
         self.__scan_map(config_map, "")
 
     @staticmethod

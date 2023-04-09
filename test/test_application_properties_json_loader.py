@@ -201,3 +201,64 @@ def test_json_loader_valid_json_but_invalid_key_xx():
     finally:
         if configuration_file and os.path.exists(configuration_file):
             os.remove(configuration_file)
+
+
+def test_json_loader_pair_valid_json():
+    """
+    Test to make sure that we can load more than one configuration file and not have
+    the configurations stomp on each other in an unpredictable manner.
+    """
+
+    # Arrange
+    supplied_configuration_first = {
+        "plugins": {"md999": {"test_value_a": 2, "test_value_b": 3}}
+    }
+    supplied_configuration_second = {
+        "plugins": {"md999": {"test_value_b": 4, "test_value_c": 5}}
+    }
+    expected_value_a = 2
+    expected_value_b = 4
+    expected_value_c = 5
+
+    configuration_file_first = None
+    try:
+        configuration_file_first = write_temporary_configuration(
+            supplied_configuration_first
+        )
+        configuration_file_second = write_temporary_configuration(
+            supplied_configuration_second
+        )
+        application_properties = ApplicationProperties()
+
+        # Act
+        ApplicationPropertiesJsonLoader.load_and_set(
+            application_properties,
+            configuration_file_first,
+            None,
+            clear_property_map=False,
+        )
+        ApplicationPropertiesJsonLoader.load_and_set(
+            application_properties,
+            configuration_file_second,
+            None,
+            clear_property_map=False,
+        )
+        actual_value_a = application_properties.get_integer_property(
+            "plugins.md999.test_value_a", -1
+        )
+        actual_value_b = application_properties.get_integer_property(
+            "plugins.md999.test_value_b", -1
+        )
+        actual_value_c = application_properties.get_integer_property(
+            "plugins.md999.test_value_c", -1
+        )
+
+        # Assert
+        assert expected_value_a == actual_value_a
+        assert expected_value_b == actual_value_b
+        assert expected_value_c == actual_value_c
+    finally:
+        if configuration_file_first and os.path.exists(configuration_file_first):
+            os.remove(configuration_file_first)
+        if configuration_file_second and os.path.exists(configuration_file_second):
+            os.remove(configuration_file_second)
