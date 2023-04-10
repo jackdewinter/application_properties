@@ -100,7 +100,7 @@ def __sample_string_validation_function(property_value):
     Simple string validation that throws an error if not "1" or "2".
     """
     if property_value not in ["1", "2"]:
-        raise ValueError("Value '" + str(property_value) + "' is not '1' or '2'")
+        raise ValueError(f"Value '{str(property_value)}' is not '1' or '2'")
 
 
 def test_properties_get_string_with_found_value_not_validated():
@@ -123,12 +123,16 @@ def test_properties_get_string_with_found_value_not_validated():
     assert expected_value == actual_value
 
 
+# pylint: disable=broad-exception-raised
 def bad_validation_function(property_value):
     """
     Test validation function that always throws an exception.
     """
     # sourcery skip: raise-specific-error
     raise Exception(f"huh? {str(property_value)}")
+
+
+# pylint: enable=broad-exception-raised
 
 
 def test_properties_get_string_with_found_value_validation_raises_error():
