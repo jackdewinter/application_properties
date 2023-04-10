@@ -108,6 +108,15 @@ if ERRORLEVEL 1 (
 	goto error_end
 )
 
+echo {Executing bandit security analyzer on Python code.}
+pipenv run bandit -q -r application_properties
+if ERRORLEVEL 1 (
+	echo.
+	echo {Executing security analyzer on Python code failed.}
+	goto error_end
+)
+
+
 echo {Executing pylint static analyzer on source Python code.}
 pipenv run pylint -j 4 --rcfile=setup.cfg %MY_VERBOSE% %PYTHON_MODULE_NAME%
 if ERRORLEVEL 1 (

@@ -176,31 +176,30 @@ class ApplicationProperties:
             )
             and len(property_value) >= 2
         ):
-            if property_value[1] == ApplicationProperties.__manual_property_type_string:
-                composed_property_value = property_value[2:]
-            elif (
-                property_value[1]
-                == ApplicationProperties.__manual_property_type_integer
-            ):
-                try:
-                    composed_property_value = int(property_value[2:])
-                except ValueError as this_exception:
-                    raise ValueError(
-                        f"Manual property value '{property_value}' cannot be translated into an integer."
-                    ) from this_exception
-            elif (
-                property_value[1]
-                == ApplicationProperties.__manual_property_type_boolean
-            ):
-                composed_property_value = property_value[2:].lower() == "true"
-            else:
-                composed_property_value = property_value[1:]
+            composed_property_value = self.__adjust_property_type(property_value)
         self.__flat_property_map[property_key] = copy.deepcopy(composed_property_value)
         LOGGER.debug(
             "Adding configuration '%s' : {%s}",
             property_key,
             str(composed_property_value),
         )
+
+    def __adjust_property_type(self, property_value: str) -> Any:
+        composed_property_value: Any = None
+        if property_value[1] == ApplicationProperties.__manual_property_type_string:
+            composed_property_value = property_value[2:]
+        elif property_value[1] == ApplicationProperties.__manual_property_type_integer:
+            try:
+                composed_property_value = int(property_value[2:])
+            except ValueError as this_exception:
+                raise ValueError(
+                    f"Manual property value '{property_value}' cannot be translated into an integer."
+                ) from this_exception
+        elif property_value[1] == ApplicationProperties.__manual_property_type_boolean:
+            composed_property_value = property_value[2:].lower() == "true"
+        else:
+            composed_property_value = property_value[1:]
+        return composed_property_value
 
     # pylint: disable=unidiomatic-typecheck
     # pylint: disable=too-many-arguments
@@ -239,27 +238,44 @@ class ApplicationProperties:
         property_name = property_name.lower()
         LOGGER.debug("property_name=%s", property_name)
         if property_name in self.__flat_property_map:
-            found_value = self.__flat_property_map[property_name]
-            is_eligible = type(found_value) == property_type
-            if not is_eligible and strict_mode:
-                raise ValueError(
-                    f"The value for property '{property_name}' must be of type '{property_type.__name__}'."
-                )
-            if is_eligible and valid_value_fn:
-                try:
-                    valid_value_fn(found_value)
-                except Exception as this_exception:
-                    is_eligible = False
-                    if strict_mode:
-                        raise ValueError(
-                            f"The value for property '{property_name}' is not valid: {str(this_exception)}"
-                        ) from this_exception
-            if is_eligible:
-                property_value = found_value
+            property_value = self.__get_present_property(
+                property_name,
+                property_value,
+                property_type,
+                strict_mode,
+                valid_value_fn,
+            )
         elif is_required:
             raise ValueError(
                 f"A value for property '{property_name}' must be provided."
             )
+        return property_value
+
+    def __get_present_property(
+        self,
+        property_name: str,
+        property_value: Any,
+        property_type: type,
+        strict_mode: bool,
+        valid_value_fn: Optional[Callable[[Any], Any]],
+    ) -> Any:
+        found_value = self.__flat_property_map[property_name]
+        is_eligible = type(found_value) == property_type
+        if not is_eligible and strict_mode:
+            raise ValueError(
+                f"The value for property '{property_name}' must be of type '{property_type.__name__}'."
+            )
+        if is_eligible and valid_value_fn:
+            try:
+                valid_value_fn(found_value)
+            except Exception as this_exception:
+                is_eligible = False
+                if strict_mode:
+                    raise ValueError(
+                        f"The value for property '{property_name}' is not valid: {str(this_exception)}"
+                    ) from this_exception
+        if is_eligible:
+            property_value = found_value
         return property_value
 
     # pylint: enable=unidiomatic-typecheck
