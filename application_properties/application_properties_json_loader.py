@@ -18,6 +18,7 @@ class ApplicationPropertiesJsonLoader:
         properties_object: ApplicationProperties,
         configuration_file: str,
         handle_error_fn: Optional[Callable[[str, Exception], None]] = None,
+        clear_property_map: bool = True,
     ) -> None:
         """
         Load the specified file and set it into the given properties object.
@@ -52,7 +53,9 @@ class ApplicationPropertiesJsonLoader:
 
         if configuration_map:
             try:
-                properties_object.load_from_dict(configuration_map)
+                properties_object.load_from_dict(
+                    configuration_map, clear_map=clear_property_map
+                )
             except ValueError as this_exception:
                 formatted_error = (
                     f"Specified configuration file '{configuration_file}' "

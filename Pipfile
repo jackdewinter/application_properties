@@ -25,6 +25,7 @@ typing-extensions = "==4.3.0"
 mypy = "==0.971"
 pre-commit = "==2.20.0"
 colorama = "==0.4.5"
+sourcery = "==1.1.0"
 
 [dev-packages]
 

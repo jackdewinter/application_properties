@@ -20,7 +20,7 @@
         },
         {
             "name": "test.test_application_properties_json_loader",
-            "totalTests": 5,
+            "totalTests": 6,
             "failedTests": 0,
             "errorTests": 0,
             "skippedTests": 0,

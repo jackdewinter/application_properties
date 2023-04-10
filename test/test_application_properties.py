@@ -406,7 +406,7 @@ def __sample_string_validation_function(property_value):
     Simple string validation that throws an error if not "1" or "2".
     """
     if property_value not in ["1", "2"]:
-        raise ValueError("Value '" + str(property_value) + "' is not '1' or '2'")
+        raise ValueError(f"Value '{str(property_value)}' is not '1' or '2'")
 
 
 def test_properties_get_generic_with_strict_mode_and_bad_validity():
