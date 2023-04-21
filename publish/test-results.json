@@ -20,7 +20,15 @@
         },
         {
             "name": "test.test_application_properties_json_loader",
-            "totalTests": 6,
+            "totalTests": 8,
+            "failedTests": 0,
+            "errorTests": 0,
+            "skippedTests": 0,
+            "elapsedTimeInMilliseconds": 0
+        },
+        {
+            "name": "test.test_application_properties_toml_loader",
+            "totalTests": 15,
             "failedTests": 0,
             "errorTests": 0,
             "skippedTests": 0,
@@ -52,7 +60,7 @@
         },
         {
             "name": "test.test_set_manual_property",
-            "totalTests": 16,
+            "totalTests": 29,
             "failedTests": 0,
             "errorTests": 0,
             "skippedTests": 0,

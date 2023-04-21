@@ -2,12 +2,12 @@
     "projectName": "application_properties",
     "reportSource": "pytest",
     "branchLevel": {
-        "totalMeasured": 76,
-        "totalCovered": 76
+        "totalMeasured": 98,
+        "totalCovered": 98
     },
     "lineLevel": {
-        "totalMeasured": 209,
-        "totalCovered": 209
+        "totalMeasured": 272,
+        "totalCovered": 272
     }
 }
 

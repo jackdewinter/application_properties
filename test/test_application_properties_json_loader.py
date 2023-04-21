@@ -46,14 +46,92 @@ def test_json_loader_valid_json():
 
         # Act
         ApplicationPropertiesJsonLoader.load_and_set(
-            application_properties, configuration_file, None
+            application_properties, configuration_file
         )
         actual_value = application_properties.get_integer_property(
-            "plugins.md999.test_value", -1
+            "plugins.md999.test_value", -1, None
         )
 
         # Assert
         assert expected_value == actual_value
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)
+
+
+def test_json_loader_valid_json_but_wrong_get_property_type():
+    """
+    Test to make sure that we can load a valid Json file, even if the property
+    we are looking for is of the wrong type.  The load should succeed, even
+    if the get fails.
+    """
+
+    # Arrange
+    supplied_configuration = {"plugins": {"md999": {"test_value": "2"}}}
+    expected_error = (
+        "The value for property 'plugins.md999.test_value' must be of type 'int'."
+    )
+
+    configuration_file = None
+    try:
+        configuration_file = write_temporary_configuration(supplied_configuration)
+        application_properties = ApplicationProperties()
+
+        # Act
+        captured_exception = None
+        ApplicationPropertiesJsonLoader.load_and_set(
+            application_properties, configuration_file
+        )
+        try:
+            application_properties.get_integer_property(
+                "plugins.md999.test_value", -1, None, strict_mode=True
+            )
+        except ValueError as this_exception:
+            captured_exception = this_exception
+
+        # Assert
+        assert not application_properties.convert_untyped_if_possible
+        assert captured_exception is not None
+        assert str(captured_exception) == expected_error
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)
+
+
+def test_json_loader_valid_json_but_wrong_get_property_type_with_untyped_conversion():
+    """
+    Test to make sure that we can load a valid Json file, even if the property
+    we are looking for is of the wrong type.  The load should succeed, even
+    if the get fails.  The get should still fail as JSON is a typed source.
+    """
+
+    # Arrange
+    supplied_configuration = {"plugins": {"md999": {"test_value": "2"}}}
+    expected_error = (
+        "The value for property 'plugins.md999.test_value' must be of type 'int'."
+    )
+
+    configuration_file = None
+    try:
+        configuration_file = write_temporary_configuration(supplied_configuration)
+        application_properties = ApplicationProperties(convert_untyped_if_possible=True)
+
+        # Act
+        captured_exception = None
+        ApplicationPropertiesJsonLoader.load_and_set(
+            application_properties, configuration_file
+        )
+        try:
+            application_properties.get_integer_property(
+                "plugins.md999.test_value", -1, None, strict_mode=True
+            )
+        except ValueError as this_exception:
+            captured_exception = this_exception
+
+        # Assert
+        assert application_properties.convert_untyped_if_possible
+        assert captured_exception is not None
+        assert str(captured_exception) == expected_error
     finally:
         if configuration_file and os.path.exists(configuration_file):
             os.remove(configuration_file)
@@ -87,7 +165,7 @@ def test_json_loader_invalid_json():
         assert handled_error_parameters
         assert handled_error_parameters[0].startswith("Specified configuration file ")
         assert (
-            "' is not a valid JSON file (Expecting value: line 1 column 1 (char 0))."
+            "' is not a valid JSON file: Expecting value: line 1 column 1 (char 0)."
             in handled_error_parameters[0]
         )
         assert isinstance(handled_error_parameters[1], json.decoder.JSONDecodeError)
@@ -120,7 +198,7 @@ def test_json_loader_missing_file():
     # Assert
     assert handled_error_parameters
     assert handled_error_parameters[0].startswith(
-        "Specified configuration file 'missing_file_name.other' was not loaded"
+        "Specified configuration file 'missing_file_name.other' was not loaded: "
     )
     assert isinstance(handled_error_parameters[1], FileNotFoundError)
 
@@ -153,7 +231,7 @@ def test_json_loader_valid_json_but_invalid_key():
         assert handled_error_parameters
         assert handled_error_parameters[0].startswith("Specified configuration file '")
         assert (
-            "' is not valid (Keys strings cannot contain the separator character '.'.)."
+            "' is not valid: Keys strings cannot contain the separator character '.'."
             in handled_error_parameters[0]
         )
         assert isinstance(handled_error_parameters[1], ValueError)
@@ -194,7 +272,7 @@ def test_json_loader_valid_json_but_invalid_key_xx():
         # Assert
         assert new_stdout.getvalue().startswith("Specified configuration file '")
         assert (
-            "' is not valid (Keys strings cannot contain the separator character '.'.)."
+            "' is not valid: Keys strings cannot contain the separator character '.'."
             in new_stdout.getvalue()
         )
         assert not new_stderr.getvalue()
