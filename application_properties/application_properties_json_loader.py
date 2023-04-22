@@ -19,7 +19,7 @@ class ApplicationPropertiesJsonLoader:
         configuration_file: str,
         handle_error_fn: Optional[Callable[[str, Exception], None]] = None,
         clear_property_map: bool = True,
-    ) -> None:
+    ) -> bool:
         """
         Load the specified file and set it into the given properties object.
         """
@@ -41,27 +41,30 @@ class ApplicationPropertiesJsonLoader:
         except json.decoder.JSONDecodeError as this_exception:
             formatted_error = (
                 f"Specified configuration file '{configuration_file}' "
-                + f"is not a valid JSON file ({str(this_exception)})."
+                + f"is not a valid JSON file: {str(this_exception)}."
             )
             handle_error_fn(formatted_error, this_exception)
         except IOError as this_exception:
             formatted_error = (
                 f"Specified configuration file '{configuration_file}' "
-                + f"was not loaded ({str(this_exception)})."
+                + f"was not loaded: {str(this_exception)}."
             )
             handle_error_fn(formatted_error, this_exception)
 
+        did_apply_map = False
         if configuration_map:
             try:
                 properties_object.load_from_dict(
                     configuration_map, clear_map=clear_property_map
                 )
+                did_apply_map = True
             except ValueError as this_exception:
                 formatted_error = (
                     f"Specified configuration file '{configuration_file}' "
-                    + f"is not valid ({str(this_exception)})."
+                    + f"is not valid: {str(this_exception)}"
                 )
                 handle_error_fn(formatted_error, this_exception)
+        return did_apply_map
 
 
 # pylint: enable=too-few-public-methods
