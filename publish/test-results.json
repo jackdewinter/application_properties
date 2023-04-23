@@ -11,6 +11,14 @@
             "elapsedTimeInMilliseconds": 0
         },
         {
+            "name": "test.test_application_properties_config_loader",
+            "totalTests": 17,
+            "failedTests": 0,
+            "errorTests": 0,
+            "skippedTests": 0,
+            "elapsedTimeInMilliseconds": 0
+        },
+        {
             "name": "test.test_application_properties_facade",
             "totalTests": 12,
             "failedTests": 0,
@@ -20,7 +28,7 @@
         },
         {
             "name": "test.test_application_properties_json_loader",
-            "totalTests": 8,
+            "totalTests": 9,
             "failedTests": 0,
             "errorTests": 0,
             "skippedTests": 0,
@@ -28,7 +36,7 @@
         },
         {
             "name": "test.test_application_properties_toml_loader",
-            "totalTests": 15,
+            "totalTests": 17,
             "failedTests": 0,
             "errorTests": 0,
             "skippedTests": 0,

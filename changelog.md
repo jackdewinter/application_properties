@@ -2,9 +2,21 @@
 
 ## Unversioned - In Main, Not Released
 
-### Fixed and Added
+## Version 0.7.0 - Date: 2023-04-22
 
-- None
+- [Issue 137](https://github.com/jackdewinter/application_properties/issues/137)
+  - to support multiple configurations, added clear_map flag to Json loader
+  - refactoring to clean things up for upcoming changes
+- [Issue 2](https://github.com/jackdewinter/application_properties/issues/2)
+  - added ability to translate from string to other forms
+  - controlled by flag, and only occurs on pure strings, not any strings with any typing
+    - i.e. only manual set and "config" files are untyped, so only those are affected
+- [Issue 145](https://github.com/jackdewinter/application_properties/issues/145)
+  - added TOML configuration file support as a typed configuration file
+
+## Version 0.6.0 - Date: xxxx-xx-xx
+
+- quick release to help PyMarkdown project
 
 ## Version 0.5.2 - Date: 2022-04-01
 
