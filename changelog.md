@@ -13,6 +13,7 @@
     - i.e. only manual set and "config" files are untyped, so only those are affected
 - [Issue 145](https://github.com/jackdewinter/application_properties/issues/145)
   - added TOML configuration file support as a typed configuration file
+- upgraded tooling packages to latest version
 
 ## Version 0.6.0 - Date: xxxx-xx-xx
 

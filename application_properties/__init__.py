@@ -10,9 +10,17 @@ from application_properties.application_properties_facade import (  # noqa F401
 from application_properties.application_properties_json_loader import (  # noqa F401
     ApplicationPropertiesJsonLoader,
 )
+from application_properties.application_properties_toml_loader import (  # noqa F401
+    ApplicationPropertiesTomlLoader,
+)
+from application_properties.application_properties_config_loader import (  # noqa F401
+    ApplicationPropertiesConfigLoader,
+)
 
 __all__ = [
     "ApplicationProperties",
     "ApplicationPropertiesFacade",
     "ApplicationPropertiesJsonLoader",
+    "ApplicationPropertiesTomlLoader",
+    "ApplicationPropertiesConfigLoader",
 ]
