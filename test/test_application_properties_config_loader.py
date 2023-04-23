@@ -7,12 +7,12 @@ import sys
 from test.test_helpers import ErrorResults, TestHelpers
 
 from application_properties import ApplicationProperties
-from application_properties.application_properties_toml_loader import (
-    ApplicationPropertiesTomlLoader,
+from application_properties.application_properties_config_loader import (
+    ApplicationPropertiesConfigLoader,
 )
 
 
-def test_toml_loader_config_not_present():
+def test_config_loader_config_not_present_check_enabled():
     """
     Test to make sure that we do not try and load a configuration file that is not present.
     """
@@ -28,7 +28,7 @@ def test_toml_loader_config_not_present():
     expected_value = -1
 
     # Act
-    actual_did_apply, actual_did_error = ApplicationPropertiesTomlLoader.load_and_set(
+    actual_did_apply, actual_did_error = ApplicationPropertiesConfigLoader.load_and_set(
         application_properties, configuration_file, None, None, True, True
     )
     actual_value = application_properties.get_integer_property(
@@ -41,16 +41,45 @@ def test_toml_loader_config_not_present():
     assert expected_did_error == actual_did_error
 
 
-def test_toml_loader_valid_toml():
+def test_config_loader_config_not_present_check_disabled():
     """
-    Test to make sure that we can load a valid toml file.
+    Test to make sure that we do not try and load a configuration file that is not present.
+    """
+
+    # Arrange
+    configuration_file = "does-not-exist"
+    configuration_file = os.path.abspath(configuration_file)
+    assert not os.path.exists(configuration_file)
+    application_properties = ApplicationProperties()
+
+    expected_did_apply = False
+    expected_did_error = True
+    expected_value = -1
+
+    # Act
+    actual_did_apply, actual_did_error = ApplicationPropertiesConfigLoader.load_and_set(
+        application_properties, configuration_file, None, None, True, False
+    )
+    actual_value = application_properties.get_integer_property(
+        "plugins.md999.test_value", -1
+    )
+
+    # Assert
+    assert expected_value == actual_value
+    assert expected_did_apply == actual_did_apply
+    assert expected_did_error == actual_did_error
+
+
+def test_config_loader_valid_config():
+    """
+    Test to make sure that we can load a valid config file.
     """
 
     # Arrange
     supplied_configuration = """[plugins]
 md999.test_value = 2
 """
-    expected_value = 2
+    expected_value = "2"
     expected_did_apply = True
     expected_did_error = False
 
@@ -60,16 +89,19 @@ md999.test_value = 2
             supplied_configuration
         )
         application_properties = ApplicationProperties()
+        with open(configuration_file, "r", encoding="utf-8") as file:
+            settings = file.read()
+            print(settings)
 
         # Act
         (
             actual_did_apply,
             actual_did_error,
-        ) = ApplicationPropertiesTomlLoader.load_and_set(
+        ) = ApplicationPropertiesConfigLoader.load_and_set(
             application_properties, configuration_file, None, None, True, True
         )
-        actual_value = application_properties.get_integer_property(
-            "plugins.md999.test_value", -1
+        actual_value = application_properties.get_string_property(
+            "plugins.md999.test_value", "bob"
         )
 
         # Assert
@@ -81,16 +113,16 @@ md999.test_value = 2
             os.remove(configuration_file)
 
 
-def test_toml_loader_valid_toml_but_wrong_get_property_type():
+def test_config_loader_valid_config_but_wrong_get_property_type():
     """
-    Test to make sure that we can load a valid toml file, even if the property
+    Test to make sure that we can load a valid config file, even if the property
     we are looking for is of the wrong type.  The load should succeed, even
     if the get fails.
     """
 
     # Arrange
     supplied_configuration = """[plugins]
-md999.test_value = "2"
+md999.test_value = 2
 """
     expected_error = (
         "The value for property 'plugins.md999.test_value' must be of type 'int'."
@@ -105,7 +137,7 @@ md999.test_value = "2"
 
         # Act
         captured_exception = None
-        ApplicationPropertiesTomlLoader.load_and_set(
+        ApplicationPropertiesConfigLoader.load_and_set(
             application_properties, configuration_file
         )
         try:
@@ -124,53 +156,9 @@ md999.test_value = "2"
             os.remove(configuration_file)
 
 
-def test_toml_loader_valid_toml_but_wrong_get_property_type_with_untyped_conversion():
+def test_config_loader_config_file_not_present_with_check():
     """
-    Test to make sure that we can load a valid toml file, even if the property
-    we are looking for is of the wrong type.  The load should succeed, even
-    if the get fails.  The get should still fail as TOML is a typed source.
-    """
-
-    # Arrange
-    supplied_configuration = """[plugins]
-md999.test_value = "2"
-"""
-    expected_error = (
-        "The value for property 'plugins.md999.test_value' must be of type 'int'."
-    )
-
-    configuration_file = None
-    try:
-        configuration_file = TestHelpers.write_temporary_configuration(
-            supplied_configuration
-        )
-        application_properties = ApplicationProperties()
-        application_properties.enable_convert_untyped_if_possible()
-
-        # Act
-        captured_exception = None
-        ApplicationPropertiesTomlLoader.load_and_set(
-            application_properties, configuration_file
-        )
-        try:
-            application_properties.get_integer_property(
-                "plugins.md999.test_value", -1, None, strict_mode=True
-            )
-        except ValueError as this_exception:
-            captured_exception = this_exception
-
-        # Assert
-        assert application_properties.convert_untyped_if_possible
-        assert captured_exception is not None
-        assert str(captured_exception) == expected_error
-    finally:
-        if configuration_file and os.path.exists(configuration_file):
-            os.remove(configuration_file)
-
-
-def test_toml_loader_toml_file_not_present_with_check():
-    """
-    Test to make sure that we cannot load a toml file that is not there,
+    Test to make sure that we cannot load a config file that is not there,
     and explicitly have something in place to check for that.
     """
 
@@ -188,7 +176,7 @@ md999.test_value = 2
     application_properties = ApplicationProperties()
 
     # Act
-    actual_did_apply, actual_did_error = ApplicationPropertiesTomlLoader.load_and_set(
+    actual_did_apply, actual_did_error = ApplicationPropertiesConfigLoader.load_and_set(
         application_properties, configuration_file, None, None, True, True
     )
 
@@ -197,9 +185,9 @@ md999.test_value = 2
     assert expected_did_error == actual_did_error
 
 
-def test_toml_loader_toml_file_not_present_without_check():
+def test_config_loader_config_file_not_present_without_check():
     """
-    Test to make sure that we cannot load a toml file that is not there,
+    Test to make sure that we cannot load a config file that is not there,
     and explicitly do not have something in place to check for that.
     """
 
@@ -218,31 +206,37 @@ md999.test_value = 2
 
     # Act
     old_stdout = sys.stdout
+    old_stderr = sys.stderr
     std_output = io.StringIO()
+    std_error = io.StringIO()
     try:
         sys.stdout = std_output
+        sys.stderr = std_error
         (
             actual_did_apply,
             actual_did_error,
-        ) = ApplicationPropertiesTomlLoader.load_and_set(
+        ) = ApplicationPropertiesConfigLoader.load_and_set(
             application_properties, configuration_file, None, None, True, False
         )
     finally:
         sys.stdout = old_stdout
+        sys.stderr = old_stderr
 
     # Assert
     assert expected_did_apply == actual_did_apply
     assert expected_did_error == actual_did_error
     assert std_output is not None
-    assert std_output.getvalue() is not None
-    assert std_output.getvalue().startswith(
-        f"Specified configuration file '{configuration_file}' was not loaded: "
+    assert (
+        std_output.getvalue()
+        == f"Specified configuration file '{configuration_file}' does not exist.\n"
     )
+    assert std_error is not None
+    assert std_error.getvalue() == ""
 
 
-def test_toml_loader_toml_file_not_present_without_check_and_error_function():
+def test_config_loader_config_file_not_present_without_check_and_error_function():
     """
-    Test to make sure that we cannot load a toml file that is not there,
+    Test to make sure that we cannot load a config file that is not there,
     and explicitly do not have something in place to check for that, but have
     all errors getting captured.
     """
@@ -262,7 +256,7 @@ md999.test_value = 2
     application_properties = ApplicationProperties()
 
     # Act
-    actual_did_apply, actual_did_error = ApplicationPropertiesTomlLoader.load_and_set(
+    actual_did_apply, actual_did_error = ApplicationPropertiesConfigLoader.load_and_set(
         application_properties,
         configuration_file,
         None,
@@ -275,14 +269,15 @@ md999.test_value = 2
     assert expected_did_apply == actual_did_apply
     assert expected_did_error == actual_did_error
     assert results.reported_error is not None
-    assert results.reported_error.startswith(
-        f"Specified configuration file '{configuration_file}' was not loaded: "
+    assert (
+        results.reported_error
+        == f"Specified configuration file '{configuration_file}' does not exist."
     )
 
 
-def test_toml_loader_toml_file_not_valid():
+def test_config_loader_config_file_not_valid():
     """
-    Test to make sure that we error loading an invalid toml file.
+    Test to make sure that we error loading an invalid config file.
     """
 
     # Arrange
@@ -307,7 +302,7 @@ md999.test_value
             (
                 actual_did_apply,
                 actual_did_error,
-            ) = ApplicationPropertiesTomlLoader.load_and_set(
+            ) = ApplicationPropertiesConfigLoader.load_and_set(
                 application_properties, configuration_file, None, None, True, False
             )
         finally:
@@ -317,15 +312,16 @@ md999.test_value
         assert expected_did_error == actual_did_error
         assert std_output is not None
         assert std_output.getvalue() is not None
-        assert std_output.getvalue().startswith(
-            f"Specified configuration file '{configuration_file}' is not a valid TOML file: Expected '=' after a key in a key/value pair (at line 2, column 17).\n"
+        configuration_file2 = configuration_file.replace("\\", "\\\\")
+        assert std_output.getvalue() == (
+            f"Specified configuration file '{configuration_file}' is not a valid config file: Source contains parsing errors: '{configuration_file2}'\n\t[line  2]: 'md999.test_value\\n'.\n"
         )
     finally:
         if configuration_file and os.path.exists(configuration_file):
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_valid_with_no_section_header():
+def test_config_loader_config_file_valid_with_no_section_header():
     """
     Test to make sure that not having a section header implies that everything in the
     file is part of the configuration.
@@ -333,7 +329,7 @@ def test_toml_loader_toml_file_valid_with_no_section_header():
 
     # Arrange
     supplied_configuration = """[plugins]
-tools.bar = "fred"
+tools.bar = fred
 """
     expected_did_apply = True
     expected_did_error = False
@@ -350,8 +346,8 @@ tools.bar = "fred"
         (
             actual_did_apply,
             actual_did_error,
-        ) = ApplicationPropertiesTomlLoader.load_and_set(
-            application_properties, configuration_file, None, None, True, False
+        ) = ApplicationPropertiesConfigLoader.load_and_set(
+            application_properties, configuration_file, None, None, False, False
         )
         actual_value = application_properties.get_string_property(
             "plugins.tools.bar", None, None
@@ -365,21 +361,25 @@ tools.bar = "fred"
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_valid_with_one_word_section_header():
+def test_config_loader_config_file_valid_with_one_word_section_header():
     """
     Test to make sure that having a having a one word section header that is
-    present in the TOML file allows for anything under that entry to be
+    present in the config file allows for anything under that entry to be
     processed as configuration.
     """
 
     # Arrange
     section_header = "plugins"
     supplied_configuration = """[plugins]
-tools.bar = "fred"
+tools.bar = fred
+
+[other-plugins]
+tools.foo = fred
 """
     expected_did_apply = True
     expected_did_error = False
     expected_value = "fred"
+    other_expected_value = None
 
     configuration_file = None
     try:
@@ -392,7 +392,7 @@ tools.bar = "fred"
         (
             actual_did_apply,
             actual_did_error,
-        ) = ApplicationPropertiesTomlLoader.load_and_set(
+        ) = ApplicationPropertiesConfigLoader.load_and_set(
             application_properties,
             configuration_file,
             section_header,
@@ -403,26 +403,30 @@ tools.bar = "fred"
         actual_value = application_properties.get_string_property(
             "tools.bar", None, None
         )
+        other_actual_value = application_properties.get_string_property(
+            "tools.foo", None, None
+        )
 
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
         assert expected_value == actual_value
+        assert other_expected_value == other_actual_value
     finally:
         if configuration_file and os.path.exists(configuration_file):
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_valid_with_one_word_bad_section_header():
+def test_config_loader_config_file_valid_with_one_word_bad_section_header():
     """
     Test to make sure that having a one word section header that is not
-    present in the TOML file effectively does not contribute to the
+    present in the config file effectively does not contribute to the
     configuration.
     """
 
     # Arrange
     section_header = "not-plugins"
     supplied_configuration = """[plugins]
-tools.bar = "fred"
+tools.bar = fred
 """
     expected_did_apply = False
     expected_did_error = False
@@ -439,7 +443,7 @@ tools.bar = "fred"
         (
             actual_did_apply,
             actual_did_error,
-        ) = ApplicationPropertiesTomlLoader.load_and_set(
+        ) = ApplicationPropertiesConfigLoader.load_and_set(
             application_properties,
             configuration_file,
             section_header,
@@ -459,7 +463,7 @@ tools.bar = "fred"
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_valid_with_multi_word_valid_section_header():
+def test_config_loader_config_file_valid_with_multi_word_valid_section_header():
     """
     Test to make sure that having a having a multi word section header that points to
     an existing section is recognized.
@@ -468,7 +472,7 @@ def test_toml_loader_toml_file_valid_with_multi_word_valid_section_header():
     # Arrange
     section_header = "tools.mytool"
     supplied_configuration = """[tools.mytool]
-tools.bar = "fred"
+tools.bar = fred
 """
     expected_did_apply = True
     expected_did_error = False
@@ -485,7 +489,7 @@ tools.bar = "fred"
         (
             actual_did_apply,
             actual_did_error,
-        ) = ApplicationPropertiesTomlLoader.load_and_set(
+        ) = ApplicationPropertiesConfigLoader.load_and_set(
             application_properties,
             configuration_file,
             section_header,
@@ -505,64 +509,18 @@ tools.bar = "fred"
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_valid_with_multi_word_section_header_that_points_to_a_value():
-    """
-    Test to make sure that having a having a multi word section header that points
-    to a specific value instead of a section does not get applied.
-    """
-
-    # Arrange
-    section_header = "plugins.tools.bar"
-    supplied_configuration = """[plugins]
-tools.bar = "fred"
-"""
-    expected_did_apply = False
-    expected_did_error = False
-    expected_value = None
-
-    configuration_file = None
-    try:
-        configuration_file = TestHelpers.write_temporary_configuration(
-            supplied_configuration
-        )
-        application_properties = ApplicationProperties()
-
-        # Act
-        (
-            actual_did_apply,
-            actual_did_error,
-        ) = ApplicationPropertiesTomlLoader.load_and_set(
-            application_properties,
-            configuration_file,
-            section_header,
-            None,
-            True,
-            False,
-        )
-        actual_value = application_properties.get_string_property(
-            "tools.bar", None, None
-        )
-
-        assert expected_did_apply == actual_did_apply
-        assert expected_did_error == actual_did_error
-        assert expected_value == actual_value
-    finally:
-        if configuration_file and os.path.exists(configuration_file):
-            os.remove(configuration_file)
-
-
-def test_toml_loader_toml_file_bad_toml_format_with_repeated_section():
+def test_config_loader_config_file_bad_config_format_with_repeated_section():
     """
     Test to make sure that a repeated section, in different forms, causes errors.
     """
 
     # Arrange
     section_header = "plugins.tools.bar"
-    supplied_configuration = """[plugins]
-tools.bar = "fred"
+    supplied_configuration = """[plugins.tools]
+bar = fred
 
 [plugins.tools]
-bar = "barney"
+bar = barney
 """
     results = ErrorResults()
     expected_did_apply = False
@@ -579,7 +537,7 @@ bar = "barney"
         (
             actual_did_apply,
             actual_did_error,
-        ) = ApplicationPropertiesTomlLoader.load_and_set(
+        ) = ApplicationPropertiesConfigLoader.load_and_set(
             application_properties,
             configuration_file,
             section_header,
@@ -590,16 +548,17 @@ bar = "barney"
 
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
+        configuration_file2 = configuration_file.replace("\\", "\\\\")
         assert (
             results.reported_error
-            == f"Specified configuration file '{configuration_file}' is not a valid TOML file: Cannot declare ('plugins', 'tools') twice (at line 4, column 15)."
+            == f"Specified configuration file '{configuration_file}' is not a valid config file: While reading from '{configuration_file2}' [line  4]: section 'plugins.tools' already exists."
         )
     finally:
         if configuration_file and os.path.exists(configuration_file):
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_bad_toml_format_with_header_with_leading_period():
+def test_config_loader_config_file_bad_config_format_with_header_with_leading_period():
     """
     Test to make sure that a header that starts with a period is an error.
     """
@@ -624,7 +583,7 @@ tools.bar = "fred"
         (
             actual_did_apply,
             actual_did_error,
-        ) = ApplicationPropertiesTomlLoader.load_and_set(
+        ) = ApplicationPropertiesConfigLoader.load_and_set(
             application_properties,
             configuration_file,
             section_header,
@@ -637,22 +596,22 @@ tools.bar = "fred"
         assert expected_did_error == actual_did_error
         assert (
             results.reported_error
-            == f"Specified configuration file '{configuration_file}' is not a valid TOML file: Invalid initial character for a key part (at line 1, column 2)."
+            == f"Configuration section name '.plugins' in file '{configuration_file}' is not a valid section name: Configuration section name must not start or end with the '.' character."
         )
     finally:
         if configuration_file and os.path.exists(configuration_file):
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_bad_toml_format_with_item_with_leading_period():
+def test_config_loader_config_file_bad_config_format_with_item_with_leading_period():
     """
     Test to make sure that an item that starts with a period is an error.
     """
 
     # Arrange
-    section_header = "plugins.tools.bar"
+    section_header = None
     supplied_configuration = """[plugins]
-.tools.bar = "fred"
+.tools.bar = fred
 """
     results = ErrorResults()
     expected_did_apply = False
@@ -669,7 +628,7 @@ def test_toml_loader_toml_file_bad_toml_format_with_item_with_leading_period():
         (
             actual_did_apply,
             actual_did_error,
-        ) = ApplicationPropertiesTomlLoader.load_and_set(
+        ) = ApplicationPropertiesConfigLoader.load_and_set(
             application_properties,
             configuration_file,
             section_header,
@@ -682,14 +641,14 @@ def test_toml_loader_toml_file_bad_toml_format_with_item_with_leading_period():
         assert expected_did_error == actual_did_error
         assert (
             results.reported_error
-            == f"Specified configuration file '{configuration_file}' is not a valid TOML file: Invalid statement (at line 2, column 1)."
+            == f"Configuration item name '.tools.bar' in file '{configuration_file}' is not a valid section name: Configuration item name must not start or end with the '.' character."
         )
     finally:
         if configuration_file and os.path.exists(configuration_file):
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_bad_toml_format_with_double_items_through_different_paths():
+def test_config_loader_config_file_bad_config_format_with_double_items_through_different_paths():
     """
     Test to make sure that an item name that is doubled, but through different paths, is caught.
     """
@@ -697,10 +656,10 @@ def test_toml_loader_toml_file_bad_toml_format_with_double_items_through_differe
     # Arrange
     section_header = None
     supplied_configuration = """[plugins]
-tools.bar = "fred"
+tools.bar = fred
 
 [plugins.tools]
-bar = "fred"
+bar = fred
 """
     results = ErrorResults()
     expected_did_apply = False
@@ -717,7 +676,7 @@ bar = "fred"
         (
             actual_did_apply,
             actual_did_error,
-        ) = ApplicationPropertiesTomlLoader.load_and_set(
+        ) = ApplicationPropertiesConfigLoader.load_and_set(
             application_properties,
             configuration_file,
             section_header,
@@ -730,7 +689,54 @@ bar = "fred"
         assert expected_did_error == actual_did_error
         assert (
             results.reported_error
-            == f"Specified configuration file '{configuration_file}' is not a valid TOML file: Cannot declare ('plugins', 'tools') twice (at line 4, column 15)."
+            == f"Full configuration item name 'plugins.tools.bar' in file '{configuration_file}' occurs multiple times using different formats."
+        )
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)
+
+
+def test_config_loader_config_file_bad_config_format_with_no_item_value():
+    """
+    Test to make sure that an item name that is followed by a separator, but not value, is handled.
+    """
+
+    # Arrange
+    section_header = None
+    supplied_configuration = """[plugins]
+tools.bar =\a\a\a\a
+""".replace(
+        "\a", " "
+    )
+    results = ErrorResults()
+    expected_did_apply = False
+    expected_did_error = True
+
+    configuration_file = None
+    try:
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
+        application_properties = ApplicationProperties()
+
+        # Act
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesConfigLoader.load_and_set(
+            application_properties,
+            configuration_file,
+            section_header,
+            results.keep_error,
+            True,
+            False,
+        )
+
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
+        assert (
+            results.reported_error
+            == f"Full configuration item name 'plugins.tools.bar' in file '{configuration_file}' does not have a value assigned to it."
         )
     finally:
         if configuration_file and os.path.exists(configuration_file):

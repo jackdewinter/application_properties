@@ -5,7 +5,7 @@ import io
 import json
 import os
 import sys
-import tempfile
+from test.test_helpers import TestHelpers
 
 from application_properties import (
     ApplicationProperties,
@@ -13,21 +13,33 @@ from application_properties import (
 )
 
 
-def write_temporary_configuration(supplied_configuration):
+def test_json_loader_config_not_present():
     """
-    Write the configuration as a temporary file that is kept around.
+    Test to make sure that we do not try and load a configuration file that is not present.
     """
-    try:
-        with tempfile.NamedTemporaryFile("wt", delete=False) as outfile:
-            if isinstance(supplied_configuration, str):
-                outfile.write(supplied_configuration)
-            else:
-                json.dump(supplied_configuration, outfile)
-            return outfile.name
-    except IOError as ex:
-        raise AssertionError(
-            f"Test configuration file was not written ({str(ex)})."
-        ) from ex
+
+    # Arrange
+    configuration_file = "does-not-exist"
+    configuration_file = os.path.abspath(configuration_file)
+    assert not os.path.exists(configuration_file)
+    application_properties = ApplicationProperties()
+
+    expected_did_apply = False
+    expected_did_error = False
+    expected_value = -1
+
+    # Act
+    actual_did_apply, actual_did_error = ApplicationPropertiesJsonLoader.load_and_set(
+        application_properties, configuration_file, None, True, True
+    )
+    actual_value = application_properties.get_integer_property(
+        "plugins.md999.test_value", -1
+    )
+
+    # Assert
+    assert expected_value == actual_value
+    assert expected_did_error == actual_did_error
+    assert expected_did_apply == actual_did_apply
 
 
 def test_json_loader_valid_json():
@@ -38,14 +50,21 @@ def test_json_loader_valid_json():
     # Arrange
     supplied_configuration = {"plugins": {"md999": {"test_value": 2}}}
     expected_value = 2
+    expected_did_apply = True
+    expected_did_error = False
 
     configuration_file = None
     try:
-        configuration_file = write_temporary_configuration(supplied_configuration)
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
         application_properties = ApplicationProperties()
 
         # Act
-        ApplicationPropertiesJsonLoader.load_and_set(
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesJsonLoader.load_and_set(
             application_properties, configuration_file
         )
         actual_value = application_properties.get_integer_property(
@@ -54,6 +73,8 @@ def test_json_loader_valid_json():
 
         # Assert
         assert expected_value == actual_value
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
     finally:
         if configuration_file and os.path.exists(configuration_file):
             os.remove(configuration_file)
@@ -71,15 +92,22 @@ def test_json_loader_valid_json_but_wrong_get_property_type():
     expected_error = (
         "The value for property 'plugins.md999.test_value' must be of type 'int'."
     )
+    expected_did_apply = True
+    expected_did_error = False
 
     configuration_file = None
     try:
-        configuration_file = write_temporary_configuration(supplied_configuration)
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
         application_properties = ApplicationProperties()
 
         # Act
         captured_exception = None
-        ApplicationPropertiesJsonLoader.load_and_set(
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesJsonLoader.load_and_set(
             application_properties, configuration_file
         )
         try:
@@ -90,6 +118,8 @@ def test_json_loader_valid_json_but_wrong_get_property_type():
             captured_exception = this_exception
 
         # Assert
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
         assert not application_properties.convert_untyped_if_possible
         assert captured_exception is not None
         assert str(captured_exception) == expected_error
@@ -110,15 +140,22 @@ def test_json_loader_valid_json_but_wrong_get_property_type_with_untyped_convers
     expected_error = (
         "The value for property 'plugins.md999.test_value' must be of type 'int'."
     )
+    expected_did_apply = True
+    expected_did_error = False
 
     configuration_file = None
     try:
-        configuration_file = write_temporary_configuration(supplied_configuration)
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
         application_properties = ApplicationProperties(convert_untyped_if_possible=True)
 
         # Act
         captured_exception = None
-        ApplicationPropertiesJsonLoader.load_and_set(
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesJsonLoader.load_and_set(
             application_properties, configuration_file
         )
         try:
@@ -129,6 +166,8 @@ def test_json_loader_valid_json_but_wrong_get_property_type_with_untyped_convers
             captured_exception = this_exception
 
         # Assert
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
         assert application_properties.convert_untyped_if_possible
         assert captured_exception is not None
         assert str(captured_exception) == expected_error
@@ -144,6 +183,8 @@ def test_json_loader_invalid_json():
 
     # Arrange
     supplied_configuration = "this is not a json file"
+    expected_did_apply = False
+    expected_did_error = True
 
     handled_error_parameters = []
 
@@ -153,15 +194,22 @@ def test_json_loader_invalid_json():
 
     configuration_file = None
     try:
-        configuration_file = write_temporary_configuration(supplied_configuration)
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
         application_properties = ApplicationProperties()
 
         # Act
-        ApplicationPropertiesJsonLoader.load_and_set(
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesJsonLoader.load_and_set(
             application_properties, configuration_file, handle_error_fn=inner_func
         )
 
         # Assert
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
         assert handled_error_parameters
         assert handled_error_parameters[0].startswith("Specified configuration file ")
         assert (
@@ -180,6 +228,8 @@ def test_json_loader_missing_file():
     """
 
     # Arrange
+    expected_did_apply = False
+    expected_did_error = True
     handled_error_parameters = []
 
     def inner_func(formatted_error, this_exception):
@@ -191,11 +241,16 @@ def test_json_loader_missing_file():
     application_properties = ApplicationProperties()
 
     # Act
-    ApplicationPropertiesJsonLoader.load_and_set(
-        application_properties, configuration_file, handle_error_fn=inner_func
+    actual_did_apply, actual_did_error = ApplicationPropertiesJsonLoader.load_and_set(
+        application_properties,
+        configuration_file,
+        handle_error_fn=inner_func,
+        check_for_file_presence=False,
     )
 
     # Assert
+    assert expected_did_apply == actual_did_apply
+    assert expected_did_error == actual_did_error
     assert handled_error_parameters
     assert handled_error_parameters[0].startswith(
         "Specified configuration file 'missing_file_name.other' was not loaded: "
@@ -210,6 +265,8 @@ def test_json_loader_valid_json_but_invalid_key():
 
     # Arrange
     supplied_configuration = {"plugins": {"md999": {"test.value": 2}}}
+    expected_did_apply = False
+    expected_did_error = True
 
     handled_error_parameters = []
 
@@ -219,15 +276,22 @@ def test_json_loader_valid_json_but_invalid_key():
 
     configuration_file = None
     try:
-        configuration_file = write_temporary_configuration(supplied_configuration)
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
         application_properties = ApplicationProperties()
 
         # Act
-        ApplicationPropertiesJsonLoader.load_and_set(
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesJsonLoader.load_and_set(
             application_properties, configuration_file, inner_func
         )
 
         # Assert
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
         assert handled_error_parameters
         assert handled_error_parameters[0].startswith("Specified configuration file '")
         assert (
@@ -240,17 +304,21 @@ def test_json_loader_valid_json_but_invalid_key():
             os.remove(configuration_file)
 
 
-def test_json_loader_valid_json_but_invalid_key_xx():
+def test_json_loader_valid_json_but_invalid_key_with_stdin_capture():
     """
     Test to make sure that we can load a valid Json file, but fail when there is an invalid key.
     """
 
     # Arrange
     supplied_configuration = {"plugins": {"md999": {"test.value": 2}}}
+    expected_did_apply = False
+    expected_did_error = True
 
     configuration_file = None
     try:
-        configuration_file = write_temporary_configuration(supplied_configuration)
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
         application_properties = ApplicationProperties()
 
         # Act
@@ -262,7 +330,10 @@ def test_json_loader_valid_json_but_invalid_key_xx():
             sys.stdout = new_stdout
             sys.stderr = new_stderr
 
-            ApplicationPropertiesJsonLoader.load_and_set(
+            (
+                actual_did_apply,
+                actual_did_error,
+            ) = ApplicationPropertiesJsonLoader.load_and_set(
                 application_properties, configuration_file
             )
         finally:
@@ -270,6 +341,8 @@ def test_json_loader_valid_json_but_invalid_key_xx():
             sys.stderr = saved_stderr
 
         # Assert
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
         assert new_stdout.getvalue().startswith("Specified configuration file '")
         assert (
             "' is not valid: Keys strings cannot contain the separator character '.'."
@@ -300,10 +373,10 @@ def test_json_loader_pair_valid_json():
 
     configuration_file_first = None
     try:
-        configuration_file_first = write_temporary_configuration(
+        configuration_file_first = TestHelpers.write_temporary_configuration(
             supplied_configuration_first
         )
-        configuration_file_second = write_temporary_configuration(
+        configuration_file_second = TestHelpers.write_temporary_configuration(
             supplied_configuration_second
         )
         application_properties = ApplicationProperties()

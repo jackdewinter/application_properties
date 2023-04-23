@@ -87,6 +87,12 @@ class ApplicationProperties:
         """
         self.__convert_untyped_if_possible = True
 
+    def clear(self) -> None:
+        """
+        Clear the configuration map.
+        """
+        self.__flat_property_map.clear()
+
     def load_from_dict(
         self, config_map: Dict[Any, Any], clear_map: bool = True
     ) -> None:
@@ -99,7 +105,7 @@ class ApplicationProperties:
 
         LOGGER.debug("Loading from dictionary: {%s}", str(config_map))
         if clear_map:
-            self.__flat_property_map.clear()
+            self.clear()
         self.__scan_map(config_map, "")
 
     @staticmethod
@@ -125,16 +131,20 @@ class ApplicationProperties:
         return property_key
 
     @staticmethod
-    def verify_full_key_form(property_key: str) -> str:
+    def verify_full_key_form(
+        property_key: str, alternate_name: Optional[str] = None
+    ) -> str:
         """
         Given a full key, verify that it is composed properly.
         """
+
+        key_name = alternate_name or "Full property key"
 
         if property_key.startswith(
             ApplicationProperties.__separator
         ) or property_key.endswith(ApplicationProperties.__separator):
             raise ValueError(
-                f"Full property key must not start or end with the '{ApplicationProperties.__separator}' character."
+                f"{key_name} must not start or end with the '{ApplicationProperties.__separator}' character."
             )
         doubles = (
             f"{ApplicationProperties.__separator}{ApplicationProperties.__separator}"
@@ -142,7 +152,7 @@ class ApplicationProperties:
         doubles_index = property_key.find(doubles)
         if doubles_index != -1:
             raise ValueError(
-                "Full property key cannot contain multiples of "
+                f"{key_name} cannot contain multiples of "
                 + f"the {ApplicationProperties.__separator} without any text between them."
             )
         split_key = property_key.split(ApplicationProperties.__separator)
