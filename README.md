@@ -1,9 +1,9 @@
-# application_properties
+# Library Package: application_properties
 
 |   |   |
 |---|---|
 |Project|[![Version](https://img.shields.io/pypi/v/application_properties.svg)](https://pypi.org/project/application_properties)  [![Python Versions](https://img.shields.io/pypi/pyversions/application_properties.svg)](https://pypi.org/project/application_properties)  ![platforms](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey)  [![License](https://img.shields.io/github/license/jackdewinter/application_properties.svg)](https://github.com/jackdewinter/application_properties/blob/main/LICENSE.txt)  [![GitHub top language](https://img.shields.io/github/languages/top/jackdewinter/application_properties)](https://github.com/jackdewinter/application_properties)|
-|Quality|[![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/jackdewinter/application_properties/Main)](https://github.com/jackdewinter/application_properties/actions/workflows/main.yml)  [![Issues](https://img.shields.io/github/issues/jackdewinter/application_properties.svg)](https://github.com/jackdewinter/application_properties/issues)  [![codecov](https://codecov.io/gh/jackdewinter/pymarkdown/branch/main/graph/badge.svg?token=PD5TKS8NQQ)](https://codecov.io/gh/jackdewinter/application_properties)  [![Sourcery](https://img.shields.io/badge/Sourcery-enabled-brightgreen)](https://sourcery.ai)  ![snyk](https://img.shields.io/snyk/vulnerabilities/github/jackdewinter/application_properties) |
+|Quality|[![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/jackdewinter/application_properties/Main)](https://github.com/jackdewinter/application_properties/actions/workflows/main.yml)  [![Issues](https://img.shields.io/github/issues/jackdewinter/application_properties.svg)](https://github.com/jackdewinter/application_properties/issues)  [![codecov](https://codecov.io/gh/jackdewinter/application_properties/branch/main/graph/badge.svg?token=PD5TKS8NQQ)](https://codecov.io/gh/jackdewinter/application_properties)  [![Sourcery](https://img.shields.io/badge/Sourcery-enabled-brightgreen)](https://sourcery.ai)  ![snyk](https://img.shields.io/snyk/vulnerabilities/github/jackdewinter/application_properties) |
 |  |![GitHub Pipenv locked dependency version (branch)](https://img.shields.io/github/pipenv/locked/dependency-version/jackdewinter/application_properties/black/main)  ![GitHub Pipenv locked dependency version (branch)](https://img.shields.io/github/pipenv/locked/dependency-version/jackdewinter/application_properties/flake8/main)  ![GitHub Pipenv locked dependency version (branch)](https://img.shields.io/github/pipenv/locked/dependency-version/jackdewinter/application_properties/pylint/main)  ![GitHub Pipenv locked dependency version (branch)](https://img.shields.io/github/pipenv/locked/dependency-version/jackdewinter/application_properties/mypy/main)  ![GitHub Pipenv locked dependency version (branch)](https://img.shields.io/github/pipenv/locked/dependency-version/jackdewinter/application_properties/pyroma/main)  ![GitHub Pipenv locked dependency version (branch)](https://img.shields.io/github/pipenv/locked/dependency-version/jackdewinter/application_properties/pre-commit/main)|
 |Community|[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/jackdewinter/application_properties/graphs/commit-activity) [![Stars](https://img.shields.io/github/stars/jackdewinter/application_properties.svg)](https://github.com/jackdewinter/application_properties/stargazers)  [![Forks](https://img.shields.io/github/forks/jackdewinter/application_properties.svg)](https://github.com/jackdewinter/application_properties/network/members)  [![Contributors](https://img.shields.io/github/contributors/jackdewinter/application_properties.svg)](https://github.com/jackdewinter/application_properties/graphs/contributors)  [![Downloads](https://img.shields.io/pypi/dm/project_summarizer.svg)](https://pypistats.org/packages/project_summarizer)|
 |Maintainers|[![LinkedIn](https://img.shields.io/badge/-LinkedIn-black.svg?logo=linkedin&colorB=555)](https://www.linkedin.com/in/jackdewinter/)|
@@ -62,187 +62,49 @@ elements:
 - accessing a specific string property, possibly with a default, from the that
   property store
 
-The examples in this section focus specifically on those elements, with more
-examples for the other scenarios being available in the
-[Advanced Examples document](https://github.com/jackdewinter/application_properties/blob/main/docs/advanced_examples.md).
+### Examples
 
-### A Word On The Examples
+For concrete examples that show the power of this library package, please consult
+the [Examples Document](./docs/examples.md).  If you come up with a normal example
+of how to use our package that we have missed, or come up with a novel example of
+how to use our package, please file an issue using the process below and let us
+know. From our experience, one example can often paint a picture of how to use our
+project that is difficult to explain clearly with just words.
 
-This section on `How To Use This Package` provides easy to follow Python code snippets.
-Each snippet is available as a complete Python script file in the project's
-[examples directory](https://github.com/jackdewinter/application_properties/tree/main/examples).
-To ensure the integrity of each Python script, the following lines are present at
-the start of each Python file:
+## Issues and Future Plans
 
-```Python
-import os
-import sys
-
-sys.path.insert(0, os.path.abspath(os.getcwd()))  # isort:skip
-```
-
-This prefix allows our team to frequently execute these samples from the project's base
-directory, on the watch for any changes in behavior.
-
-For the sake of brevity, as those lines are at the start of every
-example file, their use is documented here and will remain absent from any
-Python examples presented in the following sections.
-
-### Example 01 - Get A String Property From An Empty Property Instance
-
-The Python script for
-[Example 01](https://github.com/jackdewinter/application_properties/blob/main/examples/example_01.py)
-illustrates the basics of using
-the `application_properties` package.  This example imports the `ApplicationProperties`
-class from the `application_properties` package, then creating a new instance of
-that class and assigning it to the `properties` variable.  Next, the example prints
-the result of calling the `get_string_property` for that new instance of the class,
-having requested the value for the property named `my_property`.
-
-```Python
-from application_properties import ApplicationProperties
-
-properties = ApplicationProperties()
-print(properties.get_string_property("my_property"))
-```
-
-As there are no properties present in the instance, the output is predictably:
-
-```text
-None
-```
-
-### Example 02 - Get A String Property After Loading Json Data Into The Property Instance
-
-For the purposes of this example, the
-[example data file](https://github.com/jackdewinter/application_properties/blob/main/examples/example_data.json),
-`example_data.json`, contains the following JSON object:
-
-```json
-{
-    "my_property" : "test data"
-}
-```
-
-The Python script for
-[Example 02](https://github.com/jackdewinter/application_properties/blob/main/examples/example_02.py),
-takes the previous script and includes the
-import for the `ApplicationPropertiesJsonLoader` loader class. Then, after the declaration
-and assignment of the `properties` instance, as was done in the previous example, the script
-then calls the `load_and_set` function of the `ApplicationPropertiesJsonLoader` loader class
-to load the data file into the `properties` instance:
-
-```Python
-from application_properties import ApplicationProperties, ApplicationPropertiesJsonLoader
-
-properties = ApplicationProperties()
-ApplicationPropertiesJsonLoader.load_and_set(
-    properties, os.path.join(os.path.dirname(__file__), "example_data.json")
-)
-print(properties.get_string_property("my_property"))
-```
-
-As the data file contains a single value with the name `my_property`, with the string value of
-`test data` assigned to it.
-
-```text
-test data
-```
-
-However, that example only shows what happens if the value is present.  The
-sibiling example,
-[Example 02A](https://github.com/jackdewinter/application_properties/blob/main/examples/example_02a.py),
-is the same script with the exception of changing the line:
-
-```Python
-print(properties.get_string_property("my_property"))
-```
-
-to:
-
-```Python
-print(properties.get_string_property("my_other_property"))
-```
-
-In this case, there are valid properties loaded, but none of those properties
-have the name `my_other_property`. As such, the result that is printed is:
-
-```text
-None
-```
-
-### Example 03 - Get A String Property With A Default Value
-
-Keeping with the theme of introducing gradual changes as the examples progress,
-the only change that was made from
-[Example 02A](https://github.com/jackdewinter/application_properties/blob/main/examples/example_02a.py)
-to
-[Example 03](https://github.com/jackdewinter/application_properties/blob/main/examples/example_03.py)
-was that the call to `get_string_property` was modified to include a default
-value parameter:
-
-```Python
-from application_properties import ApplicationProperties, ApplicationPropertiesJsonLoader
-
-properties = ApplicationProperties()
-ApplicationPropertiesJsonLoader.load_and_set(
-    properties, os.path.join(os.path.dirname(__file__), "example_data.json")
-)
-print(properties.get_string_property("my_other_property", default="default value"))
-```
-
-When the example is executed, no value is found for the property `my_other_property`,
-the same as before.  However, due to the the `default` parameter,  the function has
-been instructed to return something other than `None` if nothing was found.  Therefore,
-the result that is printed is:
-
-```text
-default value
-```
-
-### Example 04 - Simple Property File Loader
-
-TBD
-
-### Advanced Examples
-
-As mentioned before, while the bulk of property accessing and loading operations
-can be accomplished using information from the above basic examples, more advanced
-examples are available in the
-[Advanced Examples document](https://github.com/jackdewinter/application_properties/blob/main/docs/advanced_examples.md).
-
-## Finding Issues
-
-If you find any issues, please report them using the standard GitHub issues process.
-When our team looks at your issue and triages it, we will assign it a priority and
-try our best to make that priority transparent within the project's repository.
-
-## When Did Things Change?
-
-The changelog for this project is maintained [at this location](changelog.md).
-
-## Still Have Questions?
-
-If you still have questions, please consult our [Frequently Asked Questions document](docs\faq.md).
-
-## Contact Information
-
-If you would like to report an issue with the library or its documentation, please
+If you would like to report an issue with the library or the documentation, please
 file an issue [using GitHub](https://github.com/jackdewinter/application_properties/issues).
+Please remember to fill in as much information as possible including a good, repeatable
+pattern for reproducing the issue.  Do not overflow us with too much information,
+but provide us with enough information to make the problem evident to us.
 
 If you would like to us to implement a feature that you believe is important, please
 file an issue [using GitHub](https://github.com/jackdewinter/application_properties/issues)
-that includes what you want to add, why you want to add it, and why it is important.
-Please note that the filing of your issue will usually be the start of a conversation,
-and be ready for more questions.
+that includes what you want to add, why you want to add it, and why it is important
+to you, and how you think it will help others.  We truly want to listen to what
+you see as a good feature, so please do not be upset if we say "no" or "let me
+think about it".
 
-If you would like to contribute to the project in a more substantial manner, please
-contact me at jack.de.winter at outlook.com.
+Please note that the issue you file will usually be the start of a conversation,
+so be ready for more questions.  If you have any Python developer skills, please
+mention that as well.  The conversations about "hey, can you..." is a lot different
+than "if I do... can I add it to the project?".
+
+## When Did Things Change?
+
+The changelog for this project is maintained [at this location](/changelog.md).
+
+## Still Have Questions?
+
+If you still have questions, please consult our
+[Frequently Asked Questions](/docs/faq.md) document.
 
 ## Instructions For Contributing
 
 Developer notes on various topics are kept in the the
-[Developer Notes document](docs\developer.md).
+[Developer Notes](/docs/developer.md) document.
 
-If you attempting to contribute something to this project, please follow the steps
-outlined in the [CONTRIBUTING.md file](CONTRIBUTING.md).
+If you attempting to contribute something to this project,
+please follow the steps outlined in the
+[CONTRIBUTING.md](/CONTRIBUTING.md) file.
