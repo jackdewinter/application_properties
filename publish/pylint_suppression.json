@@ -1,0 +1,36 @@
+{
+    "disables-by-file": {
+        "application_properties/__init__.py": {},
+        "application_properties/application_properties.py": {
+            "unidiomatic-typecheck": 1,
+            "too-many-arguments": 3,
+            "broad-except": 1,
+            "raise-missing-from": 1
+        },
+        "application_properties/application_properties_config_loader.py": {
+            "too-few-public-methods": 1,
+            "too-many-arguments": 3
+        },
+        "application_properties/application_properties_facade.py": {
+            "too-many-arguments": 3
+        },
+        "application_properties/application_properties_json_loader.py": {
+            "too-few-public-methods": 1
+        },
+        "application_properties/application_properties_loader_helper.py": {
+            "too-few-public-methods": 1
+        },
+        "application_properties/application_properties_toml_loader.py": {
+            "too-few-public-methods": 1,
+            "too-many-arguments": 1
+        },
+        "application_properties/version.py": {}
+    },
+    "disables-by-name": {
+        "unidiomatic-typecheck": 1,
+        "too-many-arguments": 10,
+        "broad-except": 1,
+        "raise-missing-from": 1,
+        "too-few-public-methods": 4
+    }
+}
