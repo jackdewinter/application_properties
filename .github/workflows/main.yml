@@ -122,7 +122,9 @@ jobs:
 
       - name: Execute MyPy
         
-        run: pipenv run mypy --strict ${{ env.project-name }} stubs
+        run: |
+          use_stubs=`find "stubs" -type f -name "*.pyi"` && [ ! -z "$use_stubs" ] && use_stubs="stubs"
+          pipenv run mypy --strict ${{ env.project-name }} $use_stubs
 
       - name: Execute PyMarkdown on Current Docs
         
