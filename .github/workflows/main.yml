@@ -118,7 +118,7 @@ jobs:
           pipenv run pylint --rcfile=setup.cfg --ignore test\resources --recursive=y ${{github.workspace}}/application_properties
       - name: Execute PyLint on Tests
         
-        run: pipenv run pylint ${{github.workspace}}/test
+        run: pipenv run pylint --rcfile=setup.cfg --ignore test\resources --recursive=y ${{github.workspace}}/test
 
       - name: Execute MyPy
         
