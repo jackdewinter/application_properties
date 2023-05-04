@@ -87,11 +87,8 @@ setup(
     keywords=KEYWORDS,
     classifiers=PROJECT_CLASSIFIERS,
     project_urls=PROJECT_URLS,
-    entry_points={
-    },
+    entry_points={},
     packages=get_package_modules(),
     include_package_data=True,
-    package_data={
-        "": ["*.typed"]
-    },
+    package_data={"": ["*.typed"]},
 )
