@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "132577e65e9a773e573d08d6f15733ab5a059a201bc270665a307ebc8491bfc5"
+            "sha256": "0b611f4e1b155052a21b25b250f930917b2fef83b5f2f2118f3e5f6505d6d71c"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,11 +18,11 @@
     "default": {
         "application-properties": {
             "hashes": [
-                "sha256:2172fe240b377ac8948c6a6492c3063722dc5dbbd00456092491688a5d95672e",
-                "sha256:c1fc3c8775a0337d2d8c5268fd4a9b4fed22bc4396e7ce17ad0a5c5463355217"
+                "sha256:0dd854e13dafd0de38f236ecf830b5b16637e6f47d2a651e65725988be2a8d48",
+                "sha256:bd5f8440cd25d2966a585d14c61a0144f70dcc3518bd25a8980a90e01f45cc31"
             ],
             "markers": "python_full_version >= '3.8.0'",
-            "version": "==0.5.2"
+            "version": "==0.6.0"
         },
         "arrow": {
             "hashes": [
@@ -764,11 +764,11 @@
         },
         "pymarkdownlnt": {
             "hashes": [
-                "sha256:bfa3559f33ba8b2257e65024c813a0f0ccd89b55809b17c7729c51f18c911c25",
-                "sha256:c19da8ada46e896c097656dd11d295f91c73756974b2658c227d379257cca1e0"
+                "sha256:0e659878043dff7b3dea9a6dfb618a8c3ae0aa6fcddbf62054d00adbfa53ec7f",
+                "sha256:a4818b3aab09072eac4c081b0f73e1ec688faac1c1387bdc8821fede22ba39b4"
             ],
             "index": "pypi",
-            "version": "==0.9.10"
+            "version": "==0.9.11"
         },
         "pyproject-hooks": {
             "hashes": [
@@ -1041,11 +1041,11 @@
         },
         "typing-extensions": {
             "hashes": [
-                "sha256:1511434bb92bf8dd198c12b1cc812e800d4181cfcb867674e0f8279cc93087aa",
-                "sha256:16fa4864408f655d35ec496218b85f79b3437c829e93320c7c9215ccfd92489e"
+                "sha256:5cb5f4a79139d699607b3ef622a1dedafa84e115ab0024e0d9c044a9479ca7cb",
+                "sha256:fb33085c39dd998ac16d1431ebc293a8b3eedd00fd4a32de0ff79002c19511b4"
             ],
             "index": "pypi",
-            "version": "==4.4.0"
+            "version": "==4.5.0"
         },
         "urllib3": {
             "hashes": [
