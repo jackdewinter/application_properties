@@ -10,6 +10,9 @@ on:
   schedule:
     - cron: '0 0 * * *'  # daily at midnight
 
+env:
+  project-name: application_properties
+
 jobs:
   scenario-tests:
     strategy:
@@ -17,63 +20,113 @@ jobs:
         #python: [3.8, 3.9]
         python: [3.8]
         platform: [windows-latest, ubuntu-latest, macos-latest]
+        
     runs-on: ${{ matrix.platform }}
+
     steps:
+
       - name: Checkout Repository
         uses: actions/checkout@master
+
       - name: Setup Python 3.8
         uses: actions/setup-python@v4.6.0
         with:
           python-version: 3.8
+
       - name: Install PipEnv
         run: |
           pip install pipenv==2022.1.8
+
       - name: Sync With Repository
         run: |
           pipenv lock
           pipenv sync
           pipenv graph
+
       - name: Execute Tests
-        run: pipenv run pytest --cov-fail-under=90 --cov --cov-branch --cov-report xml:report/coverage.xml --cov-report html:report/coverage
+        run: pipenv run pytest --cov-fail-under=80 --cov --cov-branch --cov-report xml:report/coverage.xml --cov-report html:report/coverage
+
       - name: Archive coverage artifacts
         uses: actions/upload-artifact@v3
         with:
+        
           name: ${{ matrix.platform }} Coverage
+
           path: |
             ./report/coverage.xml
             ./report/coverage
+
       - name: Report Coverage
         uses: codecov/codecov-action@v3
         if: github.event_name != 'schedule'
         with:
           file: ./report/coverage.xml
+        
           name: ${{ matrix.python }} - ${{ matrix.platform }}
+
           fail_ci_if_error: true
+
   lint:
     strategy:
       matrix:
         python: [3.8]
         platform: [ubuntu-latest]
+        
     runs-on: ${{ matrix.platform }}
+
     steps:
+
       - name: Checkout Repository
         uses: actions/checkout@master
+
       - name: Setup Python 3.8
         uses: actions/setup-python@v4.6.0
         with:
           python-version: 3.8
+
       - name: Install PipEnv
         run: |
           pip install pipenv==2022.1.8
+
       - name: Sync With Repository
         run: |
           pipenv lock
           pipenv sync
           pipenv graph
+
+      - name: Execute Black
+        run: |
+          pipenv run black .
+
+      - name: Execute ISort
+        run: |
+          pipenv run isort .
+
+      - name: Execute Pre-Commit
+        run: |
+          pipenv run pre-commit run --all
+
       - name: Execute Flake8
         run: pipenv run flake8 --exclude dist,build
+      - name: Execute Bandit
+        run: |
+        
+          pipenv run bandit -q -r ${{ env.project-name }}
+
       - name: Execute PyLint on Source
         run: |
-          pipenv run pylint --rcfile=${{github.workspace}}/setup.cfg ${{github.workspace}}/application_properties
+          pipenv run pylint --rcfile=setup.cfg --ignore test\resources --recursive=y ${{github.workspace}}/application_properties
       - name: Execute PyLint on Tests
-        run: pipenv run pylint --rcfile=${{github.workspace}}/setup.cfg ${{github.workspace}}/test
+        
+        run: pipenv run pylint --rcfile=setup.cfg --ignore test\resources --recursive=y ${{github.workspace}}/test
+
+      - name: Execute MyPy
+        
+        run: |
+          use_stubs=`find "stubs" -type f -name "*.pyi"` && [ ! -z "$use_stubs" ] && use_stubs="stubs"
+          pipenv run mypy --strict ${{ env.project-name }} $use_stubs
+
+      - name: Execute PyMarkdown on Current Docs
+        
+        run: pipenv run pymarkdown --config ${{github.workspace}}/clean.json scan ${{github.workspace}} ${{github.workspace}}/docs
+

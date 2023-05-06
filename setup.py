@@ -7,9 +7,9 @@ import runpy
 
 from setuptools import setup
 
+INSTALL_REQUIREMENT_FILE = "install-requirements.txt"
 PROJECT_README_FILE = "README.md"
 ALTERNATE_PYPI_README_FILE = "pypi.md"
-INSTALL_REQUIREMENT_FILE = "install-requirements.txt"
 
 
 def parse_requirements():
@@ -31,6 +31,14 @@ def load_readme_file():
     )
     with open(source_file, "r", encoding="utf-8") as readme_file:
         return readme_file.read()
+
+
+def get_package_modules():
+    return [
+        next_item[0][2:]
+        for next_item in os.walk(".")
+        if os.path.exists(os.path.join(next_item[0], ".external-package"))
+    ]
 
 
 AUTHOR = "Jack De Winter"
@@ -63,10 +71,6 @@ PROJECT_CLASSIFIERS = [
     "Topic :: Software Development :: Libraries :: Application Frameworks",
 ]
 
-PACKAGE_MODULES = [
-    "application_properties",
-]
-
 setup(
     name=PACKAGE_NAME,
     version=SEMANTIC_VERSION,
@@ -84,7 +88,7 @@ setup(
     classifiers=PROJECT_CLASSIFIERS,
     project_urls=PROJECT_URLS,
     entry_points={},
-    packages=PACKAGE_MODULES,
+    packages=get_package_modules(),
     include_package_data=True,
     package_data={"": ["*.typed"]},
 )
