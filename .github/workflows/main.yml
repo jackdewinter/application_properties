@@ -128,5 +128,5 @@ jobs:
 
       - name: Execute PyMarkdown on Current Docs
         
-        run: pipenv run python ${{github.workspace}}/main.py --config ${{github.workspace}}/clean.json scan ${{github.workspace}} ${{github.workspace}}/docs
+        run: pipenv run pymarkdown --config ${{github.workspace}}/clean.json scan ${{github.workspace}} ${{github.workspace}}/docs
 
