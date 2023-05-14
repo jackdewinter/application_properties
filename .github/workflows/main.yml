@@ -10,6 +10,7 @@ on:
 
 env:
   project-name: application_properties
+  default-python-version: 3.8
 
 jobs:
 
