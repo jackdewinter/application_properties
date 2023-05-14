@@ -143,7 +143,6 @@ if defined STUBS_DIRECTORY (
 	set STUBS_DIRECTORY=stubs
 )
 
-echo {Executing mypy static analyzer on Python source code.}
 pipenv run mypy --strict %PYTHON_MODULE_NAME% !STUBS_DIRECTORY!
 if ERRORLEVEL 1 (
 	echo.
@@ -164,6 +163,14 @@ pipenv run pylint -j 1 --rcfile=setup.cfg --ignore test\resources --recursive=y 
 if ERRORLEVEL 1 (
 	echo.
 	echo {Executing pylint static analyzer on test Python code failed.}
+	goto error_end
+)	
+
+echo {Executing pylint static analyzer on utils Python code.}
+pipenv run pylint -j 1 --rcfile=setup.cfg --recursive=y %MY_VERBOSE% utils
+if ERRORLEVEL 1 (
+	echo.
+	echo {Executing pylint static analyzer on utils Python code failed.}
 	goto error_end
 )	
 
