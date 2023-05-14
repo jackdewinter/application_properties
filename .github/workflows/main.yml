@@ -72,11 +72,7 @@ jobs:
   lint:
 
     name: Project Quality Analysis
-    strategy:
-      matrix:
-        python: [3.8]
-        platform: [ubuntu-latest]
-    runs-on: ${{ matrix.platform }}
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     defaults:
       run:
