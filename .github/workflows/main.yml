@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Setup Python 3.8
-        uses: actions/setup-python@v4.6.0
+        uses: actions/setup-python@v4.6.1
         with:
           python-version: 3.8
 
@@ -85,7 +85,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Setup Python 3.8
-        uses: actions/setup-python@v4.6.0
+        uses: actions/setup-python@v4.6.1
         with:
           python-version: 3.8
 
@@ -152,7 +152,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Setup Python ${{ env.default-python-version }}
-        uses: actions/setup-python@v4.5.0
+        uses: actions/setup-python@v4.6.1
         with:
           python-version: ${{ env.default-python-version }}
 
