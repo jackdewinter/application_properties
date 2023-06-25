@@ -1,9 +1,5 @@
 # Advanced Examples
 
-## Property Names
-
-- strings separated by "."
-
 ```Python
 self.__properties.get_string_property("log.file")
 ```

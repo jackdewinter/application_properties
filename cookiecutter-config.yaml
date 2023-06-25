@@ -3,7 +3,6 @@ default_context:
     pypi_package_name: "application_properties"
     github_organization: "jackdewinter"
     github_project_name: "application_properties"
-    main_class_name: "Fred"
     one_line_setup_description : "A simple, easy to use, unified manner of accessing program properties."
     setup_intended_audience : "\"Intended Audience :: Developers\","
     setup_additional_classifier : "\"Topic :: Software Development :: Libraries :: Application Frameworks\","

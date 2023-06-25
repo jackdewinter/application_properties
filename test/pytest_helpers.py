@@ -3,6 +3,7 @@ Module to provide helper methods for tests.
 """
 import json
 import tempfile
+from typing import Any, Optional, Union
 
 
 # pylint: disable=too-few-public-methods
@@ -12,7 +13,7 @@ class TestHelpers:
     """
 
     @staticmethod
-    def write_temporary_configuration(supplied_configuration):
+    def write_temporary_configuration(supplied_configuration: Union[str, Any]) -> str:
         """
         Write the configuration as a temporary file that is kept around.
         """
@@ -38,10 +39,12 @@ class ErrorResults:
     Class to collect the error results.
     """
 
-    def __init__(self):
-        self.reported_error = None
+    def __init__(self) -> None:
+        self.reported_error: str
 
-    def keep_error(self, formatted_error: str, thrown_exception: Exception) -> None:
+    def keep_error(
+        self, formatted_error: str, thrown_exception: Optional[Exception]
+    ) -> None:
         """
         Deal with the error by keeping a record of it to compare.
         """

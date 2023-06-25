@@ -1,12 +1,14 @@
 """
 Tests for the ApplicationProperties class
 """
+from typing import Any, Dict
+
 from application_properties import ApplicationProperties
 
 # pylint: disable=too-many-lines
 
 
-def test_property_name_separator():
+def test_property_name_separator() -> None:
     """
     Test to make sure that the property name separator is as expected.
     """
@@ -22,7 +24,7 @@ def test_property_name_separator():
     assert actual_separator == expected_separator
 
 
-def test_properties_with_object():
+def test_properties_with_object() -> None:
     """
     Test to make sure that a default application properties object has no properties.
     """
@@ -38,7 +40,7 @@ def test_properties_with_object():
     assert actual_property_count == expected_property_count
 
 
-def test_properties_with_single_property():
+def test_properties_with_single_property() -> None:
     """
     Test a configuration map with a single property, and how that property looks.
     """
@@ -59,7 +61,7 @@ def test_properties_with_single_property():
     assert "enabled" in found_names
 
 
-def test_properties_with_single_nested_property():
+def test_properties_with_single_nested_property() -> None:
     """
     Test a configuration map with a single nested property, and how that property looks.
     """
@@ -80,7 +82,7 @@ def test_properties_with_single_nested_property():
     assert "feature.enabled" in found_names
 
 
-def test_properties_with_mixed_properties():
+def test_properties_with_mixed_properties() -> None:
     """
     Test a configuration map with properties at different levels, and how those properties look.
     """
@@ -106,13 +108,13 @@ def test_properties_with_mixed_properties():
     assert "other_feature.other" in found_names
 
 
-def test_get_properties_under_at_top_level_partial():
+def test_get_properties_under_at_top_level_partial() -> None:
     """
     Test calling the `property_names_under` function specifying only part of the top level.
     """
 
     # Arrange
-    config_map = {
+    config_map: Dict[str, Dict[str, Any]] = {
         "feature": {"enabled": True},
         "other_feature": {"enabled": False, "other": 1},
     }
@@ -128,13 +130,13 @@ def test_get_properties_under_at_top_level_partial():
     assert "other_feature.other" in found_names
 
 
-def test_get_properties_under_at_top_level_none():
+def test_get_properties_under_at_top_level_none() -> None:
     """
     Test calling the `property_names_under` function specifying none of the top level.
     """
 
     # Arrange
-    config_map = {
+    config_map: Dict[str, Dict[str, Any]] = {
         "feature": {"enabled": True},
         "other_feature": {"enabled": False, "other": 1},
     }
@@ -149,7 +151,7 @@ def test_get_properties_under_at_top_level_none():
     assert "missing_feature" not in config_map
 
 
-def test_get_properties_under_at_sub_level():
+def test_get_properties_under_at_sub_level() -> None:
     """
     Test calling the `property_names_under` function specifying none of the top level.
     """
@@ -168,11 +170,11 @@ def test_get_properties_under_at_sub_level():
     found_names = application_properties.property_names_under("new_top_level.feature")
 
     # Assert
-    assert len(found_names) == len(config_map["new_top_level"]["feature"])
+    assert len(found_names) == 1
     assert "new_top_level.feature.enabled" in found_names
 
 
-def test_properties_load_from_non_dictionary():
+def test_properties_load_from_non_dictionary() -> None:
     """
     Test a loading a configuration map that is not a dictionary.
     """
@@ -184,7 +186,7 @@ def test_properties_load_from_non_dictionary():
     # Act
     raised_exception = None
     try:
-        application_properties.load_from_dict(config_map)
+        application_properties.load_from_dict(config_map)  # type: ignore
         raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
@@ -196,7 +198,7 @@ def test_properties_load_from_non_dictionary():
     ), "Expected message was not present in exception."
 
 
-def test_properties_load_with_non_string_key():
+def test_properties_load_with_non_string_key() -> None:
     """
     Test a loading a configuration map that contains a key that is not a string.
     """
@@ -221,7 +223,7 @@ def test_properties_load_with_non_string_key():
     ), "Expected message was not present in exception."
 
 
-def test_properties_load_with_key_containing_dot():
+def test_properties_load_with_key_containing_dot() -> None:
     """
     Test a loading a configuration map that contains a key with a '.' character.
     """
@@ -246,7 +248,7 @@ def test_properties_load_with_key_containing_dot():
     ), "Expected message was not present in exception."
 
 
-def test_properties_get_generic_with_bad_type():
+def test_properties_get_generic_with_bad_type() -> None:
     """
     Test a fetching a configuration value where the generic function is
     used and the type and the default are confused.
@@ -260,7 +262,7 @@ def test_properties_get_generic_with_bad_type():
     # Act
     raised_exception = None
     try:
-        application_properties.get_property("property", False)
+        application_properties.get_property("property", False)  # type: ignore
         raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
@@ -273,7 +275,7 @@ def test_properties_get_generic_with_bad_type():
     ), "Expected message was not present in exception."
 
 
-def test_properties_get_generic_with_required_and_found():
+def test_properties_get_generic_with_required_and_found() -> None:
     """
     Test a fetching a configuration value where the value is required and present.
     """
@@ -293,7 +295,7 @@ def test_properties_get_generic_with_required_and_found():
     assert actual_value == expected_value
 
 
-def test_properties_get_generic_with_required_and_not_found():
+def test_properties_get_generic_with_required_and_not_found() -> None:
     """
     Test a fetching a configuration value where the value is required and not present.
     """
@@ -319,7 +321,7 @@ def test_properties_get_generic_with_required_and_not_found():
     ), "Expected message was not present in exception."
 
 
-def test_properties_get_generic_with_strict_mode_and_bad_type():
+def test_properties_get_generic_with_strict_mode_and_bad_type() -> None:
     """
     Test a fetching a configuration value where strict mode is on and the type is not correct.
     """
@@ -345,7 +347,7 @@ def test_properties_get_generic_with_strict_mode_and_bad_type():
     ), "Expected message was not present in exception."
 
 
-def test_properties_get_generic_with_global_strict_mode_and_bad_type():
+def test_properties_get_generic_with_global_strict_mode_and_bad_type() -> None:
     """
     Test a fetching a configuration value where strict mode is on and the type is not correct.
     """
@@ -372,7 +374,7 @@ def test_properties_get_generic_with_global_strict_mode_and_bad_type():
     ), "Expected message was not present in exception."
 
 
-def test_properties_get_generic_with_delayed_global_strict_mode_and_bad_type():
+def test_properties_get_generic_with_delayed_global_strict_mode_and_bad_type() -> None:
     """
     Test a fetching a configuration value where strict mode is on through the
     delayed mechanism and the type is not correct.
@@ -401,15 +403,15 @@ def test_properties_get_generic_with_delayed_global_strict_mode_and_bad_type():
     ), "Expected message was not present in exception."
 
 
-def __sample_string_validation_function(property_value):
+def __sample_string_validation_function(property_value: str) -> None:
     """
     Simple string validation that throws an error if not "1" or "2".
     """
     if property_value not in ["1", "2"]:
-        raise ValueError(f"Value '{str(property_value)}' is not '1' or '2'")
+        raise ValueError(f"Value '{property_value}' is not '1' or '2'")
 
 
-def test_properties_get_generic_with_strict_mode_and_bad_validity():
+def test_properties_get_generic_with_strict_mode_and_bad_validity() -> None:
     """
     Test a fetching a configuration value where strict mode is on and the value is not valid.
     """

@@ -1,5 +1,7 @@
 """
 Module to verify that the install-requirements.txt file and the Pipfile are synced.
+
+Used in .pre-commit-config.yaml.
 """
 
 import configparser

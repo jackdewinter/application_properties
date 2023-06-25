@@ -14,15 +14,36 @@ env:
 
 jobs:
 
+  matrix-prep:
+
+    name: Prepare Test Matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Calculate test matrix
+      id: set-matrix
+      run: |
+        branchName=$(echo '${{ github.ref }}' | sed 's,refs/heads/,,g')
+        matrix=$(jq --arg branchName "$branchName" 'map(. | select((.runOn==$branchName) or (.runOn=="always")) )' .github/workflows/matrix_includes.json)
+        echo "matrix={\"include\":$(echo $matrix)}" >> $GITHUB_OUTPUT
+
   scenario-tests:
 
     name: Scenario Tests
+    needs: matrix-prep
     strategy:
-      matrix:
-        python: ["3.8", "3.9", "3.10"]
-        platform: [windows-latest, ubuntu-latest, macos-latest]
+      matrix: ${{fromJson(needs.matrix-prep.outputs.matrix)}}
     runs-on: ${{ matrix.platform }}
-    timeout-minutes: 5
+    timeout-minutes: ${{ matrix.timeout }}
     defaults:
       run:
         shell: bash
@@ -32,10 +53,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@master
 
-      - name: Setup Python 3.8
+      - name: Setup Python ${{ matrix.python }}
         uses: actions/setup-python@v4.6.0
         with:
-          python-version: 3.8
+          python-version: ${{ matrix.python }}
 
       - name: Install PipEnv
         run: |
@@ -43,7 +64,7 @@ jobs:
 
       - name: Sync With Repository
         run: |
-          pipenv lock
+          pipenv lock --python ${{ matrix.python }}
           pipenv sync
           pipenv graph
 
@@ -53,9 +74,7 @@ jobs:
       - name: Archive coverage artifacts
         uses: actions/upload-artifact@v3
         with:
-        
           name: ${{ matrix.platform }} Coverage
-
           path: |
             ./report/coverage.xml
             ./report/coverage
@@ -65,9 +84,7 @@ jobs:
         if: github.event_name != 'schedule'
         with:
           file: ./report/coverage.xml
-        
           name: ${{ matrix.python }} - ${{ matrix.platform }}
-
           fail_ci_if_error: true
 
   lint:

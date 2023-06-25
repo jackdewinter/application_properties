@@ -1,10 +1,12 @@
 """
 Tests for the get_string* functions of the ApplicationProperties class
 """
+from typing import Any
+
 from application_properties import ApplicationProperties
 
 
-def test_properties_get_string_with_found_value():
+def test_properties_get_string_with_found_value() -> None:
     """
     Test fetching a configuration value that is present and string.
     """
@@ -22,7 +24,7 @@ def test_properties_get_string_with_found_value():
     assert expected_value == actual_value
 
 
-def test_properties_get_string_with_found_value_but_wrong_type():
+def test_properties_get_string_with_found_value_but_wrong_type() -> None:
     """
     Test fetching a configuration value that is present and not string.
     """
@@ -40,7 +42,7 @@ def test_properties_get_string_with_found_value_but_wrong_type():
     assert expected_value == actual_value
 
 
-def test_properties_get_string_with_not_found_value():
+def test_properties_get_string_with_not_found_value() -> None:
     """
     Test fetching a configuration value that is not present and string.
     """
@@ -58,7 +60,7 @@ def test_properties_get_string_with_not_found_value():
     assert expected_value == actual_value
 
 
-def test_properties_get_string_with_not_found_value_and_no_default_value():
+def test_properties_get_string_with_not_found_value_and_no_default_value() -> None:
     """
     Test fetching a configuration value that is not present, with no default, and integer.
     """
@@ -75,7 +77,7 @@ def test_properties_get_string_with_not_found_value_and_no_default_value():
     assert actual_value is None
 
 
-def test_properties_get_string_with_found_value_validated():
+def test_properties_get_string_with_found_value_validated() -> None:
     """
     Test fetching a configuration value that is present and adheres to the validation function.
     """
@@ -95,15 +97,15 @@ def test_properties_get_string_with_found_value_validated():
     assert expected_value == actual_value
 
 
-def __sample_string_validation_function(property_value):
+def __sample_string_validation_function(property_value: str) -> Any:
     """
     Simple string validation that throws an error if not "1" or "2".
     """
     if property_value not in ["1", "2"]:
-        raise ValueError(f"Value '{str(property_value)}' is not '1' or '2'")
+        raise ValueError(f"Value '{property_value}' is not '1' or '2'")
 
 
-def test_properties_get_string_with_found_value_not_validated():
+def test_properties_get_string_with_found_value_not_validated() -> None:
     """
     Test fetching a configuration value that is present and does not adhere to the validation function.
     """
@@ -124,18 +126,18 @@ def test_properties_get_string_with_found_value_not_validated():
 
 
 # pylint: disable=broad-exception-raised
-def bad_validation_function(property_value):
+def bad_validation_function(property_value: str) -> Any:
     """
     Test validation function that always throws an exception.
     """
     # sourcery skip: raise-specific-error
-    raise Exception(f"huh? {str(property_value)}")
+    raise Exception(f"huh? {property_value}")
 
 
 # pylint: enable=broad-exception-raised
 
 
-def test_properties_get_string_with_found_value_validation_raises_error():
+def test_properties_get_string_with_found_value_validation_raises_error() -> None:
     """
     Test fetching a configuration value that is present and the validation function raises an error.
     """
@@ -155,7 +157,7 @@ def test_properties_get_string_with_found_value_validation_raises_error():
     assert expected_value == actual_value
 
 
-def test_properties_get_string_with_a_bad_property_name():
+def test_properties_get_string_with_a_bad_property_name() -> None:
     """
     Test fetching a configuration value with a bad property name.
     """
@@ -168,7 +170,7 @@ def test_properties_get_string_with_a_bad_property_name():
     # Act
     raised_exception = None
     try:
-        application_properties.get_string_property(1, "3")
+        application_properties.get_string_property(1, "3")  # type: ignore
         raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
@@ -180,7 +182,7 @@ def test_properties_get_string_with_a_bad_property_name():
     ), "Expected message was not present in exception."
 
 
-def test_properties_get_string_with_a_bad_default():
+def test_properties_get_string_with_a_bad_default() -> None:
     """
     Test fetching a configuration value with a default value that is not a string.
     """
@@ -193,7 +195,7 @@ def test_properties_get_string_with_a_bad_default():
     # Act
     raised_exception = None
     try:
-        application_properties.get_string_property("property", True)
+        application_properties.get_string_property("property", True)  # type: ignore
         raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception

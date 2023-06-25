@@ -1,10 +1,12 @@
 """
 Tests for the set_manual_property related functions of the ApplicationProperties class
 """
+from typing import List
+
 from application_properties import ApplicationProperties
 
 
-def test_properties_set_manual_property_with_non_string():
+def test_properties_set_manual_property_with_non_string() -> None:
     """
     Test to make sure that a manual property with a non-string is handled properly.
     """
@@ -16,7 +18,7 @@ def test_properties_set_manual_property_with_non_string():
     # Act
     raised_exception = None
     try:
-        application_properties.set_manual_property(full_string)
+        application_properties.set_manual_property(full_string)  # type: ignore
         raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
@@ -29,7 +31,7 @@ def test_properties_set_manual_property_with_non_string():
     ), "Expected message was not present in exception."
 
 
-def test_properties_set_manual_property_with_no_equals():
+def test_properties_set_manual_property_with_no_equals() -> None:
     """
     Test to make sure that a full key with no value part is handled properly.
     """
@@ -54,7 +56,7 @@ def test_properties_set_manual_property_with_no_equals():
     ), "Expected message was not present in exception."
 
 
-def test_properties_set_manual_property_with_single_part_string():
+def test_properties_set_manual_property_with_single_part_string() -> None:
     """
     Test to make sure that a full key specifying an string without any format is handled properly.
     """
@@ -73,7 +75,7 @@ def test_properties_set_manual_property_with_single_part_string():
     assert property_value == actual_value
 
 
-def test_properties_set_manual_property_shows_up_in_property_names():
+def test_properties_set_manual_property_shows_up_in_property_names() -> None:
     """
     Test to make sure that a full key specifying an string without any format shows
     up properly in the properrt names list.
@@ -93,7 +95,7 @@ def test_properties_set_manual_property_shows_up_in_property_names():
     assert property_value == actual_value
 
 
-def test_properties_set_manual_property_with_only_format_indicator():
+def test_properties_set_manual_property_with_only_format_indicator() -> None:
     """
     Test to make sure that a full key specifying an string format but with no
     format character following is handled properly.
@@ -113,7 +115,7 @@ def test_properties_set_manual_property_with_only_format_indicator():
     assert property_value[1:] == actual_value
 
 
-def test_properties_set_manual_property_with_string_indicator():
+def test_properties_set_manual_property_with_string_indicator() -> None:
     """
     Test to make sure that a full key specifying an string is handled properly.
     """
@@ -132,7 +134,7 @@ def test_properties_set_manual_property_with_string_indicator():
     assert property_value[2:] == actual_value
 
 
-def test_properties_set_manual_property_with_integer_indicator():
+def test_properties_set_manual_property_with_integer_indicator() -> None:
     """
     Test to make sure that a full key specifying an integer is handled properly.
     """
@@ -151,7 +153,9 @@ def test_properties_set_manual_property_with_integer_indicator():
     assert property_value == actual_value
 
 
-def test_properties_set_manual_property_with_integer_indicator_and_bad_integer():
+def test_properties_set_manual_property_with_integer_indicator_and_bad_integer() -> (
+    None
+):
     """
     Test to make sure that a full key specifying a bad integer is handled properly.
     """
@@ -179,7 +183,7 @@ def test_properties_set_manual_property_with_integer_indicator_and_bad_integer()
     ), "Expected message was not present in exception."
 
 
-def test_properties_set_manual_property_with_boolean_indicator():
+def test_properties_set_manual_property_with_boolean_indicator() -> None:
     """
     Test to make sure that a full key specifying a True boolean is handled properly.
     """
@@ -198,7 +202,7 @@ def test_properties_set_manual_property_with_boolean_indicator():
     assert property_value == actual_value
 
 
-def test_properties_set_manual_property_with_uncased_boolean_indicator():
+def test_properties_set_manual_property_with_uncased_boolean_indicator() -> None:
     """
     Test to make sure that a full key specifying a True boolean in lower case is handled properly.
     """
@@ -217,7 +221,7 @@ def test_properties_set_manual_property_with_uncased_boolean_indicator():
     assert property_value == actual_value
 
 
-def test_properties_set_manual_property_with_multiples():
+def test_properties_set_manual_property_with_multiples() -> None:
     """
     Test to make sure that a list of full keys is handled properly.
     """
@@ -227,16 +231,17 @@ def test_properties_set_manual_property_with_multiples():
     full_property_key = "a"
     property_value = True
     full_string = f"{full_property_key}=$!{property_value}"
+    full_string_in_array: List[str] = [full_string]
 
     # Act
-    application_properties.set_manual_property([full_string])
+    application_properties.set_manual_property(full_string_in_array)  # type: ignore
 
     # Assert
     actual_value = application_properties.get_boolean_property(full_property_key)
     assert property_value == actual_value
 
 
-def test_properties_set_manual_property_with_bad_key_start():
+def test_properties_set_manual_property_with_bad_key_start() -> None:
     """
     Test to make sure that a full key starting with the key separator character is handled properly.
     """
@@ -264,7 +269,7 @@ def test_properties_set_manual_property_with_bad_key_start():
     ), "Expected message was not present in exception."
 
 
-def test_properties_set_manual_property_with_bad_key_end():
+def test_properties_set_manual_property_with_bad_key_end() -> None:
     """
     Test to make sure that a full key ending with the key separator character is handled properly.
     """
@@ -292,7 +297,7 @@ def test_properties_set_manual_property_with_bad_key_end():
     ), "Expected message was not present in exception."
 
 
-def test_properties_set_manual_property_with_empty_key_middle():
+def test_properties_set_manual_property_with_empty_key_middle() -> None:
     """
     Test to make sure that an empty key part for the full key is handled properly.
     """
@@ -320,7 +325,7 @@ def test_properties_set_manual_property_with_empty_key_middle():
     ), "Expected message was not present in exception."
 
 
-def test_properties_set_manual_property_with_empty_key():
+def test_properties_set_manual_property_with_empty_key() -> None:
     """
     Test to make sure that a key with an empty key part is handled properly.
     """
@@ -348,7 +353,7 @@ def test_properties_set_manual_property_with_empty_key():
     ), "Expected message was not present in exception."
 
 
-def test_properties_set_manual_property_with_whitespace_key():
+def test_properties_set_manual_property_with_whitespace_key() -> None:
     """
     Test to make sure that a key with whitespace is handled properly.
     """
@@ -376,7 +381,7 @@ def test_properties_set_manual_property_with_whitespace_key():
     ), "Expected message was not present in exception."
 
 
-def test_properties_verify_manual_property_form_with_non_string():
+def test_properties_verify_manual_property_form_with_non_string() -> None:
     """
     Test to make sure that if we try and test the verification form function
     with a non-string, it fails predictably.
@@ -388,7 +393,7 @@ def test_properties_verify_manual_property_form_with_non_string():
     # Act
     raised_exception = None
     try:
-        ApplicationProperties.verify_manual_property_form(full_string)
+        ApplicationProperties.verify_manual_property_form(full_string)  # type: ignore
         raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
@@ -400,7 +405,9 @@ def test_properties_verify_manual_property_form_with_non_string():
     ), "Expected message was not present in exception."
 
 
-def test_properties_set_manual_property_bool_wrong_type_convert_disabled_strict_enabled():
+def test_properties_set_manual_property_bool_wrong_type_convert_disabled_strict_enabled() -> (
+    None
+):
     """
     Test to make sure that asking for a boolean with only a string present, strict
     mode on and covert mode off results in an exception.
@@ -431,7 +438,9 @@ def test_properties_set_manual_property_bool_wrong_type_convert_disabled_strict_
     assert str(caught_exception) == expected_error
 
 
-def test_properties_set_manual_property_bool_wrong_type_convert_disabled_strict_disabled():
+def test_properties_set_manual_property_bool_wrong_type_convert_disabled_strict_disabled() -> (
+    None
+):
     """
     Test to make sure that asking for a boolean with only a string present, strict
     mode off and covert mode off results in an exception.  As strict mode is off, the
@@ -458,7 +467,9 @@ def test_properties_set_manual_property_bool_wrong_type_convert_disabled_strict_
     assert expected_value == actual_value
 
 
-def test_properties_set_manual_property_bool_wrong_type_convert_enabled_strict_enabled_with_valid():
+def test_properties_set_manual_property_bool_wrong_type_convert_enabled_strict_enabled_with_valid() -> (
+    None
+):
     """
     Test to make sure that asking for a boolean with only a string present, strict
     mode on and covert mode on with a valid string that can be translated into a boolean.
@@ -484,7 +495,9 @@ def test_properties_set_manual_property_bool_wrong_type_convert_enabled_strict_e
     assert expected_value == actual_value
 
 
-def test_properties_set_manual_property_bool_wrong_type_convert_enabled_strict_enabled_with_invalid():
+def test_properties_set_manual_property_bool_wrong_type_convert_enabled_strict_enabled_with_invalid() -> (
+    None
+):
     """
     Test to make sure that asking for a boolean with only a string present, strict
     mode on and covert mode off with an invalid (i.e. non-"true") boolean value. This happens
@@ -512,7 +525,9 @@ def test_properties_set_manual_property_bool_wrong_type_convert_enabled_strict_e
     assert expected_value == actual_value
 
 
-def test_properties_set_manual_property_bool_wrong_type_convert_enabled_strict_disabled_with_valid():
+def test_properties_set_manual_property_bool_wrong_type_convert_enabled_strict_disabled_with_valid() -> (
+    None
+):
     """
     Test to make sure that asking for a boolean with only a string present, strict
     mode off and covert mode on with a valid string that can be translated into a boolean.
@@ -538,7 +553,9 @@ def test_properties_set_manual_property_bool_wrong_type_convert_enabled_strict_d
     assert expected_value == actual_value
 
 
-def test_properties_set_manual_property_bool_wrong_type_convert_enabled_strict_disabled_with_invalid():
+def test_properties_set_manual_property_bool_wrong_type_convert_enabled_strict_disabled_with_invalid() -> (
+    None
+):
     """
     Test to make sure that asking for a boolean with only a string present, strict
     mode off and covert mode off with an invalid (i.e. non-"true") boolean value. This happens
@@ -566,7 +583,9 @@ def test_properties_set_manual_property_bool_wrong_type_convert_enabled_strict_d
     assert expected_value == actual_value
 
 
-def test_properties_set_manual_property_integer_wrong_type_convert_disabled_strict_enabled():
+def test_properties_set_manual_property_integer_wrong_type_convert_disabled_strict_enabled() -> (
+    None
+):
     """
     Test to make sure that asking for a integer with only a string present, strict
     mode on and covert mode off results in an exception.
@@ -595,7 +614,9 @@ def test_properties_set_manual_property_integer_wrong_type_convert_disabled_stri
     assert str(caught_exception) == expected_error
 
 
-def test_properties_set_manual_property_integer_wrong_type_convert_disabled_strict_disabled():
+def test_properties_set_manual_property_integer_wrong_type_convert_disabled_strict_disabled() -> (
+    None
+):
     """
     Test to make sure that asking for a integer with only a string present, strict
     mode off and covert mode off results in an exception.  As strict mode is off, the
@@ -622,7 +643,9 @@ def test_properties_set_manual_property_integer_wrong_type_convert_disabled_stri
     assert expected_value == actual_value
 
 
-def test_properties_set_manual_property_integer_wrong_type_convert_enabled_strict_enabled_with_valid():
+def test_properties_set_manual_property_integer_wrong_type_convert_enabled_strict_enabled_with_valid() -> (
+    None
+):
     """
     Test to make sure that asking for a integer with only a string present, strict
     mode on and covert mode on with a valid string that can be translated into an integer.
@@ -648,7 +671,9 @@ def test_properties_set_manual_property_integer_wrong_type_convert_enabled_stric
     assert expected_value == actual_value
 
 
-def test_properties_set_manual_property_integer_wrong_type_convert_enabled_strict_enabled_with_invalid():
+def test_properties_set_manual_property_integer_wrong_type_convert_enabled_strict_enabled_with_invalid() -> (
+    None
+):
     """
     Test to make sure that asking for a integer with only a string present, strict
     mode on and covert mode off with an invalid integer value.
@@ -677,7 +702,9 @@ def test_properties_set_manual_property_integer_wrong_type_convert_enabled_stric
     assert str(caught_exception) == expected_error
 
 
-def test_properties_set_manual_property_integer_wrong_type_convert_enabled_strict_disabled_with_valid():
+def test_properties_set_manual_property_integer_wrong_type_convert_enabled_strict_disabled_with_valid() -> (
+    None
+):
     """
     Test to make sure that asking for a integer with only a string present, strict
     mode off and covert mode on with a valid string that can be translated into a integer.
@@ -703,7 +730,9 @@ def test_properties_set_manual_property_integer_wrong_type_convert_enabled_stric
     assert expected_value == actual_value
 
 
-def test_properties_set_manual_property_integer_wrong_type_convert_enabled_strict_disabled_with_invalid():
+def test_properties_set_manual_property_integer_wrong_type_convert_enabled_strict_disabled_with_invalid() -> (
+    None
+):
     """
     Test to make sure that asking for a integer with only a string present, strict
     mode off and covert mode off with an invalid integer value.
