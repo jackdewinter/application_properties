@@ -4,7 +4,7 @@ Tests for the ApplicationProperties class
 import io
 import os
 import sys
-from test.test_helpers import ErrorResults, TestHelpers
+from test.pytest_helpers import ErrorResults, TestHelpers
 
 from application_properties import ApplicationProperties
 from application_properties.application_properties_config_loader import (
@@ -12,7 +12,7 @@ from application_properties.application_properties_config_loader import (
 )
 
 
-def test_config_loader_config_not_present_check_enabled():
+def test_config_loader_config_not_present_check_enabled() -> None:
     """
     Test to make sure that we do not try and load a configuration file that is not present.
     """
@@ -41,7 +41,7 @@ def test_config_loader_config_not_present_check_enabled():
     assert expected_did_error == actual_did_error
 
 
-def test_config_loader_config_not_present_check_disabled():
+def test_config_loader_config_not_present_check_disabled() -> None:
     """
     Test to make sure that we do not try and load a configuration file that is not present.
     """
@@ -70,7 +70,7 @@ def test_config_loader_config_not_present_check_disabled():
     assert expected_did_error == actual_did_error
 
 
-def test_config_loader_valid_config():
+def test_config_loader_valid_config() -> None:
     """
     Test to make sure that we can load a valid config file.
     """
@@ -113,7 +113,7 @@ md999.test_value = 2
             os.remove(configuration_file)
 
 
-def test_config_loader_valid_config_but_wrong_get_property_type():
+def test_config_loader_valid_config_but_wrong_get_property_type() -> None:
     """
     Test to make sure that we can load a valid config file, even if the property
     we are looking for is of the wrong type.  The load should succeed, even
@@ -156,7 +156,7 @@ md999.test_value = 2
             os.remove(configuration_file)
 
 
-def test_config_loader_config_file_not_present_with_check():
+def test_config_loader_config_file_not_present_with_check() -> None:
     """
     Test to make sure that we cannot load a config file that is not there,
     and explicitly have something in place to check for that.
@@ -185,7 +185,7 @@ md999.test_value = 2
     assert expected_did_error == actual_did_error
 
 
-def test_config_loader_config_file_not_present_without_check():
+def test_config_loader_config_file_not_present_without_check() -> None:
     """
     Test to make sure that we cannot load a config file that is not there,
     and explicitly do not have something in place to check for that.
@@ -225,16 +225,16 @@ md999.test_value = 2
     # Assert
     assert expected_did_apply == actual_did_apply
     assert expected_did_error == actual_did_error
-    assert std_output is not None
     assert (
         std_output.getvalue()
         == f"Specified configuration file '{configuration_file}' does not exist.\n"
     )
-    assert std_error is not None
     assert std_error.getvalue() == ""
 
 
-def test_config_loader_config_file_not_present_without_check_and_error_function():
+def test_config_loader_config_file_not_present_without_check_and_error_function() -> (
+    None
+):
     """
     Test to make sure that we cannot load a config file that is not there,
     and explicitly do not have something in place to check for that, but have
@@ -275,7 +275,7 @@ md999.test_value = 2
     )
 
 
-def test_config_loader_config_file_not_valid():
+def test_config_loader_config_file_not_valid() -> None:
     """
     Test to make sure that we error loading an invalid config file.
     """
@@ -310,7 +310,6 @@ md999.test_value
 
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
-        assert std_output is not None
         assert std_output.getvalue() is not None
         configuration_file2 = configuration_file.replace("\\", "\\\\")
         assert std_output.getvalue() == (
@@ -321,7 +320,7 @@ md999.test_value
             os.remove(configuration_file)
 
 
-def test_config_loader_config_file_valid_with_no_section_header():
+def test_config_loader_config_file_valid_with_no_section_header() -> None:
     """
     Test to make sure that not having a section header implies that everything in the
     file is part of the configuration.
@@ -361,7 +360,7 @@ tools.bar = fred
             os.remove(configuration_file)
 
 
-def test_config_loader_config_file_valid_with_one_word_section_header():
+def test_config_loader_config_file_valid_with_one_word_section_header() -> None:
     """
     Test to make sure that having a having a one word section header that is
     present in the config file allows for anything under that entry to be
@@ -416,7 +415,7 @@ tools.foo = fred
             os.remove(configuration_file)
 
 
-def test_config_loader_config_file_valid_with_one_word_bad_section_header():
+def test_config_loader_config_file_valid_with_one_word_bad_section_header() -> None:
     """
     Test to make sure that having a one word section header that is not
     present in the config file effectively does not contribute to the
@@ -463,7 +462,7 @@ tools.bar = fred
             os.remove(configuration_file)
 
 
-def test_config_loader_config_file_valid_with_multi_word_valid_section_header():
+def test_config_loader_config_file_valid_with_multi_word_valid_section_header() -> None:
     """
     Test to make sure that having a having a multi word section header that points to
     an existing section is recognized.
@@ -509,7 +508,7 @@ tools.bar = fred
             os.remove(configuration_file)
 
 
-def test_config_loader_config_file_bad_config_format_with_repeated_section():
+def test_config_loader_config_file_bad_config_format_with_repeated_section() -> None:
     """
     Test to make sure that a repeated section, in different forms, causes errors.
     """
@@ -549,6 +548,7 @@ bar = barney
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
         configuration_file2 = configuration_file.replace("\\", "\\\\")
+        assert results.reported_error is not None
         assert (
             results.reported_error
             == f"Specified configuration file '{configuration_file}' is not a valid config file: While reading from '{configuration_file2}' [line  4]: section 'plugins.tools' already exists."
@@ -558,7 +558,9 @@ bar = barney
             os.remove(configuration_file)
 
 
-def test_config_loader_config_file_bad_config_format_with_header_with_leading_period():
+def test_config_loader_config_file_bad_config_format_with_header_with_leading_period() -> (
+    None
+):
     """
     Test to make sure that a header that starts with a period is an error.
     """
@@ -594,6 +596,7 @@ tools.bar = "fred"
 
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
+        assert results.reported_error is not None
         assert (
             results.reported_error
             == f"Configuration section name '.plugins' in file '{configuration_file}' is not a valid section name: Configuration section name must not start or end with the '.' character."
@@ -603,7 +606,9 @@ tools.bar = "fred"
             os.remove(configuration_file)
 
 
-def test_config_loader_config_file_bad_config_format_with_item_with_leading_period():
+def test_config_loader_config_file_bad_config_format_with_item_with_leading_period() -> (
+    None
+):
     """
     Test to make sure that an item that starts with a period is an error.
     """
@@ -639,6 +644,7 @@ def test_config_loader_config_file_bad_config_format_with_item_with_leading_peri
 
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
+        assert results.reported_error is not None
         assert (
             results.reported_error
             == f"Configuration item name '.tools.bar' in file '{configuration_file}' is not a valid section name: Configuration item name must not start or end with the '.' character."
@@ -648,7 +654,9 @@ def test_config_loader_config_file_bad_config_format_with_item_with_leading_peri
             os.remove(configuration_file)
 
 
-def test_config_loader_config_file_bad_config_format_with_double_items_through_different_paths():
+def test_config_loader_config_file_bad_config_format_with_double_items_through_different_paths() -> (
+    None
+):
     """
     Test to make sure that an item name that is doubled, but through different paths, is caught.
     """
@@ -687,6 +695,7 @@ bar = fred
 
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
+        assert results.reported_error is not None
         assert (
             results.reported_error
             == f"Full configuration item name 'plugins.tools.bar' in file '{configuration_file}' occurs multiple times using different formats."
@@ -696,7 +705,7 @@ bar = fred
             os.remove(configuration_file)
 
 
-def test_config_loader_config_file_bad_config_format_with_no_item_value():
+def test_config_loader_config_file_bad_config_format_with_no_item_value() -> None:
     """
     Test to make sure that an item name that is followed by a separator, but not value, is handled.
     """
@@ -734,6 +743,7 @@ tools.bar =\a\a\a\a
 
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
+        assert results.reported_error is not None
         assert (
             results.reported_error
             == f"Full configuration item name 'plugins.tools.bar' in file '{configuration_file}' does not have a value assigned to it."

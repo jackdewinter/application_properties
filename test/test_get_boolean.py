@@ -4,7 +4,7 @@ Tests for the get_boolean* functions of the ApplicationProperties class
 from application_properties import ApplicationProperties
 
 
-def test_properties_get_boolean_with_found_value():
+def test_properties_get_boolean_with_found_value() -> None:
     """
     Test fetching a configuration value that is present and boolean.
     """
@@ -22,7 +22,7 @@ def test_properties_get_boolean_with_found_value():
     assert expected_value == actual_value
 
 
-def test_properties_get_boolean_with_found_value_but_wrong_type():
+def test_properties_get_boolean_with_found_value_but_wrong_type() -> None:
     """
     Test fetching a configuration value that is present and not boolean.
     """
@@ -40,7 +40,7 @@ def test_properties_get_boolean_with_found_value_but_wrong_type():
     assert expected_value == actual_value
 
 
-def test_properties_get_boolean_with_not_found_value():
+def test_properties_get_boolean_with_not_found_value() -> None:
     """
     Test fetching a configuration value that is not present and boolean.
     """
@@ -58,7 +58,7 @@ def test_properties_get_boolean_with_not_found_value():
     assert expected_value == actual_value
 
 
-def test_properties_get_boolean_with_not_found_value_and_no_default_value():
+def test_properties_get_boolean_with_not_found_value_and_no_default_value() -> None:
     """
     Test fetching a configuration value that is not present, with no default, and boolean.
     """
@@ -75,7 +75,7 @@ def test_properties_get_boolean_with_not_found_value_and_no_default_value():
     assert actual_value is None
 
 
-def test_properties_get_boolean_with_a_bad_property_name():
+def test_properties_get_boolean_with_a_bad_property_name() -> None:
     """
     Test fetching a configuration value with a bad property name.
     """
@@ -88,7 +88,7 @@ def test_properties_get_boolean_with_a_bad_property_name():
     # Act
     raised_exception = None
     try:
-        application_properties.get_boolean_property(1, 1)
+        application_properties.get_boolean_property(1, 1)  # type: ignore
         raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
@@ -100,7 +100,7 @@ def test_properties_get_boolean_with_a_bad_property_name():
     ), "Expected message was not present in exception."
 
 
-def test_properties_get_boolean_with_a_bad_default():
+def test_properties_get_boolean_with_a_bad_default() -> None:
     """
     Test fetching a configuration value with a default value that is not a boolean.
     """
@@ -113,7 +113,7 @@ def test_properties_get_boolean_with_a_bad_default():
     # Act
     raised_exception = None
     try:
-        application_properties.get_boolean_property("property", 1)
+        application_properties.get_boolean_property("property", 1)  # type: ignore
         raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception

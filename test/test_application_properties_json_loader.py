@@ -5,7 +5,8 @@ import io
 import json
 import os
 import sys
-from test.test_helpers import TestHelpers
+from test.pytest_helpers import TestHelpers
+from typing import Any, List, Optional
 
 from application_properties import (
     ApplicationProperties,
@@ -13,7 +14,7 @@ from application_properties import (
 )
 
 
-def test_json_loader_config_not_present():
+def test_json_loader_config_not_present() -> None:
     """
     Test to make sure that we do not try and load a configuration file that is not present.
     """
@@ -42,7 +43,7 @@ def test_json_loader_config_not_present():
     assert expected_did_apply == actual_did_apply
 
 
-def test_json_loader_valid_json():
+def test_json_loader_valid_json() -> None:
     """
     Test to make sure that we can load a valid Json file.
     """
@@ -80,7 +81,7 @@ def test_json_loader_valid_json():
             os.remove(configuration_file)
 
 
-def test_json_loader_valid_json_but_wrong_get_property_type():
+def test_json_loader_valid_json_but_wrong_get_property_type() -> None:
     """
     Test to make sure that we can load a valid Json file, even if the property
     we are looking for is of the wrong type.  The load should succeed, even
@@ -128,7 +129,9 @@ def test_json_loader_valid_json_but_wrong_get_property_type():
             os.remove(configuration_file)
 
 
-def test_json_loader_valid_json_but_wrong_get_property_type_with_untyped_conversion():
+def test_json_loader_valid_json_but_wrong_get_property_type_with_untyped_conversion() -> (
+    None
+):
     """
     Test to make sure that we can load a valid Json file, even if the property
     we are looking for is of the wrong type.  The load should succeed, even
@@ -176,7 +179,7 @@ def test_json_loader_valid_json_but_wrong_get_property_type_with_untyped_convers
             os.remove(configuration_file)
 
 
-def test_json_loader_invalid_json():
+def test_json_loader_invalid_json() -> None:
     """
     Test to make sure that we cannot load an invalid Json file.
     """
@@ -186,9 +189,9 @@ def test_json_loader_invalid_json():
     expected_did_apply = False
     expected_did_error = True
 
-    handled_error_parameters = []
+    handled_error_parameters: List[Any] = []
 
-    def inner_func(formatted_error, this_exception):
+    def inner_func(formatted_error: str, this_exception: Optional[Exception]) -> None:
         handled_error_parameters.append(formatted_error)
         handled_error_parameters.append(this_exception)
 
@@ -222,7 +225,7 @@ def test_json_loader_invalid_json():
             os.remove(configuration_file)
 
 
-def test_json_loader_missing_file():
+def test_json_loader_missing_file() -> None:
     """
     Test to make sure that we fail to load a file that isn't there.
     """
@@ -230,9 +233,9 @@ def test_json_loader_missing_file():
     # Arrange
     expected_did_apply = False
     expected_did_error = True
-    handled_error_parameters = []
+    handled_error_parameters: List[Any] = []
 
-    def inner_func(formatted_error, this_exception):
+    def inner_func(formatted_error: str, this_exception: Optional[Exception]) -> None:
         handled_error_parameters.append(formatted_error)
         handled_error_parameters.append(this_exception)
 
@@ -258,7 +261,7 @@ def test_json_loader_missing_file():
     assert isinstance(handled_error_parameters[1], FileNotFoundError)
 
 
-def test_json_loader_valid_json_but_invalid_key():
+def test_json_loader_valid_json_but_invalid_key() -> None:
     """
     Test to make sure that we can load a valid Json file, but fail when there is an invalid key.
     """
@@ -268,9 +271,9 @@ def test_json_loader_valid_json_but_invalid_key():
     expected_did_apply = False
     expected_did_error = True
 
-    handled_error_parameters = []
+    handled_error_parameters: List[Any] = []
 
-    def inner_func(formatted_error, this_exception):
+    def inner_func(formatted_error: str, this_exception: Optional[Exception]) -> None:
         handled_error_parameters.append(formatted_error)
         handled_error_parameters.append(this_exception)
 
@@ -304,7 +307,7 @@ def test_json_loader_valid_json_but_invalid_key():
             os.remove(configuration_file)
 
 
-def test_json_loader_valid_json_but_invalid_key_with_stdin_capture():
+def test_json_loader_valid_json_but_invalid_key_with_stdin_capture() -> None:
     """
     Test to make sure that we can load a valid Json file, but fail when there is an invalid key.
     """
@@ -354,7 +357,7 @@ def test_json_loader_valid_json_but_invalid_key_with_stdin_capture():
             os.remove(configuration_file)
 
 
-def test_json_loader_pair_valid_json():
+def test_json_loader_pair_valid_json() -> None:
     """
     Test to make sure that we can load more than one configuration file and not have
     the configurations stomp on each other in an unpredictable manner.

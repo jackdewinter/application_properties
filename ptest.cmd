@@ -89,6 +89,10 @@ if defined PTEST_MULTI_CORE_ARGS (
 )
 
 rem Enter main part of script.
+
+rem The build directory can sometimes be a problem, so just nuke it.
+rmdir /s /q build > nul 2>&1
+
 if defined PTEST_KEYWORD (
 	echo {Executing partial test suite...}
 	set PYTEST_ARGS=

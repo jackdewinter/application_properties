@@ -1,10 +1,12 @@
 """
 Tests for the ApplicationPropertiesFacade class
 """
+from typing import Any, Dict, List
+
 from application_properties import ApplicationProperties, ApplicationPropertiesFacade
 
 
-def test_properties_facade_base_not_properties_object():
+def test_properties_facade_base_not_properties_object() -> None:
     """
     Test setting up a facade with properties object that is not a properties object.
     """
@@ -14,7 +16,7 @@ def test_properties_facade_base_not_properties_object():
     # Act
     raised_exception = None
     try:
-        ApplicationPropertiesFacade(1, 1)
+        ApplicationPropertiesFacade(1, 1)  # type: ignore
         raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
@@ -27,7 +29,7 @@ def test_properties_facade_base_not_properties_object():
     ), "Expected message was not present in exception."
 
 
-def test_properties_facade_prefix_not_string():
+def test_properties_facade_prefix_not_string() -> None:
     """
     Test setting up a facade with a prefix that is not a string.
     """
@@ -40,7 +42,7 @@ def test_properties_facade_prefix_not_string():
     # Act
     raised_exception = None
     try:
-        ApplicationPropertiesFacade(application_properties, 1)
+        ApplicationPropertiesFacade(application_properties, 1)  # type: ignore
         raise AssertionError("Should have raised an exception by now.")
     except ValueError as this_exception:
         raised_exception = this_exception
@@ -52,7 +54,7 @@ def test_properties_facade_prefix_not_string():
     ), "Expected message was not present in exception."
 
 
-def test_properties_facade_prefix_not_terminated_with_separator():
+def test_properties_facade_prefix_not_terminated_with_separator() -> None:
     """
     Test setting up a facade with a prefix that is not terminated with the separator.
     """
@@ -78,7 +80,7 @@ def test_properties_facade_prefix_not_terminated_with_separator():
     ), "Expected message was not present in exception."
 
 
-def test_properties_facade_get_with_found_value():
+def test_properties_facade_get_with_found_value() -> None:
     """
     Test fetching through a configuration facade for a property that is present.
     """
@@ -97,7 +99,7 @@ def test_properties_facade_get_with_found_value():
     assert expected_value == actual_value
 
 
-def test_properties_facade_get_boolean_with_found_value():
+def test_properties_facade_get_boolean_with_found_value() -> None:
     """
     Test fetching through a configuration facade for a boolean property that is present.
     """
@@ -116,7 +118,7 @@ def test_properties_facade_get_boolean_with_found_value():
     assert expected_value == actual_value
 
 
-def test_properties_facade_get_integer_with_found_value():
+def test_properties_facade_get_integer_with_found_value() -> None:
     """
     Test fetching through a configuration facade for an integer property that is present.
     """
@@ -135,7 +137,7 @@ def test_properties_facade_get_integer_with_found_value():
     assert expected_value == actual_value
 
 
-def test_properties_facade_get_string_with_found_value():
+def test_properties_facade_get_string_with_found_value() -> None:
     """
     Test fetching through a configuration facade for a string property that is present.
     """
@@ -154,7 +156,7 @@ def test_properties_facade_get_string_with_found_value():
     assert expected_value == actual_value
 
 
-def test_properties_facade_get_property_names_with_one_value():
+def test_properties_facade_get_property_names_with_one_value() -> None:
     """
     Test fetching through a configuration facade the property names for a single property value.
     """
@@ -175,17 +177,17 @@ def test_properties_facade_get_property_names_with_one_value():
     assert expected_value == actual_value
 
 
-def test_properties_facade_get_property_names_with_no_values():
+def test_properties_facade_get_property_names_with_no_values() -> None:
     """
     Test fetching through a configuration facade the property names without a single property value.
     """
 
     # Arrange
-    config_map = {"upper": {"property": "2"}}
+    config_map: Dict[str, Dict[str, Any]] = {"upper": {"property": "2"}}
     application_properties = ApplicationProperties()
     application_properties.load_from_dict(config_map)
     facade = ApplicationPropertiesFacade(application_properties, "uppers.")
-    expected_value = []
+    expected_value: List[str] = []
 
     # Act
     actual_value = facade.property_names
@@ -196,13 +198,13 @@ def test_properties_facade_get_property_names_with_no_values():
     assert expected_value == actual_value
 
 
-def test_properties_facade_get_properties_under_at_top_level_partial():
+def test_properties_facade_get_properties_under_at_top_level_partial() -> None:
     """
     Test calling the `property_names_under` function specifying only part of the top level.
     """
 
     # Arrange
-    config_map = {
+    config_map: Dict[str, Dict[str, Any]] = {
         "upper": {
             "feature": {"enabled": True},
             "other_feature": {"enabled": False, "other": 1},
@@ -221,13 +223,13 @@ def test_properties_facade_get_properties_under_at_top_level_partial():
     assert "other_feature.other" in found_names
 
 
-def test_properties_facade_get_properties_under_at_top_level_none():
+def test_properties_facade_get_properties_under_at_top_level_none() -> None:
     """
     Test calling the `property_names_under` function specifying none of the top level.
     """
 
     # Arrange
-    config_map = {
+    config_map: Dict[str, Dict[str, Any]] = {
         "upper": {
             "feature": {"enabled": True},
             "other_feature": {"enabled": False, "other": 1},
@@ -245,13 +247,13 @@ def test_properties_facade_get_properties_under_at_top_level_none():
     assert "missing_feature" not in config_map["upper"]
 
 
-def test_properties_facade_get_properties_under_at_sub_level():
+def test_properties_facade_get_properties_under_at_sub_level() -> None:
     """
     Test calling the `property_names_under` function specifying none of the top level.
     """
 
     # Arrange
-    config_map = {
+    config_map: Dict[str, Dict[str, Dict[str, Any]]] = {
         "upper": {
             "new_top_level": {
                 "feature": {"enabled": True},

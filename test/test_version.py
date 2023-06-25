@@ -4,7 +4,7 @@ Module to make sure that the version number is tested.
 import runpy
 
 
-def test_version():
+def test_version() -> None:
     """
     Make sure that the version is a valid semantic version.
     """

@@ -23,6 +23,16 @@ def get_semantic_version():
     return version_meta["__version__"]
 
 
+def get_project_name():
+    version_meta = runpy.run_path(f"./{PACKAGE_NAME}/version.py")
+    return version_meta["__project_name__"]
+
+
+def get_description():
+    version_meta = runpy.run_path(f"./{PACKAGE_NAME}/version.py")
+    return version_meta["__description__"]
+
+
 def load_readme_file():
     source_file = (
         ALTERNATE_PYPI_README_FILE
@@ -49,12 +59,11 @@ PROJECT_URLS = {
 }
 
 PACKAGE_NAME = "application_properties"
+PROJECT_NAME = get_project_name()
 SEMANTIC_VERSION = get_semantic_version()
 MINIMUM_PYTHON_VERSION = "3.8.0"
 
-ONE_LINE_DESCRIPTION = (
-    "A simple, easy to use, unified manner of accessing program properties."
-)
+ONE_LINE_DESCRIPTION = get_description()
 LONG_DESCRIPTION = load_readme_file()
 LONG_DESCRIPTION_CONTENT_TYPE = "text/markdown"
 

@@ -4,7 +4,7 @@ Tests for the ApplicationProperties class
 import io
 import os
 import sys
-from test.test_helpers import ErrorResults, TestHelpers
+from test.pytest_helpers import ErrorResults, TestHelpers
 
 from application_properties import ApplicationProperties
 from application_properties.application_properties_toml_loader import (
@@ -12,7 +12,7 @@ from application_properties.application_properties_toml_loader import (
 )
 
 
-def test_toml_loader_config_not_present():
+def test_toml_loader_config_not_present() -> None:
     """
     Test to make sure that we do not try and load a configuration file that is not present.
     """
@@ -41,7 +41,7 @@ def test_toml_loader_config_not_present():
     assert expected_did_error == actual_did_error
 
 
-def test_toml_loader_valid_toml():
+def test_toml_loader_valid_toml() -> None:
     """
     Test to make sure that we can load a valid toml file.
     """
@@ -81,7 +81,7 @@ md999.test_value = 2
             os.remove(configuration_file)
 
 
-def test_toml_loader_valid_toml_but_wrong_get_property_type():
+def test_toml_loader_valid_toml_but_wrong_get_property_type() -> None:
     """
     Test to make sure that we can load a valid toml file, even if the property
     we are looking for is of the wrong type.  The load should succeed, even
@@ -124,7 +124,9 @@ md999.test_value = "2"
             os.remove(configuration_file)
 
 
-def test_toml_loader_valid_toml_but_wrong_get_property_type_with_untyped_conversion():
+def test_toml_loader_valid_toml_but_wrong_get_property_type_with_untyped_conversion() -> (
+    None
+):
     """
     Test to make sure that we can load a valid toml file, even if the property
     we are looking for is of the wrong type.  The load should succeed, even
@@ -168,7 +170,7 @@ md999.test_value = "2"
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_not_present_with_check():
+def test_toml_loader_toml_file_not_present_with_check() -> None:
     """
     Test to make sure that we cannot load a toml file that is not there,
     and explicitly have something in place to check for that.
@@ -197,7 +199,7 @@ md999.test_value = 2
     assert expected_did_error == actual_did_error
 
 
-def test_toml_loader_toml_file_not_present_without_check():
+def test_toml_loader_toml_file_not_present_without_check() -> None:
     """
     Test to make sure that we cannot load a toml file that is not there,
     and explicitly do not have something in place to check for that.
@@ -233,14 +235,13 @@ md999.test_value = 2
     # Assert
     assert expected_did_apply == actual_did_apply
     assert expected_did_error == actual_did_error
-    assert std_output is not None
     assert std_output.getvalue() is not None
     assert std_output.getvalue().startswith(
         f"Specified configuration file '{configuration_file}' was not loaded: "
     )
 
 
-def test_toml_loader_toml_file_not_present_without_check_and_error_function():
+def test_toml_loader_toml_file_not_present_without_check_and_error_function() -> None:
     """
     Test to make sure that we cannot load a toml file that is not there,
     and explicitly do not have something in place to check for that, but have
@@ -275,12 +276,12 @@ md999.test_value = 2
     assert expected_did_apply == actual_did_apply
     assert expected_did_error == actual_did_error
     assert results.reported_error is not None
-    assert results.reported_error.startswith(
+    assert str(results.reported_error).startswith(
         f"Specified configuration file '{configuration_file}' was not loaded: "
     )
 
 
-def test_toml_loader_toml_file_not_valid():
+def test_toml_loader_toml_file_not_valid() -> None:
     """
     Test to make sure that we error loading an invalid toml file.
     """
@@ -315,7 +316,6 @@ md999.test_value
 
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
-        assert std_output is not None
         assert std_output.getvalue() is not None
         assert std_output.getvalue().startswith(
             f"Specified configuration file '{configuration_file}' is not a valid TOML file: Expected '=' after a key in a key/value pair (at line 2, column 17).\n"
@@ -325,7 +325,7 @@ md999.test_value
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_valid_with_no_section_header():
+def test_toml_loader_toml_file_valid_with_no_section_header() -> None:
     """
     Test to make sure that not having a section header implies that everything in the
     file is part of the configuration.
@@ -365,7 +365,7 @@ tools.bar = "fred"
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_valid_with_one_word_section_header():
+def test_toml_loader_toml_file_valid_with_one_word_section_header() -> None:
     """
     Test to make sure that having a having a one word section header that is
     present in the TOML file allows for anything under that entry to be
@@ -412,7 +412,7 @@ tools.bar = "fred"
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_valid_with_one_word_bad_section_header():
+def test_toml_loader_toml_file_valid_with_one_word_bad_section_header() -> None:
     """
     Test to make sure that having a one word section header that is not
     present in the TOML file effectively does not contribute to the
@@ -459,7 +459,7 @@ tools.bar = "fred"
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_valid_with_multi_word_valid_section_header():
+def test_toml_loader_toml_file_valid_with_multi_word_valid_section_header() -> None:
     """
     Test to make sure that having a having a multi word section header that points to
     an existing section is recognized.
@@ -505,7 +505,9 @@ tools.bar = "fred"
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_valid_with_multi_word_section_header_that_points_to_a_value():
+def test_toml_loader_toml_file_valid_with_multi_word_section_header_that_points_to_a_value() -> (
+    None
+):
     """
     Test to make sure that having a having a multi word section header that points
     to a specific value instead of a section does not get applied.
@@ -551,7 +553,7 @@ tools.bar = "fred"
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_bad_toml_format_with_repeated_section():
+def test_toml_loader_toml_file_bad_toml_format_with_repeated_section() -> None:
     """
     Test to make sure that a repeated section, in different forms, causes errors.
     """
@@ -590,6 +592,7 @@ bar = "barney"
 
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
+        assert results.reported_error is not None
         assert (
             results.reported_error
             == f"Specified configuration file '{configuration_file}' is not a valid TOML file: Cannot declare ('plugins', 'tools') twice (at line 4, column 15)."
@@ -599,7 +602,9 @@ bar = "barney"
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_bad_toml_format_with_header_with_leading_period():
+def test_toml_loader_toml_file_bad_toml_format_with_header_with_leading_period() -> (
+    None
+):
     """
     Test to make sure that a header that starts with a period is an error.
     """
@@ -635,6 +640,7 @@ tools.bar = "fred"
 
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
+        assert results.reported_error is not None
         assert (
             results.reported_error
             == f"Specified configuration file '{configuration_file}' is not a valid TOML file: Invalid initial character for a key part (at line 1, column 2)."
@@ -644,7 +650,7 @@ tools.bar = "fred"
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_bad_toml_format_with_item_with_leading_period():
+def test_toml_loader_toml_file_bad_toml_format_with_item_with_leading_period() -> None:
     """
     Test to make sure that an item that starts with a period is an error.
     """
@@ -680,6 +686,7 @@ def test_toml_loader_toml_file_bad_toml_format_with_item_with_leading_period():
 
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
+        assert results.reported_error is not None
         assert (
             results.reported_error
             == f"Specified configuration file '{configuration_file}' is not a valid TOML file: Invalid statement (at line 2, column 1)."
@@ -689,7 +696,9 @@ def test_toml_loader_toml_file_bad_toml_format_with_item_with_leading_period():
             os.remove(configuration_file)
 
 
-def test_toml_loader_toml_file_bad_toml_format_with_double_items_through_different_paths():
+def test_toml_loader_toml_file_bad_toml_format_with_double_items_through_different_paths() -> (
+    None
+):
     """
     Test to make sure that an item name that is doubled, but through different paths, is caught.
     """
@@ -728,6 +737,7 @@ bar = "fred"
 
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
+        assert results.reported_error is not None
         assert (
             results.reported_error
             == f"Specified configuration file '{configuration_file}' is not a valid TOML file: Cannot declare ('plugins', 'tools') twice (at line 4, column 15)."

@@ -53,12 +53,30 @@ echo {Analysis of project started.}
 
 rem Cleanly start the main part of the script
 
-echo {Syncing python packages with PipEnv 'pipfile'.}
-pipenv sync
-if ERRORLEVEL 1 (
+rem Check to see if the Pipfile is newer than the Pipfile.lock file.
+python utils\find_outdated_piplock_file.py
+if ERRORLEVEL 2 (
 	echo.
-	echo {Syncing python packages with PipEnv failed.}
+	echo Analysis of project cannot proceed without a Pipfile.
 	goto error_end
+)
+if ERRORLEVEL 1 (
+	echo {'Pipfile' and 'Pipfile.lock' are not in sync with each other.}
+	echo {Syncing python packages with new PipEnv 'Pipfile'.}
+	erase Pipfile.lock
+	pipenv lock
+	if ERRORLEVEL 1 (
+		echo.
+		echo {Creating new Pipfile.lock file failed.}
+		goto error_end
+	)
+
+	pipenv sync
+	if ERRORLEVEL 1 (
+		echo.
+		echo {Syncing python packages with PipEnv failed.}
+		goto error_end
+	)
 )
 
 echo {Executing black formatter on Python code.}
@@ -104,10 +122,17 @@ if "%SOURCERY_USER_KEY%" == "" (
 		set "SOURCERY_LIMIT=--diff ^"git diff^""
 	)
 
-	pipenv run sourcery review --check %PYTHON_MODULE_NAME% !SOURCERY_LIMIT!
+	pipenv run sourcery review --fix --verbose . !SOURCERY_LIMIT!
 	if ERRORLEVEL 1 (
 		echo.
-		echo {Executing Sourcery on Python code failed.}
+		echo {Executing Sourcery fix on project code failed.}
+		goto error_end
+	)
+
+	pipenv run sourcery review --check --verbose . !SOURCERY_LIMIT!
+	if ERRORLEVEL 1 (
+		echo.
+		echo {Executing Sourcery check on project code after fix failed. Failures remain.}
 		goto error_end
 	)
 )
@@ -150,6 +175,13 @@ if ERRORLEVEL 1 (
 	goto error_end
 )
 
+pipenv run mypy --strict test !STUBS_DIRECTORY!
+if ERRORLEVEL 1 (
+	echo.
+	echo {Executing mypy static analyzer on Python test code failed.}
+	goto error_end
+)
+
 echo {Executing pylint utils analyzer on Python source code to verify suppressions and document them.}
 pipenv run python ..\pylint_utils\main.py --config setup.cfg --recurse -r publish\pylint_suppression.json %PYTHON_MODULE_NAME%
 if ERRORLEVEL 1 (
@@ -174,7 +206,7 @@ if ERRORLEVEL 1 (
 	goto error_end
 )	
 
-git diff --name-only --staged > %CLEAN_TEMPFILE%
+git diff --name-only --staged --diff-filter=d > %CLEAN_TEMPFILE%
 set ALL_FILES=
 for /f "tokens=*" %%x in (%CLEAN_TEMPFILE%) do (
 	set TEST_FILE=%%x
@@ -188,6 +220,17 @@ if "%ALL_FILES%" == "" (
 	if ERRORLEVEL 1 (
 		echo.
 		echo {Executing reporting of unused pylint suppressions in modified Python source code failed.}
+		goto error_end
+	)
+)
+
+if defined MY_PUBLISH (
+	echo {Building package for current repository.}
+	call package.cmd > %CLEAN_TEMPFILE%
+	if ERRORLEVEL 1 (
+		cat %CLEAN_TEMPFILE%
+		echo.
+		echo {Building package for repository failed.}
 		goto error_end
 	)
 )

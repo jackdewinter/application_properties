@@ -18,9 +18,12 @@ ignore: # A list of paths or files which Sourcery will ignore.
 - env
 - .env
 - .tox
-- test
+# - test
 - stubs
 - build
+- report
+- publish
+- dist
 
 rule_settings:
   enable:
