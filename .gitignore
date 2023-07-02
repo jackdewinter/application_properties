@@ -134,4 +134,3 @@ report/
 report.xml
 .idea/
 dist/
-Pipfile.lock

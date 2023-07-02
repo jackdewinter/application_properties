@@ -2,6 +2,8 @@
 
 ## Unversioned - In Main, Not Released
 
+- updating dependencies - 2023Jul02
+
 ## Version 0.7.0 - Date: 2023-04-22
 
 - [Issue 137](https://github.com/jackdewinter/application_properties/issues/137)

@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.9
+    rev: v0.9.11
     hooks:
       - id: pymarkdown
         pass_filenames: false
