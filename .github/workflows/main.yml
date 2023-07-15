@@ -65,7 +65,7 @@ jobs:
       - name: Sync With Repository
         run: |
           pipenv lock --python ${{ matrix.python }}
-          pipenv sync
+          pipenv sync -d
           pipenv graph
 
       - name: Execute Tests
@@ -113,7 +113,7 @@ jobs:
       - name: Sync With Repository
         run: |
           pipenv lock
-          pipenv sync
+          pipenv sync -d
           pipenv graph
 
       - name: Execute Black
@@ -180,7 +180,7 @@ jobs:
       - name: Sync With Repository
         run: |
           pipenv lock
-          pipenv sync
+          pipenv sync -d
           pipenv graph
 
       - name: Pyroma

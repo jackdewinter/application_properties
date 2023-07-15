@@ -99,7 +99,7 @@ if defined PTEST_VERBOSE_MODE (
 	echo {Creating new lock file and virtual environment.}
 )
 pipenv lock
-pipenv sync
+pipenv sync -d
 
 if defined PTEST_VERBOSE_MODE (
 	echo {Restarting VSCode.}
