@@ -2,6 +2,17 @@
 
 ## Unversioned - In Main, Not Released
 
+- No changes
+
+## Version 0.8.0 - Date: 2023-04-22
+
+- [Issue 192](https://github.com/jackdewinter/application_properties/issues/192)
+  - moved useful utility functions from PyMarkdown project into application_properties
+    project
+- [Issue 156](https://github.com/jackdewinter/application_properties/issues/156)
+  - brought into alignment with other projects, for ease of maintenance
+  - split up Pipfile dependencies into dev-packages and packages
+- updating dependencies - 2023Jul15
 - updating dependencies - 2023Jul02
 
 ## Version 0.7.0 - Date: 2023-04-22

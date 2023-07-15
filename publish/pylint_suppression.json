@@ -24,6 +24,7 @@
             "too-few-public-methods": 1,
             "too-many-arguments": 1
         },
+        "application_properties/application_properties_utilities.py": {},
         "application_properties/version.py": {}
     },
     "disables-by-name": {

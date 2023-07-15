@@ -5,8 +5,6 @@ from typing import Any, Dict
 
 from application_properties import ApplicationProperties
 
-# pylint: disable=too-many-lines
-
 
 def test_property_name_separator() -> None:
     """

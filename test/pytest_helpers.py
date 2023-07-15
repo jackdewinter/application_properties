@@ -2,6 +2,7 @@
 Module to provide helper methods for tests.
 """
 import json
+import os
 import tempfile
 from typing import Any, Optional, Union
 
@@ -13,21 +14,38 @@ class TestHelpers:
     """
 
     @staticmethod
-    def write_temporary_configuration(supplied_configuration: Union[str, Any]) -> str:
+    def write_temporary_configuration(
+        supplied_configuration: Union[str, Any],
+        file_name: Optional[str] = None,
+        directory: Optional[str] = None,
+    ) -> str:
         """
         Write the configuration as a temporary file that is kept around.
         """
-        try:
-            with tempfile.NamedTemporaryFile("wt", delete=False) as outfile:
+        if file_name:
+            full_file_name = str(
+                os.path.join(directory, file_name) if directory else file_name
+            )
+            with open(full_file_name, "wt", encoding="utf-8") as outfile:
                 if isinstance(supplied_configuration, str):
                     outfile.write(supplied_configuration)
                 else:
                     json.dump(supplied_configuration, outfile)
-                return outfile.name
-        except IOError as ex:
-            raise AssertionError(
-                f"Test configuration file was not written ({str(ex)})."
-            ) from ex
+                return full_file_name
+        else:
+            try:
+                with tempfile.NamedTemporaryFile(
+                    "wt", delete=False, dir=directory
+                ) as outfile:
+                    if isinstance(supplied_configuration, str):
+                        outfile.write(supplied_configuration)
+                    else:
+                        json.dump(supplied_configuration, outfile)
+                    return outfile.name
+            except IOError as ex:
+                raise AssertionError(
+                    f"Test configuration file was not written ({str(ex)})."
+                ) from ex
 
 
 # pylint: enable=too-few-public-methods
