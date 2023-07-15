@@ -71,7 +71,7 @@ if ERRORLEVEL 1 (
 		goto error_end
 	)
 
-	pipenv sync
+	pipenv sync -d
 	if ERRORLEVEL 1 (
 		echo.
 		echo {Syncing python packages with PipEnv failed.}

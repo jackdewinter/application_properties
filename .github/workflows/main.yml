@@ -54,7 +54,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Setup Python ${{ matrix.python }}
-        uses: actions/setup-python@v4.6.1
+        uses: actions/setup-python@v4.7.0
         with:
           python-version: ${{ matrix.python }}
 
@@ -65,7 +65,7 @@ jobs:
       - name: Sync With Repository
         run: |
           pipenv lock --python ${{ matrix.python }}
-          pipenv sync
+          pipenv sync -d
           pipenv graph
 
       - name: Execute Tests
@@ -113,7 +113,7 @@ jobs:
       - name: Sync With Repository
         run: |
           pipenv lock
-          pipenv sync
+          pipenv sync -d
           pipenv graph
 
       - name: Execute Black
@@ -169,7 +169,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Setup Python ${{ env.default-python-version }}
-        uses: actions/setup-python@v4.6.1
+        uses: actions/setup-python@v4.7.0
         with:
           python-version: ${{ env.default-python-version }}
 
@@ -180,7 +180,7 @@ jobs:
       - name: Sync With Repository
         run: |
           pipenv lock
-          pipenv sync
+          pipenv sync -d
           pipenv graph
 
       - name: Pyroma
