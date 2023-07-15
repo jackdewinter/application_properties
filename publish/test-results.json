@@ -43,6 +43,14 @@
             "elapsedTimeInMilliseconds": 0
         },
         {
+            "name": "test.test_application_properties_utilities",
+            "totalTests": 11,
+            "failedTests": 0,
+            "errorTests": 0,
+            "skippedTests": 0,
+            "elapsedTimeInMilliseconds": 0
+        },
+        {
             "name": "test.test_get_boolean",
             "totalTests": 6,
             "failedTests": 0,

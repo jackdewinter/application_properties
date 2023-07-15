@@ -53,6 +53,22 @@ echo {Analysis of project started.}
 
 rem Cleanly start the main part of the script
 
+rem Make sure that Git has been installed and that the script is being executed
+rem from within a Git repository.
+where git > nul 2>&1
+if ERRORLEVEL 1 (
+	echo.
+	echo Git is either not installed or not referenced in the PATH variable.
+	goto error_end
+)
+
+git rev-parse --is-inside-work-tree > nul 2>&1
+if ERRORLEVEL 1 (
+	echo.
+	echo Script must be executed from within a Git repository due to dependencies.
+	goto error_end
+)
+
 rem Check to see if the Pipfile is newer than the Pipfile.lock file.
 python utils\find_outdated_piplock_file.py
 if ERRORLEVEL 2 (
