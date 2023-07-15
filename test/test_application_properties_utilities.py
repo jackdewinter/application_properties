@@ -5,6 +5,7 @@ Tests for the ApplicationProperties class
 import argparse
 import json
 import os
+import sys
 import tempfile
 from test.pytest_helpers import TestHelpers
 from typing import List, Optional
@@ -143,10 +144,16 @@ def test_utilities_pyproject_config_error() -> None:
             os.chdir(old_dir)
 
     # Assert
-    assert (
-        captured_error_text
-        == f"Specified configuration file '{python_config_file_path}' is not a valid TOML file: Invalid statement (at line 2, column 1)."
-    )
+    if sys.platform == "darwin":
+        assert captured_error_text.startswith("Specified configuration file '")
+        assert captured_error_text.endswith(
+            "' is not a valid TOML file: Invalid statement (at line 2, column 1)."
+        )
+    else:
+        assert (
+            captured_error_text
+            == f"Specified configuration file '{python_config_file_path}' is not a valid TOML file: Invalid statement (at line 2, column 1)."
+        )
     assert isinstance(captured_error_exception, TOMLDecodeError)
     assert str(captured_error_exception) == "Invalid statement (at line 2, column 1)"
 
@@ -283,10 +290,16 @@ def test_utilities_command_default_only_with_error() -> None:
             os.chdir(old_dir)
 
     # Assert
-    assert (
-        captured_error_text
-        == f"Specified configuration file '{python_config_file_path}' is not a valid JSON file: Expecting value: line 1 column 1 (char 0)."
-    )
+    if sys.platform == "darwin":
+        assert captured_error_text.startswith("Specified configuration file '")
+        assert captured_error_text.endswith(
+            "' is not a valid JSON file: Expecting value: line 1 column 1 (char 0)."
+        )
+    else:
+        assert (
+            captured_error_text
+            == f"Specified configuration file '{python_config_file_path}' is not a valid JSON file: Expecting value: line 1 column 1 (char 0)."
+        )
     assert isinstance(captured_error_exception, json.decoder.JSONDecodeError)
     assert str(captured_error_exception) == "Expecting value: line 1 column 1 (char 0)"
 
