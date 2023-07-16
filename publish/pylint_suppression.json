@@ -2,10 +2,9 @@
     "disables-by-file": {
         "application_properties/__init__.py": {},
         "application_properties/application_properties.py": {
-            "unidiomatic-typecheck": 1,
-            "too-many-arguments": 3,
-            "broad-except": 1,
-            "raise-missing-from": 1
+            "unidiomatic-typecheck": 2,
+            "too-many-arguments": 4,
+            "broad-exception-caught": 1
         },
         "application_properties/application_properties_config_loader.py": {
             "too-few-public-methods": 1,
@@ -25,13 +24,16 @@
             "too-many-arguments": 1
         },
         "application_properties/application_properties_utilities.py": {},
+        "application_properties/application_properties_yaml_loader.py": {
+            "too-few-public-methods": 1,
+            "too-many-arguments": 1
+        },
         "application_properties/version.py": {}
     },
     "disables-by-name": {
-        "unidiomatic-typecheck": 1,
-        "too-many-arguments": 10,
-        "broad-except": 1,
-        "raise-missing-from": 1,
-        "too-few-public-methods": 4
+        "unidiomatic-typecheck": 2,
+        "too-many-arguments": 12,
+        "broad-exception-caught": 1,
+        "too-few-public-methods": 5
     }
 }

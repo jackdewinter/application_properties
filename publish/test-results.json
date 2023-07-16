@@ -51,6 +51,14 @@
             "elapsedTimeInMilliseconds": 0
         },
         {
+            "name": "test.test_application_properties_yaml_loader",
+            "totalTests": 18,
+            "failedTests": 0,
+            "errorTests": 0,
+            "skippedTests": 0,
+            "elapsedTimeInMilliseconds": 0
+        },
+        {
             "name": "test.test_get_boolean",
             "totalTests": 6,
             "failedTests": 0,

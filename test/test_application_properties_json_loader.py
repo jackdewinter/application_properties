@@ -298,7 +298,7 @@ def test_json_loader_valid_json_but_invalid_key() -> None:
         assert handled_error_parameters
         assert handled_error_parameters[0].startswith("Specified configuration file '")
         assert (
-            "' is not valid: Keys strings cannot contain the separator character '.'."
+            "' is not valid: Key strings cannot contain a whitespace character, a '=' character, or a '.' character."
             in handled_error_parameters[0]
         )
         assert isinstance(handled_error_parameters[1], ValueError)
@@ -348,7 +348,7 @@ def test_json_loader_valid_json_but_invalid_key_with_stdin_capture() -> None:
         assert expected_did_error == actual_did_error
         assert new_stdout.getvalue().startswith("Specified configuration file '")
         assert (
-            "' is not valid: Keys strings cannot contain the separator character '.'."
+            "' is not valid: Key strings cannot contain a whitespace character, a '=' character, or a '.' character."
             in new_stdout.getvalue()
         )
         assert not new_stderr.getvalue()

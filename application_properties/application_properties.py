@@ -119,10 +119,12 @@ class ApplicationProperties:
             or "\t" in property_key
             or "\n" in property_key
             or ApplicationProperties.__assignment_operator in property_key
+            or ApplicationProperties.__separator in property_key
         ):
             raise ValueError(
-                "Each part of the property key must not contain a "
-                + f"whitespace character or the '{ApplicationProperties.__separator}' character."
+                "Each part of the property key cannot contain a whitespace character, "
+                + f"a '{ApplicationProperties.__assignment_operator}' character, or "
+                + f"a '{ApplicationProperties.__separator}' character."
             )
         if not property_key:
             raise ValueError(
@@ -246,8 +248,6 @@ class ApplicationProperties:
 
     # pylint: disable=unidiomatic-typecheck
     # pylint: disable=too-many-arguments
-    # pylint: disable=broad-except
-    # pylint: disable=raise-missing-from
     def get_property(
         self,
         property_name: str,
@@ -294,6 +294,10 @@ class ApplicationProperties:
             )
         return property_value
 
+    # pylint: enable=unidiomatic-typecheck
+    # pylint: enable=too-many-arguments
+
+    # pylint: disable=unidiomatic-typecheck
     def __get_present_property_value(
         self, property_name: str, property_type: type
     ) -> Tuple[bool, Any]:
@@ -319,6 +323,9 @@ class ApplicationProperties:
             # print(f"::{covertable_property_name}::{found_value}::")
         return is_eligible, found_value
 
+    # pylint: enable=unidiomatic-typecheck
+
+    # pylint: disable=too-many-arguments, broad-exception-caught
     def __get_present_property(
         self,
         property_name: str,
@@ -347,10 +354,7 @@ class ApplicationProperties:
             property_value = found_value
         return property_value
 
-    # pylint: enable=unidiomatic-typecheck
-    # pylint: enable=too-many-arguments
-    # pylint: enable=broad-except
-    # pylint: enable=raise-missing-from
+    # pylint: enable=too-many-arguments, broad-exception-caught
 
     def get_boolean_property(
         self,
@@ -443,9 +447,17 @@ class ApplicationProperties:
                 raise ValueError(
                     "All keys in the main dictionary and nested dictionaries must be strings."
                 )
-            if self.__separator in next_key:
+            if (
+                " " in next_key
+                or "\t" in next_key
+                or "\n" in next_key
+                or ApplicationProperties.__assignment_operator in next_key
+                or ApplicationProperties.__separator in next_key
+            ):
                 raise ValueError(
-                    f"Keys strings cannot contain the separator character '{self.__separator}'."
+                    "Key strings cannot contain a whitespace character, "
+                    + f"a '{ApplicationProperties.__assignment_operator}' character, or "
+                    + f"a '{ApplicationProperties.__separator}' character."
                 )
 
             if isinstance(next_value, dict):

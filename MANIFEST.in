@@ -1,2 +1,3 @@
 include install-requirements.txt
 include application_properties/py.typed
+include application_properties/.external-package

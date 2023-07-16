@@ -242,7 +242,7 @@ def test_properties_load_with_key_containing_dot() -> None:
     assert raised_exception, "Expected exception was not raised."
     assert (
         str(raised_exception)
-        == "Keys strings cannot contain the separator character '.'."
+        == "Key strings cannot contain a whitespace character, a '=' character, or a '.' character."
     ), "Expected message was not present in exception."
 
 

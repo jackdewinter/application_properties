@@ -377,7 +377,7 @@ def test_properties_set_manual_property_with_whitespace_key() -> None:
     assert raised_exception, "Expected exception was not raised."
     assert (
         str(raised_exception)
-        == "Each part of the property key must not contain a whitespace character or the '.' character."
+        == "Each part of the property key cannot contain a whitespace character, a '=' character, or a '.' character."
     ), "Expected message was not present in exception."
 
 

@@ -4,7 +4,7 @@
 
 - No changes
 
-## Version 0.8.0 - Date: 2023-04-22
+## Version 0.8.0 - Date: 2023-07-16
 
 - [Issue 192](https://github.com/jackdewinter/application_properties/issues/192)
   - moved useful utility functions from PyMarkdown project into application_properties
