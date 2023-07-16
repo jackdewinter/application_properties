@@ -8,8 +8,8 @@ import os
 from argparse import ArgumentParser
 from typing import Callable, Optional
 
-from application_properties import (
-    ApplicationProperties,
+from application_properties import ApplicationProperties
+from application_properties.application_properties_json_loader import (
     ApplicationPropertiesJsonLoader,
 )
 from application_properties.application_properties_toml_loader import (
