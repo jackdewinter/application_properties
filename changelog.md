@@ -5,7 +5,7 @@
 - [Issue 195](https://github.com/jackdewinter/application_properties/issues/195)
   - Added YAML support
 
-## Version 0.8.1 - Date: 2023-07-21
+## Version 0.8.2 - Date: 2024-01-28
 
 - Fixed issue with installation not specifying `pyyaml>=6.0` as an installation dependency
 
