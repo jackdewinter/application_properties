@@ -1,6 +1,6 @@
 default_context:
     project_name: "application_properties"
-    project_version: "0.7.0"
+    project_version: "0.8.2"
     pypi_package_name: "application_properties"
     github_organization: "jackdewinter"
     github_project_name: "application_properties"

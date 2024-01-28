@@ -5,7 +5,7 @@ name = "pypi"
 
 [dev-packages]
 bandit = "==1.7.5"
-black = "==23.3.0"
+black = "==23.9.1"
 build = "==0.10.0"
 cookiecutter = "==2.3.0"
 cookieslicer = "==0.1.2"
@@ -29,14 +29,14 @@ pytest-html = "==3.2.0"
 pytest-timeout = "==2.1.0"
 pytest-xdist = "==3.3.1"
 setuptools = "==68.0.0"
-sourcery = "==1.5.0"
+sourcery = "==1.10.0"
 twine = "==4.0.2"
-types-pyyaml = "==6.0.12.10"
+types-pyyaml = "==6.0.12.11"
 
 [packages]
 typing-extensions = ">=4.5.0"
 tomli = ">=2.0.1"
-pyyaml = ">=6.0"
+pyyaml = ">=5.4.1"
 
 [requires]
 python_version = "3.8"
