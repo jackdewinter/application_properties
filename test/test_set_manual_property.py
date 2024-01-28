@@ -1,6 +1,7 @@
 """
 Tests for the set_manual_property related functions of the ApplicationProperties class
 """
+
 from typing import List
 
 from application_properties import ApplicationProperties

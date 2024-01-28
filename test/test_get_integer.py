@@ -1,6 +1,7 @@
 """
 Tests for the get_integer* functions of the ApplicationProperties class
 """
+
 from application_properties import ApplicationProperties
 
 

@@ -3,6 +3,7 @@ Module to provide for easy access to various property file formats.
 
 https://stackoverflow.com/questions/44834/what-does-all-mean-in-python#When%20Avoiding%20__all__%20Makes%20Sense
 """
+
 from application_properties.application_properties import (  # noqa F401
     ApplicationProperties,
 )

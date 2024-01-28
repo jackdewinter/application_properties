@@ -1,6 +1,7 @@
 """
 Tests for the ApplicationPropertiesFacade class
 """
+
 from typing import Any, Dict, List
 
 from application_properties import ApplicationProperties, ApplicationPropertiesFacade

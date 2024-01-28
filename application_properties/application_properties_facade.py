@@ -2,6 +2,7 @@
 Module to provide for a facade in front of an ApplicationProperties instance that
 only exposes part of the properties tree.
 """
+
 import logging
 from typing import Any, Callable, List, Optional
 

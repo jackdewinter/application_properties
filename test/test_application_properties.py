@@ -1,6 +1,7 @@
 """
 Tests for the ApplicationProperties class
 """
+
 from typing import Any, Dict
 
 from application_properties import ApplicationProperties

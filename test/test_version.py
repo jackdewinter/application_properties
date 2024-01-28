@@ -1,6 +1,7 @@
 """
 Module to make sure that the version number is tested.
 """
+
 import runpy
 
 
