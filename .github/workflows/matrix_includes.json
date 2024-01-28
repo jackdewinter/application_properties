@@ -18,6 +18,12 @@
         "runOn":"main"
     },
     {
+        "python":"3.11",
+        "platform":"windows-latest",
+        "timeout":10,
+        "runOn":"main"
+    },
+    {
         "python":"3.8",
         "platform":"ubuntu-latest",
         "timeout":5,
@@ -36,6 +42,12 @@
         "runOn":"main"
     },
     {
+        "python":"3.11",
+        "platform":"ubuntu-latest",
+        "timeout":5,
+        "runOn":"main"
+    },
+    {
         "python":"3.8",
         "platform":"macos-latest",
         "timeout":7,
@@ -49,6 +61,12 @@
     },
     {
         "python":"3.10",
+        "platform":"macos-latest",
+        "timeout":7,
+        "runOn":"main"
+    },
+    {
+        "python":"3.11",
         "platform":"macos-latest",
         "timeout":7,
         "runOn":"main"

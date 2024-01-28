@@ -21,6 +21,7 @@ rem Look for options on the command line.
 set PTEST_VERBOSE_MODE=
 set PTEST_FORCE_MODE=
 set PTEST_LIST_MODE=
+set PTEST_GENERATE_MODE=
 :process_arguments
 if "%1" == "-h" (
     echo Command: %0 [options]
@@ -29,6 +30,7 @@ if "%1" == "-h" (
     echo   Options:
     echo     -h                This message.
     echo     -v                Verbose mode.
+    echo     -g                Generate default configuration file.
     echo     -l                List mode.
 	echo     -f				   Force the template to be re-applied, even if synced.
     GOTO real_end
@@ -38,8 +40,8 @@ if "%1" == "-h" (
 	set PTEST_FORCE_MODE=-f
 ) else if "%1" == "-l" (
 	set PTEST_LIST_MODE=--list
-) else if "%1" == "-d" (
-	set PTEST_DEBUG_MODE=1
+) else if "%1" == "-g" (
+	set PTEST_GENERATE_MODE=--generate-config
 ) else if "%1" == "" (
     goto after_process_arguments
 ) else (
@@ -61,7 +63,7 @@ if defined PTEST_VERBOSE_MODE (
 )
 
 echo {Applying template.}
-pipenv run cookieslicer --output-directory . --source-directory c:\enlistments\template\libraries %PTEST_LIST_MODE% %PTEST_FORCE_MODE% --project-name %PYTHON_MODULE_NAME%
+pipenv run cookieslicer --output-directory . --source-directory c:\enlistments\template\libraries %PTEST_LIST_MODE% %PTEST_FORCE_MODE% %PTEST_GENERATE_MODE% --project-name %PYTHON_MODULE_NAME%
 if ERRORLEVEL 1 (
 	echo.
 	echo {Applying template to existing directory failed.}
