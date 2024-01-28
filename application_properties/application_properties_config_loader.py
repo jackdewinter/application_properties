@@ -1,6 +1,7 @@
 """
 Module to provide for a manner to load an ApplicationProperties object from a ini-type config file.
 """
+
 import configparser
 import os
 from typing import Callable, Optional, Set, Tuple

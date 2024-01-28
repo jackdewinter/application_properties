@@ -1,6 +1,7 @@
 """
 Tests for the get_boolean* functions of the ApplicationProperties class
 """
+
 from application_properties import ApplicationProperties
 
 

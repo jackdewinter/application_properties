@@ -2,7 +2,6 @@
 Module to provide helpers for the loaders to share.
 """
 
-
 # pylint: disable=too-few-public-methods
 from typing import Callable, Optional
 

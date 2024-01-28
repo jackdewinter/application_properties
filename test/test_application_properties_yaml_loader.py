@@ -1,6 +1,7 @@
 """
 Tests for the ApplicationProperties class
 """
+
 import io
 import os
 import sys

@@ -1,6 +1,7 @@
 """
 Tests for the get_string* functions of the ApplicationProperties class
 """
+
 from typing import Any
 
 from application_properties import ApplicationProperties

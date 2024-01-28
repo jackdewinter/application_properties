@@ -1,6 +1,7 @@
 """
 Module to provide for a manner to load an ApplicationProperties object from a TOML file.
 """
+
 import os
 from typing import Any, Callable, Dict, Optional, Tuple
 
