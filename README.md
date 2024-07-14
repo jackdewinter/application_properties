@@ -13,7 +13,7 @@ During the creation of the [PyMarkdown](https://github.com/jackdewinter/pymarkdo
 there was a distinct need for a configuration subsystem that was able to handle more
 complex configuration scenarios.
 
-The `application_properties` library has the following advnatages:
+The `application_properties` library has the following advantages:
 
 - Thoroughly tested
   - The project currently has over 65 tests and coverage percentages over 99%.
