@@ -51,7 +51,7 @@
         "python":"3.8",
         "platform":"macos-latest",
         "timeout":7,
-        "runOn":"always"
+        "runOn":"main"
     },
     {
         "python":"3.9",
