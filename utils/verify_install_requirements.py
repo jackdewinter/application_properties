@@ -32,6 +32,7 @@ def __read_requirements_file() -> Dict[str, Tuple[str, str]]:
             all_lines = input_file.readlines()
         file_map = {}
         for next_line in all_lines:
+            print(f"line:>{next_line}<")
             if next_line.endswith("\n"):
                 next_line = next_line[:-1]
             if next_line := next_line.strip():
