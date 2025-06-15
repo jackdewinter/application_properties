@@ -1,0 +1,38 @@
+site_name: Application Properties
+# site_url: http://127.0.0.1:8000/
+site_description: TBD
+site_author: Jack De Winter
+theme: readthedocs
+# repo_url: https://github.com/jackdewinter/application_properties
+docs_dir: src
+site_dir: site
+plugins:
+  - search
+nav:
+  - "Introduction":
+    - 'index.md'
+    - 'getting-started.md'
+  - "User Guide":
+    - 'user-guide.md'
+  - "Usual Project Stuff":
+    - 'usual.md'
+    - 'contribute.md'
+    - "Changelog" : changelog.md
+    - "Frequently Asked Questions": faq.md
+markdown_extensions:
+  - toc:
+      permalink: "#"
+theme:
+  name: readthedocs
+  navigation_depth: 2
+  # features:
+  #   - navigation.tabs
+  #   - navigation.top
+  #   - navigation.sections
+  #   - navigation.expand
+  #   - navigation.instant
+  #   - navigation.index
+  #   - navigation.search
+  #   - navigation.search.highlight
+  #   - navigation.search.suggest
+  #   - navigation.search.suggest.autocomplete  

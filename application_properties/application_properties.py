@@ -246,7 +246,6 @@ class ApplicationProperties:
             composed_property_value = property_value[1:]
         return composed_property_value
 
-    # pylint: disable=unidiomatic-typecheck
     # pylint: disable=too-many-arguments
     def get_property(
         self,
@@ -271,11 +270,17 @@ class ApplicationProperties:
             raise ValueError(
                 f"The property_type argument for '{property_name}' must be a type."
             )
-        if default_value is not None and type(default_value) != property_type:
-            raise ValueError(
-                f"The default value for property '{property_name}' must "
-                + f"either be None or a '{property_type.__name__}' value."
-            )
+
+        if default_value is not None:
+            is_eligible = isinstance(default_value, property_type)
+            if is_eligible and property_type == int and isinstance(default_value, bool):
+                is_eligible = False
+
+            if not is_eligible:
+                raise ValueError(
+                    f"The default value for property '{property_name}' must "
+                    + f"either be None or a '{property_type.__name__}' value."
+                )
 
         property_value = default_value
         property_name = property_name.lower()
@@ -294,15 +299,15 @@ class ApplicationProperties:
             )
         return property_value
 
-    # pylint: enable=unidiomatic-typecheck
     # pylint: enable=too-many-arguments
 
-    # pylint: disable=unidiomatic-typecheck
     def __get_present_property_value(
         self, property_name: str, property_type: type
     ) -> Tuple[bool, Any]:
         found_value = self.__flat_property_map[property_name]
-        is_eligible = type(found_value) == property_type
+        is_eligible = isinstance(found_value, property_type)
+        if is_eligible and property_type == int and isinstance(found_value, bool):
+            is_eligible = False
 
         covertable_property_name = f"{ApplicationProperties.__separator}{property_name}"
         if (
@@ -322,8 +327,6 @@ class ApplicationProperties:
                 is_eligible = True
             # print(f"::{covertable_property_name}::{found_value}::")
         return is_eligible, found_value
-
-    # pylint: enable=unidiomatic-typecheck
 
     # pylint: disable=too-many-arguments, broad-exception-caught
     def __get_present_property(

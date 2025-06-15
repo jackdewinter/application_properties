@@ -1,19 +1,143 @@
 repos:
-  - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.16
+  - repo: https://github.com/ambv/black
+    rev: 24.8.0
     hooks:
-      - id: pymarkdown
-        pass_filenames: false
-        args:
-          - --config
-          - clean.json
-          - scan
-          - .
-          - ./docs
+    - id: black
+      name: "Format: Black"
+      args: ["--exclude", "test/resources", "." ]
+      pass_filenames: false
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+    - id: isort
+      name: "Format: ISort"
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.10.0-1
+    hooks:
+    - id: shfmt
+      name: "Format: ShFmt"
   - repo: local
     hooks:
-      - id: verify-install-requirements
-        name: Verify Install Requirements Match
-        language: system
-        entry: pipenv run python utils/verify_install_requirements.py
-        pass_filenames: false
+    - id: verify-install-requirements
+      name: "Scan:   Verify Install Requirements Match"
+      language: system
+      entry: pipenv run python utils/verify_install_requirements.py
+      pass_filenames: false
+  - repo: https://github.com/pycqa/flake8
+    rev: '7.1.1'
+    hooks:
+    - id: flake8
+      name: "Scan:   Flake8"
+      args: ["-j","4", "--exclude", "dist,build,.venv,test/resources", "."]
+      additional_dependencies: ["flake8-bugbear==24.8.19", "flake8-bandit==4.1.1"]
+      pass_filenames: false
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.8.0
+    hooks:
+    - id: bandit
+      name: "Scan:   Bandit"
+      args: [--configfile,.bandit.yaml,-q,-r,"application_properties"]
+      pass_filenames: false
+  - repo: local
+    hooks:
+    - id: pylint
+      name: "Scan:   PyLint"
+      entry: pylint
+      language: system
+      types: [python]
+      require_serial: true
+      args:
+        [
+          "-j=1",
+          "--recursive=y",
+          "-rn", # Only display messages
+          "-sn", # Don't display the score
+          "application_properties"
+        ]
+      pass_filenames: false
+  - repo: local
+    hooks:
+    - id: pylint
+      name: "Scan:   PyLint (test)"
+      entry: pylint
+      language: system
+      types: [python]
+      require_serial: true
+      args:
+        [
+          "-j=1",
+          "--ignore",
+          "test/resources",
+          "--recursive=y",
+          "-rn", # Only display messages
+          "-sn", # Don't display the score
+          "test"
+        ]
+      pass_filenames: false
+  - repo: local
+    hooks:
+    - id: pylint
+      name: "Scan:   PyLint (utils)"
+      entry: pylint
+      language: system
+      types: [python]
+      require_serial: true
+      args:
+        [
+          "-j=1",
+          "--recursive=y",
+          "-rn", # Only display messages
+          "-sn", # Don't display the score
+          "utils"
+        ]
+      pass_filenames: false
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+    - id: mypy
+      name: "Scan:   MyPy"
+      args: [--warn-return-any, --strict, application_properties  ]
+      additional_dependencies: [
+        tomli, types-PyYAML
+      ]
+      pass_filenames: false
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+    - id: mypy
+      name: "Scan:   MyPy (test)"
+      args: [--warn-return-any, --exclude, test/resources, --strict, test  ]
+      additional_dependencies: [
+        tomli, types-PyYAML
+      ]
+      pass_filenames: false
+  - repo: https://github.com/jackdewinter/pymarkdown
+    rev: v0.9.27
+    hooks:
+    - id: pymarkdown
+      name: "Scan:   PyMarkdown (Old Documentation)"
+      pass_filenames: false
+      args:
+        - --config
+        - clean.json
+        - scan
+        - changelog.md
+        - README.md
+        - ./docs
+  - repo: https://github.com/jackdewinter/pymarkdown
+    rev: v0.9.27
+    hooks:
+    - id: pymarkdown
+      name: "Scan:   PyMarkdown (New Documentation)"
+      pass_filenames: false
+      args:
+        - --config
+        - newdocs/clean.json
+        - scan
+        - ./newdocs/src
+  - repo: https://github.com/koalaman/shellcheck-precommit
+    rev: v0.10.0
+    hooks:
+    - id: shellcheck
+      name: "Scan:   Shellcheck"
+      args: ["-x", "-o","require-variable-braces"]

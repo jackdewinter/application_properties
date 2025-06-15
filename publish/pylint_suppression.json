@@ -2,7 +2,6 @@
     "disables-by-file": {
         "application_properties/__init__.py": {},
         "application_properties/application_properties.py": {
-            "unidiomatic-typecheck": 2,
             "too-many-arguments": 4,
             "broad-exception-caught": 1
         },
@@ -31,7 +30,6 @@
         "application_properties/version.py": {}
     },
     "disables-by-name": {
-        "unidiomatic-typecheck": 2,
         "too-many-arguments": 12,
         "broad-exception-caught": 1,
         "too-few-public-methods": 5
