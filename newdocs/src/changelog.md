@@ -5,7 +5,8 @@
 <!--- pyml disable-next-line no-duplicate-heading-->
 ### Fixed and Added
 
-- None
+- [Issue 271](https://github.com/jackdewinter/application_properties/issues/271)
+    - Applying project templates.
 
 ## Version 0.8.2 - Date: 2024-01-28
 
