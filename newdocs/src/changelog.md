@@ -5,6 +5,13 @@
 <!--- pyml disable-next-line no-duplicate-heading-->
 ### Fixed and Added
 
+- None
+
+## Version 0.83 - Date: 2025-06-15
+
+<!--- pyml disable-next-line no-duplicate-heading-->
+### Fixed and Added
+
 - [Issue 271](https://github.com/jackdewinter/application_properties/issues/271)
     - Applying project templates.
 
