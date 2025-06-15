@@ -8,11 +8,30 @@ set "PROJECT_DIRECTORY=%cd%"
 set PYTHONPATH=%PROJECT_DIRECTORY%
 
 rem Set needed environment variables.
+set PROPERTIES_FILE=project.properties
 set PTEST_TEMPFILE=temp_ptest.txt
 set PTEST_SCRIPT_DIRECTORY=%~dp0
-set PTEST_PYSCAN_SCRIPT_PATH=project_summarizer
 set PTEST_TEST_RESULTS_PATH=report\tests.xml
 set PTEST_TEST_COVERAGE_PATH=report\coverage.xml
+
+rem Read properties from the properties file and set in the current environment.
+FOR /f %%N IN (%PROPERTIES_FILE%) DO (
+	set TEST_LINE=%%N
+	IF NOT "!TEST_LINE:~0,1!"=="#" (
+		SET %%N
+	)
+)
+if not defined PYTHON_MODULE_NAME (
+	echo "Property 'PYTHON_MODULE_NAME' must be set in the %PROPERTIES_FILE% file."
+	goto error_end
+)
+
+if "%PYTHON_MODULE_NAME%" == "project_summarizer" (
+	set PTEST_PYSCAN_SCRIPT_PATH=python %PTEST_SCRIPT_DIRECTORY%\project_summarizer\main.py
+) else (
+	set PTEST_PYSCAN_SCRIPT_PATH=project_summarizer
+)
+echo %PTEST_PYSCAN_SCRIPT_PATH%
 
 rem Look for options on the command line.
 set PTEST_PUBLISH_SUMMARIES=

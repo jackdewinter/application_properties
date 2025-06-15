@@ -17,6 +17,12 @@ if not defined PYTHON_MODULE_NAME (
 	goto error_end
 )
 
+if "%PYTHON_MODULE_NAME%" == "cookieslicer" (
+	set PTEST_SLICER_SCRIPT_PATH="main.py"
+) else (
+	set PTEST_SLICER_SCRIPT_PATH="cookieslicer"
+)
+
 rem Look for options on the command line.
 set PTEST_VERBOSE_MODE=
 set PTEST_FORCE_MODE=
@@ -63,7 +69,7 @@ if defined PTEST_VERBOSE_MODE (
 )
 
 echo {Applying template.}
-pipenv run cookieslicer --output-directory . --source-directory c:\enlistments\template\libraries %PTEST_LIST_MODE% %PTEST_FORCE_MODE% %PTEST_GENERATE_MODE% --project-name %PYTHON_MODULE_NAME%
+pipenv run "%PTEST_SLICER_SCRIPT_PATH%" --output-directory . --source-directory c:\enlistments\template\applications %PTEST_LIST_MODE% %PTEST_FORCE_MODE% %PTEST_GENERATE_MODE% --project-name %PYTHON_MODULE_NAME%
 if ERRORLEVEL 1 (
 	echo.
 	echo {Applying template to existing directory failed.}

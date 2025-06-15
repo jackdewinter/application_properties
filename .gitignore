@@ -128,9 +128,14 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# IDEs and editors
+.vscode/
+.idea/
+
 # Others
 report/
-.vscode/
-report.xml
-.idea/
+build/
+.coverage
+project_summarizer.egg-info/*
 dist/
+report.xml

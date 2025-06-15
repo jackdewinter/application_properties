@@ -1,0 +1,4 @@
+[pylint]
+disable = C0301, W0511, R0917, R0801, R0401, duplicate-code, cyclic-import, too-many-positional-arguments
+extension-pkg-whitelist=win32api
+ignore-paths=^.venv/.*$
