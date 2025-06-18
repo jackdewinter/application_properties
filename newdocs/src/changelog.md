@@ -5,9 +5,10 @@
 <!--- pyml disable-next-line no-duplicate-heading-->
 ### Fixed and Added
 
-- None
+- [Issue 148](https://github.com/jackdewinter/application_properties/issues/148)
+    - Added JSON5 support, which includes support for JSON comments.
 
-## Version 0.83 - Date: 2025-06-15
+## Version 0.8.3 - Date: 2025-06-15
 
 <!--- pyml disable-next-line no-duplicate-heading-->
 ### Fixed and Added

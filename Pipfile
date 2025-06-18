@@ -28,6 +28,7 @@ twine = "==6.1.0"
 typing-extensions = ">=4.5.0"
 pyyaml = ">=5.4.1"
 tomli = ">=2.0.1"
+pyjson5  = ">=1.6.9"
 
 [requires]
 python_version = "3.13"
