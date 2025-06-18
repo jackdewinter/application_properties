@@ -98,7 +98,7 @@ repos:
       name: "Scan:   MyPy"
       args: [--warn-return-any, --strict, application_properties  ]
       additional_dependencies: [
-        tomli, types-PyYAML
+        tomli, types-PyYAML, pytest,pyjson5
       ]
       pass_filenames: false
   - repo: https://github.com/pre-commit/mirrors-mypy
@@ -108,7 +108,7 @@ repos:
       name: "Scan:   MyPy (test)"
       args: [--warn-return-any, --exclude, test/resources, --strict, test  ]
       additional_dependencies: [
-        tomli, types-PyYAML
+        tomli, types-PyYAML, pytest, pyjson5
       ]
       pass_filenames: false
   - repo: https://github.com/jackdewinter/pymarkdown

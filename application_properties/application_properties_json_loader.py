@@ -20,6 +20,8 @@ class ApplicationPropertiesJsonLoader:
     Class to provide for a manner to load an ApplicationProperties object from a JSON file.
     """
 
+    # pylint: disable=too-many-arguments
+
     @staticmethod
     def load_and_set(
         properties_object: ApplicationProperties,
@@ -74,6 +76,8 @@ class ApplicationPropertiesJsonLoader:
                 handle_error_fn(formatted_error, this_exception)
         return did_apply_map and not did_have_one_error, did_have_one_error
 
+    # pylint: enable=too-many-arguments
+
     @staticmethod
     def __load_as_json(
         configuration_file: str,
@@ -100,6 +104,7 @@ class ApplicationPropertiesJsonLoader:
             handle_error_fn(formatted_error, this_exception)
         return did_have_one_error, configuration_map
 
+    # pylint: disable=no-member
     @staticmethod
     def __load_as_json5(
         configuration_file: str,
@@ -126,6 +131,8 @@ class ApplicationPropertiesJsonLoader:
             did_have_one_error = True
             handle_error_fn(formatted_error, this_exception)
         return did_have_one_error, configuration_map
+
+    # pylint: enable=no-member
 
 
 # pylint: enable=too-few-public-methods

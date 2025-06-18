@@ -6,17 +6,21 @@ import io
 import json
 import os
 import sys
-
-from pyjson5 import Json5DecoderException, Json5IllegalCharacter
 from test.pytest_helpers import TestHelpers
 from typing import Any, List, Optional
 
+# fmt: off
 import pytest
+# pylint: disable=no-name-in-module
+from pyjson5 import Json5DecoderException
 
 from application_properties import (
     ApplicationProperties,
     ApplicationPropertiesJsonLoader,
 )
+
+# pylint: enable=no-name-in-module
+# fmt: on
 
 
 @pytest.mark.parametrize("load_as_json5_file", [True, False])
@@ -223,9 +227,11 @@ def test_json_loader_invalid_json(load_as_json5_file: bool) -> None:
     expected_did_error = True
     if load_as_json5_file:
         expected_error_suffix = "' is not a valid JSON file: ('Expected U+0072 near 1, found U+0068', None, 'h')."
-        expected_exception_class = Json5DecoderException
+        expected_exception_class: type = Json5DecoderException
     else:
-        expected_error_suffix = "' is not a valid JSON file: Expecting value: line 1 column 1 (char 0)."
+        expected_error_suffix = (
+            "' is not a valid JSON file: Expecting value: line 1 column 1 (char 0)."
+        )
         expected_exception_class = json.decoder.JSONDecodeError
 
     handled_error_parameters: List[Any] = []
@@ -256,10 +262,7 @@ def test_json_loader_invalid_json(load_as_json5_file: bool) -> None:
         assert expected_did_error == actual_did_error
         assert handled_error_parameters
         assert handled_error_parameters[0].startswith("Specified configuration file ")
-        assert (
-            expected_error_suffix
-            in handled_error_parameters[0]
-        )
+        assert expected_error_suffix in handled_error_parameters[0]
         assert isinstance(handled_error_parameters[1], expected_exception_class)
     finally:
         if configuration_file and os.path.exists(configuration_file):
@@ -415,6 +418,9 @@ def test_json_loader_valid_json_but_invalid_key_with_stdin_capture(
             os.remove(configuration_file)
 
 
+# pylint: disable=too-many-locals
+
+
 @pytest.mark.parametrize("load_as_json5_file", [True, False])
 def test_json_loader_pair_valid_json(load_as_json5_file: bool) -> None:
     """
@@ -493,8 +499,14 @@ def test_json_loader_pair_valid_json(load_as_json5_file: bool) -> None:
             os.remove(configuration_file_second)
 
 
+# pylint: disable=too-many-locals
+
+
 @pytest.mark.parametrize("load_as_json5_file", [True, False])
-def test_json_loader_with_comments(load_as_json5_file:bool) -> None:
+def test_json_loader_with_comments(load_as_json5_file: bool) -> None:
+    """
+    Test to verify that the non-json5 fails with comments, but with JSON5, they are accepted.
+    """
 
     # Arrange
     supplied_configuration_first = """{
@@ -538,7 +550,7 @@ def test_json_loader_with_comments(load_as_json5_file:bool) -> None:
         if load_as_json5_file:
             assert actual_did_apply
             assert not actual_did_error
-            
+
             actual_value_a = application_properties.get_integer_property(
                 "plugins.md999.test_value_a", -1
             )
@@ -562,3 +574,6 @@ def test_json_loader_with_comments(load_as_json5_file:bool) -> None:
     finally:
         if configuration_file_first and os.path.exists(configuration_file_first):
             os.remove(configuration_file_first)
+
+
+# pylint: enable=too-many-locals
