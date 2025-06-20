@@ -6,6 +6,8 @@ import json
 import os
 from typing import Any, Callable, Dict, Optional, Tuple
 
+import pyjson5
+
 from application_properties.application_properties import ApplicationProperties
 from application_properties.application_properties_loader_helper import (
     ApplicationPropertiesLoaderHelper,
@@ -18,6 +20,8 @@ class ApplicationPropertiesJsonLoader:
     Class to provide for a manner to load an ApplicationProperties object from a JSON file.
     """
 
+    # pylint: disable=too-many-arguments
+
     @staticmethod
     def load_and_set(
         properties_object: ApplicationProperties,
@@ -25,6 +29,7 @@ class ApplicationPropertiesJsonLoader:
         handle_error_fn: Optional[Callable[[str, Optional[Exception]], None]] = None,
         clear_property_map: bool = True,
         check_for_file_presence: bool = True,
+        load_as_json5_file: bool = False,
     ) -> Tuple[bool, bool]:
         """
         Load the specified file and set it into the given properties object.
@@ -41,24 +46,19 @@ class ApplicationPropertiesJsonLoader:
                 handle_error_fn
             )
         )
-        did_have_one_error = False
-        try:
-            with open(configuration_file, encoding="utf-8") as infile:
-                configuration_map = json.load(infile)
-        except json.decoder.JSONDecodeError as this_exception:
-            formatted_error = (
-                f"Specified configuration file '{configuration_file}' "
-                + f"is not a valid JSON file: {str(this_exception)}."
+
+        if load_as_json5_file:
+            did_have_one_error, configuration_map = (
+                ApplicationPropertiesJsonLoader.__load_as_json5(
+                    configuration_file, handle_error_fn
+                )
             )
-            did_have_one_error = True
-            handle_error_fn(formatted_error, this_exception)
-        except IOError as this_exception:
-            formatted_error = (
-                f"Specified configuration file '{configuration_file}' "
-                + f"was not loaded: {str(this_exception)}."
+        else:
+            did_have_one_error, configuration_map = (
+                ApplicationPropertiesJsonLoader.__load_as_json(
+                    configuration_file, handle_error_fn
+                )
             )
-            did_have_one_error = True
-            handle_error_fn(formatted_error, this_exception)
 
         did_apply_map = False
         if not did_have_one_error and configuration_map:
@@ -75,6 +75,64 @@ class ApplicationPropertiesJsonLoader:
                 did_have_one_error = True
                 handle_error_fn(formatted_error, this_exception)
         return did_apply_map and not did_have_one_error, did_have_one_error
+
+    # pylint: enable=too-many-arguments
+
+    @staticmethod
+    def __load_as_json(
+        configuration_file: str,
+        handle_error_fn: Callable[[str, Optional[Exception]], None],
+    ) -> Tuple[bool, Dict[str, Any]]:
+        did_have_one_error = False
+        configuration_map: Dict[Any, Any] = {}
+        try:
+            with open(configuration_file, encoding="utf-8") as infile:
+                configuration_map = json.load(infile)
+        except json.decoder.JSONDecodeError as this_exception:
+            formatted_error = (
+                f"Specified configuration file '{configuration_file}' "
+                + f"is not a valid JSON file: {str(this_exception)}."
+            )
+            did_have_one_error = True
+            handle_error_fn(formatted_error, this_exception)
+        except OSError as this_exception:
+            formatted_error = (
+                f"Specified configuration file '{configuration_file}' "
+                + f"was not loaded: {str(this_exception)}."
+            )
+            did_have_one_error = True
+            handle_error_fn(formatted_error, this_exception)
+        return did_have_one_error, configuration_map
+
+    # pylint: disable=no-member
+    @staticmethod
+    def __load_as_json5(
+        configuration_file: str,
+        handle_error_fn: Callable[[str, Optional[Exception]], None],
+    ) -> Tuple[bool, Dict[str, Any]]:
+        did_have_one_error = False
+        configuration_map: Dict[Any, Any] = {}
+
+        try:
+            with open(configuration_file, encoding="utf-8") as infile:
+                configuration_map = pyjson5.load(infile)
+        except pyjson5.Json5DecoderException as this_exception:
+            formatted_error = (
+                f"Specified configuration file '{configuration_file}' "
+                + f"is not a valid JSON file: {str(this_exception)}."
+            )
+            did_have_one_error = True
+            handle_error_fn(formatted_error, this_exception)
+        except OSError as this_exception:
+            formatted_error = (
+                f"Specified configuration file '{configuration_file}' "
+                + f"was not loaded: {str(this_exception)}."
+            )
+            did_have_one_error = True
+            handle_error_fn(formatted_error, this_exception)
+        return did_have_one_error, configuration_map
+
+    # pylint: enable=no-member
 
 
 # pylint: enable=too-few-public-methods

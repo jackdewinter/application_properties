@@ -5,8 +5,16 @@
 <!--- pyml disable-next-line no-duplicate-heading-->
 ### Fixed and Added
 
+- [Issue 148](https://github.com/jackdewinter/application_properties/issues/148)
+    - Added JSON5 support, which includes support for JSON comments.
+
+## Version 0.8.3 - Date: 2025-06-15
+
+<!--- pyml disable-next-line no-duplicate-heading-->
+### Fixed and Added
+
 - [Issue 271](https://github.com/jackdewinter/application_properties/issues/271)
-    - Applying project templates.
+    - Applying project templates across projects.
 
 ## Version 0.8.2 - Date: 2024-01-28
 

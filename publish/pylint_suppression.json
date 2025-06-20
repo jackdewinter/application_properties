@@ -13,7 +13,9 @@
             "too-many-arguments": 3
         },
         "application_properties/application_properties_json_loader.py": {
-            "too-few-public-methods": 1
+            "too-few-public-methods": 1,
+            "too-many-arguments": 1,
+            "no-member": 1
         },
         "application_properties/application_properties_loader_helper.py": {
             "too-few-public-methods": 1
@@ -30,8 +32,9 @@
         "application_properties/version.py": {}
     },
     "disables-by-name": {
-        "too-many-arguments": 12,
+        "too-many-arguments": 13,
         "broad-exception-caught": 1,
-        "too-few-public-methods": 5
+        "too-few-public-methods": 5,
+        "no-member": 1
     }
 }
