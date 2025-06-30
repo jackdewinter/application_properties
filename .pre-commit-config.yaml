@@ -4,7 +4,7 @@ repos:
     hooks:
     - id: black
       name: "Format: Black"
-      args: ["--exclude", "test/resources", "." ]
+      args: ["--exclude", "test/resources", "--exclude", ".venv",  "." ]
       pass_filenames: false
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2

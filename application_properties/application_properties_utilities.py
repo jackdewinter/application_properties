@@ -99,7 +99,9 @@ class ApplicationPropertiesUtilities:
         handle_error_fn: Optional[Callable[[str, Optional[Exception]], None]] = None,
     ) -> None:
         """
-        Load configuration information from standard Python project files.
+        Load configuration information from standard Python project files. This currently
+        means that application_properties will look for the `[tool.pymarkdown]` section
+        within the `pyproject.toml` located within the current directory.
         """
 
         # Currently, we only support the pyproject.toml file.
