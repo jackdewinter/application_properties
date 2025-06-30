@@ -12,6 +12,8 @@ nav:
   - "Introduction":
     - 'index.md'
     - 'getting-started.md'
+    - 'file-types.md'
+    - 'command-line.md'
   - "User Guide":
     - 'user-guide.md'
   - "Usual Project Stuff":
