@@ -5,7 +5,7 @@ Module that provides for an encapsulation of properties for an application.
 import contextlib
 import copy
 import logging
-from typing import Any, Callable, Dict, List, Optional, Tuple, cast
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union, cast
 
 LOGGER = logging.getLogger(__name__)
 
@@ -181,7 +181,7 @@ class ApplicationProperties:
         ApplicationProperties.verify_full_key_form(property_key)
         return string_to_verify
 
-    def set_manual_property(self, combined_string: str | List[str]) -> None:
+    def set_manual_property(self, combined_string: Union[str, List[str]]) -> None:
         """
         Manually set a property for the object.
         """
