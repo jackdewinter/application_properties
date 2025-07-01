@@ -3,7 +3,8 @@
 The `application_properties` package was born out of necessity.
 During the creation of the [PyMarkdown](https://pymarkdown.readthedocs.io/en/latest/)
 project, there was a distinct need for a configuration subsystem that was able to
-handle more complex configuration scenarios.
+handle more complex configuration scenarios. That is when the application_properties
+project was born [on GitHub](https://github.com/jackdewinter/application_properties).
 
 The `application_properties` package has the following advantages:
 
