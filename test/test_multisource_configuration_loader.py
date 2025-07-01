@@ -510,6 +510,7 @@ def test_multisource_raw_specified_configuration_file_with_unspecified_json5_fil
     assert len(application_properties.property_names) == 1
     assert application_properties.get_integer_property("some.thing") == 1
 
+
 def test_multisource_specified_configuration_file_does_not_specified() -> None:
     """
     Test that the add_specified_configuration_file function handles a configuration file that is not specified.

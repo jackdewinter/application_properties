@@ -3,11 +3,11 @@
     "reportSource": "Unknown",
     "branchLevel": {
         "totalMeasured": 178,
-        "totalCovered": 177
+        "totalCovered": 178
     },
     "lineLevel": {
         "totalMeasured": 665,
-        "totalCovered": 664
+        "totalCovered": 665
     }
 }
 

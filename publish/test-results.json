@@ -84,7 +84,7 @@
         },
         {
             "name": "test.test_multisource_configuration_loader",
-            "totalTests": 36,
+            "totalTests": 37,
             "failedTests": 0,
             "errorTests": 0,
             "skippedTests": 0,
