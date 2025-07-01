@@ -83,6 +83,14 @@
             "elapsedTimeInMilliseconds": 0
         },
         {
+            "name": "test.test_multisource_configuration_loader",
+            "totalTests": 37,
+            "failedTests": 0,
+            "errorTests": 0,
+            "skippedTests": 0,
+            "elapsedTimeInMilliseconds": 0
+        },
+        {
             "name": "test.test_set_manual_property",
             "totalTests": 29,
             "failedTests": 0,

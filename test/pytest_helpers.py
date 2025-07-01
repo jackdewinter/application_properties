@@ -5,10 +5,10 @@ Module to provide helper methods for tests.
 import json
 import os
 import tempfile
-from typing import Any, Optional, Union
+from contextlib import contextmanager
+from typing import Any, Generator, Optional, Union
 
 
-# pylint: disable=too-few-public-methods
 class TestHelpers:
     """
     Class to provide helper methods for tests.
@@ -48,8 +48,19 @@ class TestHelpers:
                     f"Test configuration file was not written ({str(ex)})."
                 ) from ex
 
-
-# pylint: enable=too-few-public-methods
+    @staticmethod
+    @contextmanager
+    def change_to_temporary_directory() -> Generator[str, None, None]:
+        """
+        Context manager to temporarily change to a given directory.
+        """
+        old_current_working_directory = os.getcwd()
+        with tempfile.TemporaryDirectory() as tmp_dir_path:
+            try:
+                os.chdir(tmp_dir_path)
+                yield tmp_dir_path
+            finally:
+                os.chdir(old_current_working_directory)
 
 
 # pylint: disable=too-few-public-methods

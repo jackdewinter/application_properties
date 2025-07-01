@@ -67,7 +67,7 @@ class ApplicationPropertiesFacade:
         property_name: str,
         default_value: Optional[bool] = None,
         is_required: bool = False,
-    ) -> bool:
+    ) -> Optional[bool]:
         """
         Get a boolean property from the configuration.
         """
@@ -85,7 +85,7 @@ class ApplicationPropertiesFacade:
         valid_value_fn: Optional[Callable[[int], Any]] = None,
         is_required: bool = False,
         strict_mode: Optional[bool] = None,
-    ) -> int:
+    ) -> Optional[int]:
         """
         Get an integer property from the configuration.
         """
@@ -107,7 +107,7 @@ class ApplicationPropertiesFacade:
         valid_value_fn: Optional[Callable[[str], Any]] = None,
         is_required: bool = False,
         strict_mode: Optional[bool] = None,
-    ) -> str:
+    ) -> Optional[str]:
         """
         Get a string property from the configuration.
         """

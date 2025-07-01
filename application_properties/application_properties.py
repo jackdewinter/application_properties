@@ -5,7 +5,7 @@ Module that provides for an encapsulation of properties for an application.
 import contextlib
 import copy
 import logging
-from typing import Any, Callable, Dict, List, Optional, Tuple, cast
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union, cast
 
 LOGGER = logging.getLogger(__name__)
 
@@ -181,7 +181,7 @@ class ApplicationProperties:
         ApplicationProperties.verify_full_key_form(property_key)
         return string_to_verify
 
-    def set_manual_property(self, combined_string: str) -> None:
+    def set_manual_property(self, combined_string: Union[str, List[str]]) -> None:
         """
         Manually set a property for the object.
         """
@@ -365,7 +365,7 @@ class ApplicationProperties:
         default_value: Optional[bool] = None,
         is_required: bool = False,
         strict_mode: Optional[bool] = None,
-    ) -> bool:
+    ) -> Optional[bool]:
         """
         Get a boolean property from the configuration.
         """
@@ -389,7 +389,7 @@ class ApplicationProperties:
         valid_value_fn: Optional[Callable[[int], Any]] = None,
         is_required: bool = False,
         strict_mode: Optional[bool] = None,
-    ) -> int:
+    ) -> Optional[int]:
         """
         Get an integer property from the configuration.
         """
@@ -415,7 +415,7 @@ class ApplicationProperties:
         valid_value_fn: Optional[Callable[[str], Any]] = None,
         is_required: bool = False,
         strict_mode: Optional[bool] = None,
-    ) -> str:
+    ) -> Optional[str]:
         """
         Get a string property from the configuration.
         """
