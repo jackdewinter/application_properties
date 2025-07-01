@@ -42,69 +42,23 @@ The `application_properties` library has the following advantages:
 
 ## Requirements
 
-This project required Python 3.8 or later to function.
-
-## Installation
-
-```sh
-pip install application_properties
-```
+This project required Python 3.9 or later to function.
 
 ## How To Use This Package
 
-The primary goal of this package is to provide a simple, easy to use interface
-to access properties within a Python script or program.  It is our contention
-that 80% or more of general usage of such a package will be focused on two
-elements:
+Our documentation for this project now resides as
+[ReadTheDocs](https://application-properties.readthedocs.io/en/latest/).
 
-- loading a group of properties from a file that is properly formatted
-  for a given format
-- accessing a specific string property, possibly with a default, from the that
-  property store
+This documentation includes:
 
-### Examples
-
-For concrete examples that show the power of this library package, please consult
-the [Examples Document](./docs/examples.md).  If you come up with a normal example
-of how to use our package that we have missed, or come up with a novel example of
-how to use our package, please file an issue using the process below and let us
-know. From our experience, one example can often paint a picture of how to use our
-project that is difficult to explain clearly with just words.
-
-## Issues and Future Plans
-
-If you would like to report an issue with the library or the documentation, please
-file an issue [using GitHub](https://github.com/jackdewinter/application_properties/issues).
-Please remember to fill in as much information as possible including a good, repeatable
-pattern for reproducing the issue.  Do not overflow us with too much information,
-but provide us with enough information to make the problem evident to us.
-
-If you would like to us to implement a feature that you believe is important, please
-file an issue [using GitHub](https://github.com/jackdewinter/application_properties/issues)
-that includes what you want to add, why you want to add it, and why it is important
-to you, and how you think it will help others.  We truly want to listen to what
-you see as a good feature, so please do not be upset if we say "no" or "let me
-think about it".
-
-Please note that the issue you file will usually be the start of a conversation,
-so be ready for more questions.  If you have any Python developer skills, please
-mention that as well.  The conversations about "hey, can you..." is a lot different
-than "if I do... can I add it to the project?".
-
-## When Did Things Change?
-
-The changelog for this project is maintained [at this location](/changelog.md).
-
-## Still Have Questions?
-
-If you still have questions, please consult our
-[Frequently Asked Questions](/docs/faq.md) document.
-
-## Instructions For Contributing
-
-Developer notes on various topics are kept in the the
-[Developer Notes](/docs/developer.md) document.
-
-If you attempting to contribute something to this project,
-please follow the steps outlined in the
-[CONTRIBUTING.md](/CONTRIBUTING.md) file.
+- [Index](https://application-properties.readthedocs.io/en/latest/)
+  - Similar to this page, just nicer formatting!
+- [Getting Started](https://application-properties.readthedocs.io/en/latest/getting-started/)
+  - Explanation of the terms and concepts that we believe will help you understand
+    the rest of the documents.
+- [Configuration Files](https://application-properties.readthedocs.io/en/latest/file-types/)
+  - Information about the configuration files types that we support.
+- [Command Line](https://application-properties.readthedocs.io/en/latest/command-line/)
+  - How to interact with `application_properties` from the command line.
+- [User Guide](https://application-properties.readthedocs.io/en/latest/user-guide/)
+  - Walk-through of executable examples to help you get up to speed quicker.
