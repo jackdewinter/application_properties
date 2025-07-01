@@ -48,8 +48,8 @@ class TestHelpers:
                     f"Test configuration file was not written ({str(ex)})."
                 ) from ex
 
-    @contextmanager
     @staticmethod
+    @contextmanager
     def change_to_temporary_directory() -> Generator[str, None, None]:
         """
         Context manager to temporarily change to a given directory.
