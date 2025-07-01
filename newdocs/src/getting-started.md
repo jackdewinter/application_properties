@@ -279,7 +279,7 @@ system at work.  While we included examples of all six configuration layers, we
 realize that it is overkill for many applications.  However, we would rather provide
 an example that is easy to understand and goes too far, rather than one that does
 not demonstrate the one type of configuration layer that you intended to use.
-Please take from this example that information that you need.
+Please take from this example the information that you need.
 
 For the sake of this example, assume that we have a `pyproject.toml` in the local
 directory with the content:

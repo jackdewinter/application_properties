@@ -8,7 +8,7 @@ handle more complex configuration scenarios.
 The `application_properties` package has the following advantages:
 
 - Thoroughly tested
-    - The project currently has over 200 tests with 100% coverage coverage.
+    - The project currently has over 200 tests with 100% coverage.
     - Comprehensive set of scenarios that test how `application_properties`
       reacts to situations are coded and passing.
 - Simple... With Examples
@@ -43,7 +43,7 @@ other documentation on the `application_properties` package. Documents that we
 feel are important to point out are:
 
 - Our [Getting Started](./getting-started.md) document covers what we believe are
-  necessary topics that provide a comprehensive foundational of why we created the
+  necessary topics that provide a comprehensive foundation of why we created the
   `application_properties` package.
 - Our [User Guide](./user-guide.md) document provides information on how to
   interact with `application_properties` package.

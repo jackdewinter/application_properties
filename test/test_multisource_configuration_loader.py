@@ -510,6 +510,29 @@ def test_multisource_raw_specified_configuration_file_with_unspecified_json5_fil
     assert len(application_properties.property_names) == 1
     assert application_properties.get_integer_property("some.thing") == 1
 
+def test_multisource_specified_configuration_file_does_not_specified() -> None:
+    """
+    Test that the add_specified_configuration_file function handles a configuration file that is not specified.
+    This can be the case if the argparse library is used and the configuration file was not specified.
+    """
+
+    # Arrange
+    configuration_file_name = ""
+
+    loader = MultisourceConfigurationLoader().add_specified_configuration_file(
+        configuration_file_name
+    )
+    application_properties = ApplicationProperties()
+    results = ErrorResults()
+
+    with TestHelpers.change_to_temporary_directory():
+
+        # Act
+        did_error = loader.process(application_properties, results.keep_error)
+
+    # Assert
+    assert not did_error
+
 
 def test_multisource_specified_configuration_file_does_not_exist() -> None:
     """

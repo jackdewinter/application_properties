@@ -21,7 +21,7 @@ that 80% or more of general usage of such a package will be focused on two
 elements:
 
 - loading a group of properties from configuration sources, typically one or more
-  file properly formatted files
+  properly formatted files
 - accessing a specific property, possibly with a default, from a configuration
   manager that has loaded one or more configuration sources
 
@@ -112,7 +112,7 @@ Experiment with the following to see what happens, executing the script again
 when needed:
 
 - change the key and the default value for the `get_string_property` to see what
-  effect that has on the returning value `property_value`
+  effect that has on the returned value `property_value`
 - remove the `handle_error_fn` parameter passed into the `process` function to
   see what the default behavior is
 
@@ -286,7 +286,7 @@ when needed:
 
 - change the hierarchy keys in the `.sample` file and try to match the changes required
   in the `get_string_property` and the `get_integer_property` functions
-- try adding a `some.switch` property to the `.simple` file with a value of `true`
+- try adding a `some.switch` property to the `.sample` file with a value of `true`
   to determine its effect on the `get_boolean_property` and is returned value
 
 ## Project Default Configuration Files
@@ -355,7 +355,7 @@ file when loading configuration sources.  For the function `add_local_pyproject_
 the parameter represents the section in the `pyproject.toml` file that we want
 to load.  Since our example `pyproject.toml` file contains a `[tool.everywhere]`
 section with our values, the example uses `tool.everywhere` as the parameter.
-For the function the function `add_local_project_configuration_file`, the parameters
+For the function `add_local_project_configuration_file`, the parameters
 represent the configuration file to load, if it is present, and the type of configuration
 file that is being provided. While the extension is usually a giveaway, this makes
 it clear to the `add_local_project_configuration_file` function that the configuration
@@ -736,7 +736,7 @@ similar exception for the `strict_mode` parameter. As a default, the code behind
 the `get_*_property` functions only sets the return value if every validation passes,
 as shown in the `None` output for the fourth example.  This follows our team's
 [work by default](./getting-started.md#our-philosophy-of-work-by-default) philosophy
-as we generally expect application to pass in default values that are reasonable
+as we generally expect applications to pass in default values that are reasonable
 for their application.  If the configuration is not set properly and they have not
 turned on `strict_mode` in some form, we believe the reasonable thing to do is to
 return that default value.  However, if the application is a stickler for values
