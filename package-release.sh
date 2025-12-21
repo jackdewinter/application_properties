@@ -164,18 +164,18 @@ create_package() {
 	if [ "${VERBOSE_MODE}" -ne 0 ]; then
 		echo "Creating package tarball. Logging output to '${SCRIPT_DIR}/report/dist.log'."
 	fi
-	if ! pipenv run python setup.py sdist >"${SCRIPT_DIR}/report/dist.log"; then
+	if ! pipenv run python -Im build >"${SCRIPT_DIR}/report/dist.log"; then
 		cat "${SCRIPT_DIR}/report/dist.log"
 		complete_process 1 "Package tarball creation failed."
 	fi
 
-	if [ "${VERBOSE_MODE}" -ne 0 ]; then
-		echo "Creating package wheel. Logging output to '${SCRIPT_DIR}/report/wheel.log'."
-	fi
-	if ! pipenv run python setup.py bdist_wheel >"${SCRIPT_DIR}/report/wheel.log"; then
-		cat "${SCRIPT_DIR}/report/wheel.log"
-		complete_process 1 "Package wheel creation failed."
-	fi
+	# if [ "${VERBOSE_MODE}" -ne 0 ]; then
+	# 	echo "Creating package wheel. Logging output to '${SCRIPT_DIR}/report/wheel.log'."
+	# fi
+	# if ! pipenv run python setup.py bdist_wheel >"${SCRIPT_DIR}/report/wheel.log"; then
+	# 	cat "${SCRIPT_DIR}/report/wheel.log"
+	# 	complete_process 1 "Package wheel creation failed."
+	# fi
 }
 
 # Inspect the built package with twine to make sure it follows standards.
