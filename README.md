@@ -42,7 +42,7 @@ The `application_properties` library has the following advantages:
 
 ## Requirements
 
-This project requires Python 3.9 or later to function.
+This project requires Python 3.10 or later to function.
 
 ## How To Use This Package
 
