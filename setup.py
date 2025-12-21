@@ -44,9 +44,7 @@ def load_readme_file():
 
 
 # Note, the below function does not always work, so we use this until we can find out why it is not working.
-PACKAGE_MODULES = [
-    "application_properties"
-]
+PACKAGE_MODULES = ["application_properties"]
 
 
 def get_package_modules():
