@@ -4,7 +4,7 @@ repos:
     hooks:
     - id: black
       name: "Format: Black"
-      args: ["--exclude", "test/resources", "--exclude", ".venv",  "." ]
+      args: ["--exclude", "test/resources", "--exclude", ".venv", "." ]
       pass_filenames: false
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2
@@ -98,7 +98,7 @@ repos:
       name: "Scan:   MyPy"
       args: [--warn-return-any, --strict, application_properties  ]
       additional_dependencies: [
-        tomli, types-PyYAML, pytest,pyjson5
+        tomli, types-PyYAML, pytest, pyjson5
       ]
       pass_filenames: false
   - repo: https://github.com/pre-commit/mirrors-mypy
