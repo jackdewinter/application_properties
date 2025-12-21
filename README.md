@@ -42,11 +42,11 @@ The `application_properties` library has the following advantages:
 
 ## Requirements
 
-This project required Python 3.9 or later to function.
+This project requires Python 3.10 or later to function.
 
 ## How To Use This Package
 
-Our documentation for this project now resides as
+Our documentation for this project is hosted on
 [ReadTheDocs](https://application-properties.readthedocs.io/en/latest/).
 
 This documentation includes:
@@ -57,7 +57,7 @@ This documentation includes:
   - Explanation of the terms and concepts that we believe will help you understand
     the rest of the documents.
 - [Configuration Files](https://application-properties.readthedocs.io/en/latest/file-types/)
-  - Information about the configuration files types that we support.
+  - Information about the configuration file types that we support.
 - [Command Line](https://application-properties.readthedocs.io/en/latest/command-line/)
   - How to interact with `application_properties` from the command line.
 - [User Guide](https://application-properties.readthedocs.io/en/latest/user-guide/)
