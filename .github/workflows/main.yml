@@ -29,7 +29,7 @@ jobs:
     steps:
 
     - name: Check out code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Calculate test matrix
       id: set-matrix
@@ -55,10 +55,10 @@ jobs:
     steps:
 
       - name: Checkout Repository
-        uses: actions/checkout@master
+        uses: actions/checkout@v6
 
       - name: Setup Python ${{ matrix.python }}
-        uses: actions/setup-python@v5.6.0
+        uses: actions/setup-python@v6.1.0
         with:
           python-version: ${{ matrix.python }}
 
@@ -81,7 +81,7 @@ jobs:
         run: pipenv run pytest --cov-fail-under=80 --cov --cov-branch --cov-report xml:report/coverage.xml --cov-report html:report/coverage
 
       - name: Archive coverage artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: ${{ matrix.python == env.default-python-version && matrix.platform == env.default-platform }}
         with:
           name: ${{ matrix.platform }} Coverage
@@ -111,10 +111,10 @@ jobs:
     steps:
 
       - name: Checkout Repository
-        uses: actions/checkout@master
+        uses: actions/checkout@v6
 
       - name: Setup Python ${{ env.default-python-version }}
-        uses: actions/setup-python@v5.6.0
+        uses: actions/setup-python@v6.1.0
         with:
           python-version: ${{ env.default-python-version }}
 
@@ -151,10 +151,10 @@ jobs:
     steps:
 
       - name: Checkout Repository
-        uses: actions/checkout@master
+        uses: actions/checkout@v6
 
       - name: Setup Python ${{ env.default-python-version }}
-        uses: actions/setup-python@v5.6.0
+        uses: actions/setup-python@v6.1.0
         with:
           python-version: ${{ env.default-python-version }}
 
@@ -189,7 +189,7 @@ jobs:
           pipenv run twine check dist/*    
 
       - name: Upload Package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: packaged-library
           path: ${{github.workspace}}/dist/
