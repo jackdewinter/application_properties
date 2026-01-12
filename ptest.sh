@@ -40,7 +40,7 @@ load_properties_from_file() {
 }
 
 # Perform any cleanup required by the script.
-# shellcheck disable=SC2317  # Unreachable code
+# shellcheck disable=SC2329
 cleanup_function() {
 
 	# If the temp file was used, get rid of it.
@@ -106,6 +106,7 @@ show_usage() {
 	echo "  -w,--workers            Enabled testing with multiple workers."
 	echo "  -k,--keyword [keyword]  Execute only the tests matching the specified keyword."
 	echo "  -p,--publish            Publish the project summaries of previously executed tests."
+	echo "  -v,--test-verbose		Display a log debug information about each test execution."
 	echo "  -x,--debug              Display debug information about the script as it executes."
 	echo "  -q,--quiet              Do not display detailed information during execution."
 	echo "  -h,--help               Display this help text."
@@ -123,6 +124,7 @@ parse_command_line() {
 	PUBLISH_MODE=0
 	MULTIPLE_WORKER_ARGS=
 	KEYWORD_ARG=
+	TEST_VERBOSE_MODE=
 	FAILURE_ARGS="--maxfail=5"
 	GENERATE_HTML_MODE=1
 	PARAMS=()
@@ -163,6 +165,10 @@ parse_command_line() {
 			;;
 		-q | --quiet)
 			VERBOSE_MODE=0
+			shift
+			;;
+		-v | --test-verbose)
+			TEST_VERBOSE_MODE="--log-cli-level=DEBUG"
 			shift
 			;;
 		-x | --debug)
@@ -264,12 +270,20 @@ execute_tests() {
 	# Run the tests.
 	if [[ ${VERBOSE_MODE} -ne 0 ]]; then
 		# shellcheck disable=SC2086  # Double quote to prevent splitting and globbing.
-		if ! pipenv run pytest ${MULTIPLE_WORKER_ARGS} ${FAILURE_ARGS} "${KEYWORD_ARG[@]}" "${pytest_args[@]}"; then
+		if ! pipenv run pytest \
+			--log-format="%(asctime)s %(levelname)s %(message)s" \
+			--log-date-format="%Y-%m-%dT%H:%M:%S.%f" \
+			${TEST_VERBOSE_MODE} \
+			${MULTIPLE_WORKER_ARGS} ${FAILURE_ARGS} "${KEYWORD_ARG[@]}" "${pytest_args[@]}"; then
 			TEST_EXECUTION_SUCCEEDED=0
 		fi
 	else
 		# shellcheck disable=SC2086  # Double quote to prevent splitting and globbing.
-		if ! pipenv run pytest ${MULTIPLE_WORKER_ARGS} ${FAILURE_ARGS} "${KEYWORD_ARG[@]}" "${pytest_args[@]}" >"${TEMP_FILE}" 2>&1; then
+		if ! pipenv run pytest \
+			--log-format="%(asctime)s %(levelname)s %(message)s" \
+			--log-date-format="%Y-%m-%dT%H:%M:%S.%f" \
+			${TEST_VERBOSE_MODE} \
+			${MULTIPLE_WORKER_ARGS} ${FAILURE_ARGS} "${KEYWORD_ARG[@]}" "${pytest_args[@]}" >"${TEMP_FILE}" 2>&1; then
 			TEST_EXECUTION_SUCCEEDED=0
 		fi
 	fi

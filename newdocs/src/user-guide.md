@@ -31,7 +31,7 @@ us know.
 
 ## Starting with Something Simple
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Goals
 
 The goals for this section are to introduce:
@@ -40,7 +40,7 @@ The goals for this section are to introduce:
 - the `get_string_property` function used to query an `ApplicationProperties` instance
   which has loaded zero or more data sources
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Example
 
 Starting on our journey of using the `application_properties` package,
@@ -75,7 +75,7 @@ did_error = False
 property_value = (None)
 ```
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Explanation
 
 Starting with the main block at the second half of the example, the script
@@ -105,7 +105,7 @@ most applications will want to provide an alternative way to manage the error.
 However, instead of trying to second guess the application, we defined a
 default handler function that meets our "work by default" philosophy.
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Things To Try
 
 Experiment with the following to see what happens, executing the script again
@@ -118,7 +118,7 @@ when needed:
 
 ## Adding A Configuration File
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Goals
 
 The goals for this section are to introduce:
@@ -128,7 +128,7 @@ The goals for this section are to introduce:
 - how the loading of a configuration file influences the configuration items and
   their retrieval
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Example
 
 With the basics taken care of, the next step to take on our journey involves the
@@ -170,7 +170,7 @@ did_error = False
 property_value = 2
 ```
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Explanation
 
 To facilitate the loading of the configuration file `.sample`, the function
@@ -189,7 +189,7 @@ that is passed as its first parameter. Therefore, when the `get_string_property`
 function is invoked, the configuration manager finds the `mode` property and relay
 its value as `2`.
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Things To Try
 
 Experiment with the following to see what happens, executing the script again
@@ -204,7 +204,7 @@ when needed:
 
 ## Get Property Functions
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Goals
 
 The goals for this section are to introduce:
@@ -214,7 +214,7 @@ The goals for this section are to introduce:
 - the `get_integer_property` function and `get_boolean_property` used to query
   an `ApplicationProperties` instance
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Example
 
 To make use of the specific configuration file from the previous section, we need
@@ -239,7 +239,7 @@ integer_property_value = 3
 boolean_property_value = False
 ```
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Explanation
 
 For the retrieval of configuration item values, three changes were made.  The first
@@ -278,7 +278,7 @@ stored [hierarchically](./getting-started.md#hierarchical) is important, allowin
 both the application and its user to understand what configuration items are logically
 grouped together by the application.
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Things To Try
 
 Experiment with the following to see what happens, executing the script again
@@ -291,7 +291,7 @@ when needed:
 
 ## Project Default Configuration Files
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Goals
 
 The goals for this section are to introduce:
@@ -299,7 +299,7 @@ The goals for this section are to introduce:
 - default configuration files not specified on the command line
 - configuration layers and how they interact with each other
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Example
 
 For this example, create a new file `pyproject.toml` in the current directory
@@ -346,7 +346,7 @@ some_when_value  = 2
 some_thing_value = 3
 ```
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Explanation
 
 The changes made to the example's `MultisourceConfigurationLoader` section add
@@ -416,7 +416,7 @@ needs of the tool where this documentation is being built.  We feel strongly
 that this feature is very important in providing a flexible configuration
 management system.
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Things To Try
 
 Experiment with the following to see what happens, executing the script again when
@@ -430,7 +430,7 @@ needed:
 
 ## Setting Individual Properties
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Goals
 
 The goals for this section are to introduce:
@@ -439,7 +439,7 @@ The goals for this section are to introduce:
 - one option for setting specific properties from the command line
 - the use of special characters when specifying non-string command line properties
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Example
 
 For this example, change the lower half of the example's content to:
@@ -474,7 +474,7 @@ some_when_value  = 12
 verbosity_value  = 3
 ```
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Explanation
 
 This example is lengthy, so it bears breaking down into distinct components.
@@ -519,7 +519,7 @@ to the configuration item type table, no special `$` characters at the start of
 the value leave the value's type as a string.  For the two values that start with
 the `$#` sequence, that means to treat the value as an integer type.
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Things To Try
 
 Experiment with the following to see what happens, executing the script again
@@ -532,7 +532,7 @@ when needed:
 
 ## Strict Mode and Type Conversion When Getting Property Values
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Goals
 
 The goals for this section are to introduce:
@@ -544,7 +544,7 @@ Please note that `strict_mode` and `convert_untyped_if_possible` can both be set
 at when the instance of the `ApplicationProperties` class is created.  However,
 `strict_mode` may also be specified at the `get_*_property` level.
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Example
 
 For this example, create a new python file and set its content to:
@@ -606,7 +606,7 @@ other_value = Exception(The value for property 'some.other-number' must be of ty
 other_value = 1
 ```
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Explanation
 
 When getting the value to return from any of the `get_*_property` functions, most
@@ -649,7 +649,7 @@ that our `convert_untyped_if_possible` mode will allow for this to happen, becom
 more flexible and responsive the needs of applications... while allowing `strict_mode`
 to be used at the same time.
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Things To Try
 
 Experiment with the following to see what happens, executing the script again when
@@ -662,7 +662,7 @@ needed:
 
 ## Required Properties and Validation Functions
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Goals
 
 The goals for this section are to introduce:
@@ -670,7 +670,7 @@ The goals for this section are to introduce:
 - required properties for the `get_*_property` functions
 - validation functions for the `get_string_property` and `get_integer_property` functions
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Example
 
 For this example, create a new python file and set its content to:
@@ -716,7 +716,7 @@ some_when_value = None
 some_when_value = Exception(The value for property 'some.when' is not valid: Value 'tomorrow' is not 'me', 'you' or 'them')
 ```
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Explanation
 
 The first example shows a request to the configuration manager for the value of
@@ -753,7 +753,7 @@ already been performed.  What we are trying to say is that the `valid_value_fn`
 function should only worry about one thing: checking to see if the value passed
 in, which is already correctly typed, is valid for the scenario in question.
 
-<!--- pyml disable-next-line no-duplicate-heading-->
+<!-- pyml disable-next-line no-duplicate-heading-->
 ### Things To Try
 
 Experiment with the following to see what happens, executing the script again when

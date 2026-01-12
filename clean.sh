@@ -12,7 +12,7 @@ TEMP_FILE=$(mktemp /tmp/"${SCRIPT_NAME}".XXXXXXXXX)
 SCRIPT_TITLE="Analyzing project cleanliness"
 
 # Perform any cleanup required by the script.
-# shellcheck disable=SC2317  # Unreachable code
+# shellcheck disable=SC2329
 cleanup_function() {
 
 	if [[ ${VERBOSE_MODE} -ne 0 ]]; then
@@ -402,6 +402,14 @@ analyze_pylint_suppressions() {
 	fi
 }
 
+look_for_upgrades() {
+
+	verbose_echo "{Looking for Python package upgrades in Pre-Commit and Pipenv.}"
+	if ! ./check_project_dependencies.sh; then
+		complete_process 1 "{One or more project dependencies can be updated. Please run './check_project_dependencies.sh --upgrade' to update them.}"
+	fi
+}
+
 execute_test_suite() {
 
 	echo ""
@@ -473,6 +481,8 @@ if [[ ${PERFORMANCE_ONLY_MODE} -eq 0 ]]; then
 	analyze_pylint_suppressions
 
 	find_unused_pylint_suppressions
+
+	look_for_upgrades
 
 	execute_test_suite
 

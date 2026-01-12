@@ -13,7 +13,7 @@ class ApplicationPropertiesLoaderHelper:
 
     @staticmethod
     def set_error_handler_if_not_set(
-        handle_error_fn: Optional[Callable[[str, Optional[Exception]], None]]
+        handle_error_fn: Optional[Callable[[str, Optional[Exception]], None]],
     ) -> Callable[[str, Optional[Exception]], None]:
         """
         If the error_handler is not set, make sure to set it to print to output.

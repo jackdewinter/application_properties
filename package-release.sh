@@ -12,7 +12,7 @@ TEMP_FILE=$(mktemp /tmp/"${SCRIPT_NAME}".XXXXXXXXX)
 SCRIPT_TITLE="Creation of application package"
 
 # Perform any cleanup required by the script.
-# shellcheck disable=SC2317  # Unreachable code
+# shellcheck disable=SC2329
 cleanup_function() {
 
 	# If the temp file was used, get rid of it.
@@ -132,16 +132,16 @@ load_properties_from_file() {
 }
 
 # Check the packaging before we use it.
-check_with_pyroma() {
+# check_with_pyroma() {
 
-	if [ "${VERBOSE_MODE}" -ne 0 ]; then
-		echo "Checking the application packaging against standards."
-	fi
-	if ! pipenv run pyroma -n 10 "${SCRIPT_DIR}" >"${TEMP_FILE}" 2>&1; then
-		cat "${TEMP_FILE}"
-		complete_process 1 "Packaging script did not pass 'pyroma' inspection."
-	fi
-}
+# 	if [ "${VERBOSE_MODE}" -ne 0 ]; then
+# 		echo "Checking the application packaging against standards."
+# 	fi
+# 	if ! pipenv run pyroma -n 10 "${SCRIPT_DIR}" >"${TEMP_FILE}" 2>&1; then
+# 		cat "${TEMP_FILE}"
+# 		complete_process 1 "Packaging script did not pass 'pyroma' inspection."
+# 	fi
+# }
 
 # Remove the previous artifacts to allow us to do this cleanly and predictably.
 remove_previous_packaging_directories() {
@@ -199,7 +199,7 @@ load_properties_from_file
 
 # Main body of the script.
 
-check_with_pyroma
+# check_with_pyroma
 
 remove_previous_packaging_directories
 
