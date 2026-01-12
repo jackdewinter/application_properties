@@ -1,5 +1,5 @@
 """
-Moduole for tests of the multisource configuration loader.  
+Moduole for tests of the multisource configuration loader.
 
 NOTE:   These tests are for the configuration loader, not to test the correctness of any
         of the individual loaders themselves.

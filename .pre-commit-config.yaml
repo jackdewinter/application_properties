@@ -1,143 +1,117 @@
 repos:
-  - repo: https://github.com/ambv/black
-    rev: 24.8.0
+-   repo: https://github.com/ambv/black
+    rev: 25.12.0
     hooks:
-    - id: black
-      name: "Format: Black"
-      args: ["--exclude", "test/resources", "--exclude", ".venv", "." ]
-      pass_filenames: false
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
+    -   id: black
+        name: "Format: Black"
+        args: ["--exclude", "test/resources", "--exclude", ".venv", "."]
+        pass_filenames: false
+-   repo: https://github.com/pycqa/isort
+    rev: 7.0.0
     hooks:
-    - id: isort
-      name: "Format: ISort"
-  - repo: https://github.com/scop/pre-commit-shfmt
-    rev: v3.10.0-1
+    -   id: isort
+        name: "Format: ISort"
+-   repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.12.0-2
     hooks:
-    - id: shfmt
-      name: "Format: ShFmt"
-  - repo: local
+    -   id: shfmt
+        name: "Format: ShFmt"
+-   repo: local
     hooks:
-    - id: verify-install-requirements
-      name: "Scan:   Verify Install Requirements Match"
-      language: system
-      entry: pipenv run python utils/verify_install_requirements.py
-      pass_filenames: false
-  - repo: https://github.com/pycqa/flake8
-    rev: '7.1.1'
+    -   id: verify-install-requirements
+        name: "Scan:   Verify Install Requirements Match"
+        language: system
+        entry: pipenv run python utils/verify_install_requirements.py
+        pass_filenames: false
+-   repo: https://github.com/pycqa/flake8
+    rev: '7.3.0'
     hooks:
-    - id: flake8
-      name: "Scan:   Flake8"
-      args: ["-j","4", "--exclude", "dist,build,.venv,test/resources", "."]
-      additional_dependencies: ["flake8-bugbear==24.8.19", "flake8-bandit==4.1.1"]
-      pass_filenames: false
-  - repo: https://github.com/PyCQA/bandit
-    rev: 1.8.0
+    -   id: flake8
+        name: "Scan:   Flake8"
+        args: ["-j", "4", "--exclude", "dist,build,.venv,test/resources", "."]
+        additional_dependencies: ["flake8-bugbear==24.8.19", "flake8-bandit==4.1.1"]
+        pass_filenames: false
+-   repo: https://github.com/PyCQA/bandit
+    rev: 1.9.2
     hooks:
-    - id: bandit
-      name: "Scan:   Bandit"
-      args: [--configfile,.bandit.yaml,-q,-r,"application_properties"]
-      pass_filenames: false
-  - repo: local
+    -   id: bandit
+        name: "Scan:   Bandit"
+        args: [--configfile, .bandit.yaml, -q, -r, "application_properties"]
+        pass_filenames: false
+-   repo: local
     hooks:
-    - id: pylint
-      name: "Scan:   PyLint"
-      entry: pylint
-      language: system
-      types: [python]
-      require_serial: true
-      args:
-        [
-          "-j=1",
-          "--recursive=y",
-          "-rn", # Only display messages
-          "-sn", # Don't display the score
-          "application_properties"
-        ]
-      pass_filenames: false
-  - repo: local
+    -   id: pylint
+        name: "Scan:   PyLint"
+        entry: pylint
+        language: system
+        types: [python]
+        require_serial: true
+        args: ["-j=1", "--recursive=y", "-rn", "-sn", "application_properties"]
+        pass_filenames: false
+-   repo: local
     hooks:
-    - id: pylint
-      name: "Scan:   PyLint (test)"
-      entry: pylint
-      language: system
-      types: [python]
-      require_serial: true
-      args:
-        [
-          "-j=1",
-          "--ignore",
-          "test/resources",
-          "--recursive=y",
-          "-rn", # Only display messages
-          "-sn", # Don't display the score
-          "test"
-        ]
-      pass_filenames: false
-  - repo: local
+    -   id: pylint
+        name: "Scan:   PyLint (test)"
+        entry: pylint
+        language: system
+        types: [python]
+        require_serial: true
+        args: ["-j=1", "--ignore", "test/resources", "--recursive=y", "-rn", "-sn",
+          "test"]
+        pass_filenames: false
+-   repo: local
     hooks:
-    - id: pylint
-      name: "Scan:   PyLint (utils)"
-      entry: pylint
-      language: system
-      types: [python]
-      require_serial: true
-      args:
-        [
-          "-j=1",
-          "--recursive=y",
-          "-rn", # Only display messages
-          "-sn", # Don't display the score
-          "utils"
-        ]
-      pass_filenames: false
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.13.0
+    -   id: pylint
+        name: "Scan:   PyLint (utils)"
+        entry: pylint
+        language: system
+        types: [python]
+        require_serial: true
+        args: ["-j=1", "--recursive=y", "-rn", "-sn", "utils"]
+        pass_filenames: false
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.19.1
     hooks:
-    - id: mypy
-      name: "Scan:   MyPy"
-      args: [--warn-return-any, --strict, application_properties  ]
-      additional_dependencies: [
-        tomli, types-PyYAML, pytest, pyjson5
-      ]
-      pass_filenames: false
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.13.0
+    -   id: mypy
+        name: "Scan:   MyPy"
+        args: [--warn-return-any, --strict, application_properties  ]
+        additional_dependencies: [ tomli, types-PyYAML, pytest, pyjson5 ]
+        pass_filenames: false
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.19.1
     hooks:
-    - id: mypy
-      name: "Scan:   MyPy (test)"
-      args: [--warn-return-any, --exclude, test/resources, --strict, test  ]
-      additional_dependencies: [
-        tomli, types-PyYAML, pytest, pyjson5
-      ]
-      pass_filenames: false
-  - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.27
+    -   id: mypy
+        name: "Scan:   MyPy (test)"
+        args: [--warn-return-any, --exclude, test/resources, --strict, test  ]
+        additional_dependencies: [ tomli, types-PyYAML, pytest, pyjson5 ]
+        pass_filenames: false
+-   repo: https://github.com/jackdewinter/pymarkdown
+    rev: v0.9.34
     hooks:
-    - id: pymarkdown
-      name: "Scan:   PyMarkdown (Old Documentation)"
-      pass_filenames: false
-      args:
-        - --config
-        - clean.json
-        - scan
-        - changelog.md
-        - README.md
-        - ./docs
-  - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.27
+    -   id: pymarkdown
+        name: "Scan:   PyMarkdown (Old Documentation)"
+        pass_filenames: false
+        args:
+        -   --config
+        -   clean.json
+        -   scan
+        -   changelog.md
+        -   README.md
+        -   ./docs
+-   repo: https://github.com/jackdewinter/pymarkdown
+    rev: v0.9.34
     hooks:
-    - id: pymarkdown
-      name: "Scan:   PyMarkdown (New Documentation)"
-      pass_filenames: false
-      args:
-        - --config
-        - newdocs/clean.json
-        - scan
-        - ./newdocs/src
-  - repo: https://github.com/koalaman/shellcheck-precommit
-    rev: v0.10.0
+    -   id: pymarkdown
+        name: "Scan:   PyMarkdown (New Documentation)"
+        pass_filenames: false
+        args:
+        -   --config
+        -   newdocs/clean.json
+        -   scan
+        -   ./newdocs/src
+-   repo: https://github.com/koalaman/shellcheck-precommit
+    rev: v0.11.0
     hooks:
-    - id: shellcheck
-      name: "Scan:   Shellcheck"
-      args: ["-x", "-o","require-variable-braces"]
+    -   id: shellcheck
+        name: "Scan:   Shellcheck"
+        args: ["-x", "-o", "require-variable-braces"]
