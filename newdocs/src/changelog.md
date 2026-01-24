@@ -33,3 +33,13 @@
       specified. If passed using `--config`, it was not. Added the `section_header_if_toml`
       field to the `MultisourceConfigurationLoaderOptions` class to allow an optional
       section header to be passed in when loading an "untyped" configuration file.
+
+## Version 0.9.0 - Date: 2025-06-30
+
+<!-- pyml disable-next-line no-duplicate-heading-->
+### Fixed and Added
+
+- Added proper documentation.
+- Hosting documentation at ReadTheDocs.
+- [Issue 148](https://github.com/jackdewinter/application_properties/issues/148)
+    - Added JSON5 support, which includes support for JSON comments.
