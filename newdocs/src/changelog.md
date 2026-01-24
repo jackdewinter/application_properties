@@ -25,7 +25,7 @@
 - [Improper parsing of TOML](https://github.com/jackdewinter/application_properties/issues/269)
     - The `.` character is considered a separator character for keys, and the code
       had a check to prevent that character from being used within a key. As TOML
-      will already break the key on that character, added a bypass to allow the
+      will already break the key on that character, a bypass was added to allow the
       TOML keys to include a `.` character IF it is in quotes.
 - [Config flag fails to apply pyproject TOML](https://github.com/jackdewinter/application_properties/issues/318)
     - If the `pyproject.toml` file was loaded implicitly, the file was loading
