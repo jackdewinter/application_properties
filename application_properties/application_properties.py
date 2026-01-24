@@ -94,7 +94,10 @@ class ApplicationProperties:
         self.__flat_property_map.clear()
 
     def load_from_dict(
-        self, config_map: Dict[Any, Any], clear_map: bool = True
+        self,
+        config_map: Dict[Any, Any],
+        clear_map: bool = True,
+        allow_periods_in_keys: bool = False,
     ) -> None:
         """
         Load the properties from a provided dictionary.
@@ -106,7 +109,7 @@ class ApplicationProperties:
         LOGGER.debug("Loading from dictionary: {%s}", str(config_map))
         if clear_map:
             self.clear()
-        self.__scan_map(config_map, "")
+        self.__scan_map(config_map, "", allow_periods_in_keys)
 
     @staticmethod
     def verify_full_part_form(property_key: str) -> str:
@@ -444,7 +447,13 @@ class ApplicationProperties:
             if next_key_name.startswith(key_name)
         ]
 
-    def __scan_map(self, config_map: Dict[Any, Any], current_prefix: str) -> None:
+    # pylint: disable=too-many-boolean-expressions
+    def __scan_map(
+        self,
+        config_map: Dict[Any, Any],
+        current_prefix: str,
+        allow_periods_in_keys: bool,
+    ) -> None:
         for next_key, next_value in config_map.items():
             if not isinstance(next_key, str):
                 raise ValueError(
@@ -455,17 +464,24 @@ class ApplicationProperties:
                 or "\t" in next_key
                 or "\n" in next_key
                 or ApplicationProperties.__assignment_operator in next_key
-                or ApplicationProperties.__separator in next_key
+                or (
+                    ApplicationProperties.__separator in next_key
+                    and not allow_periods_in_keys
+                )
             ):
                 raise ValueError(
                     "Key strings cannot contain a whitespace character, "
                     + f"a '{ApplicationProperties.__assignment_operator}' character, or "
                     + f"a '{ApplicationProperties.__separator}' character."
                 )
+            if ApplicationProperties.__separator in next_key:
+                next_key = f"'{next_key}'"
 
             if isinstance(next_value, dict):
                 self.__scan_map(
-                    next_value, f"{current_prefix}{next_key}{self.__separator}"
+                    next_value,
+                    f"{current_prefix}{next_key}{self.__separator}",
+                    allow_periods_in_keys,
                 )
             else:
                 new_key = f"{current_prefix}{next_key}".lower()
@@ -473,3 +489,5 @@ class ApplicationProperties:
                 LOGGER.debug(
                     "Adding configuration '%s' : {%s}", new_key, str(next_value)
                 )
+
+    # pylint: enable=too-many-boolean-expressions

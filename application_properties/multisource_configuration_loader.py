@@ -56,6 +56,9 @@ class MultisourceConfigurationLoaderOptions:
     """
     Allow parsing of JSON files using the JSON5 parser. (Default = False)
     """
+    section_header_if_toml: Optional[str] = None
+    """Optional section header to use when loading TOML configuration files.
+    """
 
 
 # pylint: disable=too-few-public-methods
@@ -137,6 +140,7 @@ class BaseConfigurationSource(ABC):
     def __load_as_toml(
         self,
         file_name: str,
+        options: MultisourceConfigurationLoaderOptions,
         application_properties: ApplicationProperties,
         handle_error_fn: Callable[[str, Optional[Exception]], None],
     ) -> Tuple[bool, bool]:
@@ -151,6 +155,7 @@ class BaseConfigurationSource(ABC):
         ) = ApplicationPropertiesTomlLoader.load_and_set(
             application_properties,
             file_name,
+            section_header=options.section_header_if_toml,
             handle_error_fn=handle_error_fn,
             clear_property_map=False,
             check_for_file_presence=True,
@@ -179,7 +184,9 @@ class BaseConfigurationSource(ABC):
                 file_name, application_properties, handle_error_fn
             )
         assert config_file_type == ConfigurationFileType.TOML
-        return self.__load_as_toml(file_name, application_properties, handle_error_fn)
+        return self.__load_as_toml(
+            file_name, options, application_properties, handle_error_fn
+        )
         # return False, False
 
     # pylint: enable=too-many-arguments
@@ -604,6 +611,8 @@ class MultisourceConfigurationLoader:
                               is made to load the file.
             config_file_type: Type of configuration file to load.  For auto-detecting
                               the file type, see the notes above.
+            section_header_if_toml: Optional section header to use when loading
+                              TOML configuration files.
 
         Returns:
             Instance of `self` for chaining `add_*` functions and the `process` function

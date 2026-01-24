@@ -84,6 +84,7 @@ show_usage() {
 	echo "  -m,--mypy-only          Only run mypy checks and exit."
 	echo "  -np,--no-publish        Do not publish project summaries if successful."
 	echo "  -ns,--no-sourcery       Do not run any sourcery checks."
+	echo "  -nu,--no-upgrades       Do not run checks for upgrades."
 	echo "  -s,--sourcery-only      Only run sourcery checks and exit."
 	echo "  --perf                  Collect standard performance metrics."
 	echo "  --perf-only             Only collect standard performance metrics."
@@ -105,6 +106,7 @@ parse_command_line() {
 	MYPY_ONLY_MODE=0
 	SOURCERY_ONLY_MODE=0
 	NO_SOURCERY_MODE=0
+	NO_UPGRADE_MODE=0
 	FORCE_RESET_MODE=0
 	RESET_PYTHON_VERSION=
 	PARAMS=()
@@ -129,6 +131,10 @@ parse_command_line() {
 			;;
 		-ns | --no-sourcery)
 			NO_SOURCERY_MODE=1
+			shift
+			;;
+		-nu | --no-upgrades)
+			NO_UPGRADE_MODE=1
 			shift
 			;;
 		-s | --sourcery-only)
@@ -403,6 +409,11 @@ analyze_pylint_suppressions() {
 }
 
 look_for_upgrades() {
+
+	if [[ ${NO_UPGRADE_MODE} -ne 0 ]]; then
+		verbose_echo "{Skipping check for Python package upgrades by request.}"
+		return
+	fi
 
 	verbose_echo "{Looking for Python package upgrades in Pre-Commit and Pipenv.}"
 	if ! ./check_project_dependencies.sh; then
