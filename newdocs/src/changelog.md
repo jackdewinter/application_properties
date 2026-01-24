@@ -15,6 +15,13 @@
 <!-- pyml disable-next-line no-duplicate-heading-->
 ### Fixed
 
+- None
+
+## Version 0.9.1 - Date: 2026-01-24
+
+<!-- pyml disable-next-line no-duplicate-heading-->
+### Fixed
+
 - [Improper parsing of TOML](https://github.com/jackdewinter/application_properties/issues/269)
     - The `.` character is considered a separator character for keys, and the code
       had a check to prevent that character from being used within a key. As TOML
