@@ -3,7 +3,8 @@
         "application_properties/__init__.py": {},
         "application_properties/application_properties.py": {
             "too-many-arguments": 4,
-            "broad-exception-caught": 1
+            "broad-exception-caught": 1,
+            "too-many-boolean-expressions": 1
         },
         "application_properties/application_properties_config_loader.py": {
             "too-few-public-methods": 1,
@@ -39,6 +40,7 @@
     "disables-by-name": {
         "too-many-arguments": 14,
         "broad-exception-caught": 1,
+        "too-many-boolean-expressions": 1,
         "too-few-public-methods": 10,
         "no-member": 2
     }

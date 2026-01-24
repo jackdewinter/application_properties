@@ -73,7 +73,9 @@ class ApplicationPropertiesTomlLoader:
                 )
             if configuration_map:
                 properties_object.load_from_dict(
-                    configuration_map, clear_map=clear_property_map
+                    configuration_map,
+                    clear_map=clear_property_map,
+                    allow_periods_in_keys=True,
                 )
                 did_apply_map = True
         return did_apply_map and not did_have_one_error, did_have_one_error
