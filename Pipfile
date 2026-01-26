@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-setuptools = "==80.9.0"
+setuptools = "==80.10.2"
 sourcery = "==1.40.0"
 build = "==1.4.0"
 cookieslicer = "==0.1.5"
