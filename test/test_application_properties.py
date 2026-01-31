@@ -218,7 +218,7 @@ def test_properties_load_with_non_string_key() -> None:
     assert raised_exception, "Expected exception was not raised."
     assert (
         str(raised_exception)
-        == "All keys in the main dictionary and nested dictionaries must be strings."
+        == "All keys in the main dictionary and nested dictionaries must be strings (not `1`)."
     ), "Expected message was not present in exception."
 
 
@@ -243,7 +243,7 @@ def test_properties_load_with_key_containing_dot() -> None:
     assert raised_exception, "Expected exception was not raised."
     assert (
         str(raised_exception)
-        == "Key strings cannot contain a whitespace character, a '=' character, or a '.' character."
+        == "Key string `my.property` cannot contain a whitespace character, a '=' character, or a '.' character."
     ), "Expected message was not present in exception."
 
 

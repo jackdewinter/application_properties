@@ -27,7 +27,10 @@ class ApplicationProperties:
     """
 
     def __init__(
-        self, strict_mode: bool = False, convert_untyped_if_possible: bool = False
+        self,
+        strict_mode: bool = False,
+        convert_untyped_if_possible: bool = False,
+        allow_separator_in_keys: bool = False,
     ) -> None:
         """
         Initializes an new instance of the ApplicationProperties class.
@@ -35,6 +38,7 @@ class ApplicationProperties:
         self.__flat_property_map: Dict[str, Any] = {}
         self.__strict_mode: bool = strict_mode
         self.__convert_untyped_if_possible: bool = convert_untyped_if_possible
+        self.__allow_separator_in_keys = allow_separator_in_keys
 
     @property
     def separator(self) -> str:
@@ -109,7 +113,9 @@ class ApplicationProperties:
         LOGGER.debug("Loading from dictionary: {%s}", str(config_map))
         if clear_map:
             self.clear()
-        self.__scan_map(config_map, "", allow_periods_in_keys)
+        self.__scan_map(
+            config_map, "", allow_periods_in_keys and self.__allow_separator_in_keys
+        )
 
     @staticmethod
     def verify_full_part_form(property_key: str) -> str:
@@ -457,7 +463,7 @@ class ApplicationProperties:
         for next_key, next_value in config_map.items():
             if not isinstance(next_key, str):
                 raise ValueError(
-                    "All keys in the main dictionary and nested dictionaries must be strings."
+                    f"All keys in the main dictionary and nested dictionaries must be strings (not `{next_key}`)."
                 )
             if (
                 " " in next_key
@@ -470,7 +476,7 @@ class ApplicationProperties:
                 )
             ):
                 raise ValueError(
-                    "Key strings cannot contain a whitespace character, "
+                    f"Key string `{next_key}` cannot contain a whitespace character, "
                     + f"a '{ApplicationProperties.__assignment_operator}' character, or "
                     + f"a '{ApplicationProperties.__separator}' character."
                 )

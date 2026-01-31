@@ -352,7 +352,7 @@ def test_json_loader_valid_json_but_invalid_key(load_as_json5_file: bool) -> Non
         assert handled_error_parameters
         assert handled_error_parameters[0].startswith("Specified configuration file '")
         assert (
-            "' is not valid: Key strings cannot contain a whitespace character, a '=' character, or a '.' character."
+            "' is not valid: Key string `test.value` cannot contain a whitespace character, a '=' character, or a '.' character."
             in handled_error_parameters[0]
         )
         assert isinstance(handled_error_parameters[1], ValueError)
@@ -409,7 +409,7 @@ def test_json_loader_valid_json_but_invalid_key_with_stdin_capture(
         assert expected_did_error == actual_did_error
         assert new_stdout.getvalue().startswith("Specified configuration file '")
         assert (
-            "' is not valid: Key strings cannot contain a whitespace character, a '=' character, or a '.' character."
+            "' is not valid: Key string `test.value` cannot contain a whitespace character, a '=' character, or a '.' character."
             in new_stdout.getvalue()
         )
         assert not new_stderr.getvalue()
@@ -499,7 +499,7 @@ def test_json_loader_pair_valid_json(load_as_json5_file: bool) -> None:
             os.remove(configuration_file_second)
 
 
-# pylint: disable=too-many-locals
+# pylint: enable=too-many-locals
 
 
 @pytest.mark.parametrize("load_as_json5_file", [True, False])
@@ -574,6 +574,3 @@ def test_json_loader_with_comments(load_as_json5_file: bool) -> None:
     finally:
         if configuration_file_first and os.path.exists(configuration_file_first):
             os.remove(configuration_file_first)
-
-
-# pylint: enable=too-many-locals

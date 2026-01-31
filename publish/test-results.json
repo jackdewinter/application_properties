@@ -36,7 +36,7 @@
         },
         {
             "name": "test.test_application_properties_toml_loader",
-            "totalTests": 22,
+            "totalTests": 19,
             "failedTests": 0,
             "errorTests": 0,
             "skippedTests": 0,
@@ -51,8 +51,16 @@
             "elapsedTimeInMilliseconds": 0
         },
         {
+            "name": "test.test_application_properties_with_special",
+            "totalTests": 27,
+            "failedTests": 0,
+            "errorTests": 0,
+            "skippedTests": 0,
+            "elapsedTimeInMilliseconds": 0
+        },
+        {
             "name": "test.test_application_properties_yaml_loader",
-            "totalTests": 18,
+            "totalTests": 14,
             "failedTests": 0,
             "errorTests": 0,
             "skippedTests": 0,
