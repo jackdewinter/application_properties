@@ -63,6 +63,29 @@ class ApplicationPropertiesTomlLoader:
             did_have_one_error = True
             handle_error_fn(formatted_error, this_exception)
 
+        return ApplicationPropertiesTomlLoader.__load_and_set_apply(
+            properties_object,
+            configuration_file,
+            section_header,
+            handle_error_fn,
+            did_have_one_error,
+            configuration_map,
+            clear_property_map,
+        )
+
+    # pylint: enable=too-many-arguments
+
+    # pylint: disable=too-many-arguments
+    @staticmethod
+    def __load_and_set_apply(
+        properties_object: ApplicationProperties,
+        configuration_file: str,
+        section_header: Optional[str],
+        handle_error_fn: Callable[[str, Optional[Exception]], None],
+        did_have_one_error: bool,
+        configuration_map: Optional[Dict[str, Any]],
+        clear_property_map: bool,
+    ) -> Tuple[bool, bool]:
         did_apply_map = False
         if not did_have_one_error:
             if configuration_map and section_header:
@@ -72,12 +95,20 @@ class ApplicationPropertiesTomlLoader:
                     )
                 )
             if configuration_map:
-                properties_object.load_from_dict(
-                    configuration_map,
-                    clear_map=clear_property_map,
-                    allow_periods_in_keys=True,
-                )
-                did_apply_map = True
+                try:
+                    properties_object.load_from_dict(
+                        configuration_map,
+                        clear_map=clear_property_map,
+                        allow_periods_in_keys=True,
+                    )
+                    did_apply_map = True
+                except ValueError as this_exception:
+                    formatted_error = (
+                        f"Specified configuration file '{configuration_file}' "
+                        + f"contains invalidly formatted data: {str(this_exception)}"
+                    )
+                    did_have_one_error = True
+                    handle_error_fn(formatted_error, this_exception)
         return did_apply_map and not did_have_one_error, did_have_one_error
 
     # pylint: enable=too-many-arguments

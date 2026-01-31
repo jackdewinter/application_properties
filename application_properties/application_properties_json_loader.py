@@ -64,7 +64,9 @@ class ApplicationPropertiesJsonLoader:
         if not did_have_one_error and configuration_map:
             try:
                 properties_object.load_from_dict(
-                    configuration_map, clear_map=clear_property_map
+                    configuration_map,
+                    clear_map=clear_property_map,
+                    allow_periods_in_keys=True,
                 )
                 did_apply_map = True
             except ValueError as this_exception:
@@ -87,7 +89,15 @@ class ApplicationPropertiesJsonLoader:
         configuration_map: Dict[Any, Any] = {}
         try:
             with open(configuration_file, encoding="utf-8") as infile:
-                configuration_map = json.load(infile)
+                sample_line = infile.readline()
+                cur_pos = infile.tell()
+                infile.seek(0, os.SEEK_END)
+                end_pos = infile.tell()
+                if sample_line.strip() == "" and cur_pos == end_pos:
+                    configuration_map = {}
+                else:
+                    infile.seek(0, os.SEEK_SET)
+                    configuration_map = json.load(infile)
         except json.decoder.JSONDecodeError as this_exception:
             formatted_error = (
                 f"Specified configuration file '{configuration_file}' "
@@ -116,6 +126,8 @@ class ApplicationPropertiesJsonLoader:
         try:
             with open(configuration_file, encoding="utf-8") as infile:
                 configuration_map = pyjson5.load(infile)
+        except pyjson5.Json5EOF:
+            configuration_map = {}
         except pyjson5.Json5DecoderException as this_exception:
             formatted_error = (
                 f"Specified configuration file '{configuration_file}' "

@@ -70,7 +70,7 @@ class ErrorResults:
     """
 
     def __init__(self) -> None:
-        self.reported_error: str
+        self.reported_error: Optional[str] = None
 
     def keep_error(
         self, formatted_error: str, thrown_exception: Optional[Exception]
