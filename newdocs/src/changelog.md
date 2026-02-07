@@ -5,7 +5,11 @@
 <!-- pyml disable-next-line no-duplicate-heading-->
 ### Added
 
-- None
+- [Ensure all three loaders can handle a "." inside of keys, with a master switch.](https://github.com/jackdewinter/application_properties/issues/326)
+    - Previous issue [Improper parsing of TOML](https://github.com/jackdewinter/application_properties/issues/269)
+      added parsing of TOML to include "." characters in keys.  This feature expands
+      that to the other two loaders, with a master switch in the key `application_properties`
+      object.
 
 <!-- pyml disable-next-line no-duplicate-heading-->
 ### Changed
