@@ -715,9 +715,7 @@ def test_config_loader_config_file_bad_config_format_with_no_item_value() -> Non
     section_header = None
     supplied_configuration = """[plugins]
 tools.bar =\a\a\a\a
-""".replace(
-        "\a", " "
-    )
+""".replace("\a", " ")
     results = ErrorResults()
     expected_did_apply = False
     expected_did_error = True

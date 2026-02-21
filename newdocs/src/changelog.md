@@ -3,7 +3,7 @@
 ## Unversioned - In Main, Not Released
 
 <!-- pyml disable-next-line no-duplicate-heading-->
-### Added
+### Fixed and Added
 
 - [Ensure all three loaders can handle a "." inside of keys, with a master switch.](https://github.com/jackdewinter/application_properties/issues/326)
     - Previous issue [Improper parsing of TOML](https://github.com/jackdewinter/application_properties/issues/269)
@@ -14,14 +14,16 @@
 <!-- pyml disable-next-line no-duplicate-heading-->
 ### Changed
 
-- None
+<!-- pyml disable-next-line no-duplicate-heading-->
+### Fixed and Added
 
 <!-- pyml disable-next-line no-duplicate-heading-->
 ### Fixed
 
 - None
 
-## Version 0.9.2 - Date: 2026-02-07
+<!-- pyml disable-next-line no-duplicate-heading-->
+### Fixed and Added
 
 <!-- pyml disable-next-line no-duplicate-heading-->
 ### Added
@@ -33,7 +35,7 @@
       object.
 
 <!-- pyml disable-next-line no-duplicate-heading-->
-### Changed
+### Fixed and Added
 
 - None
 
@@ -48,16 +50,22 @@
 ## Version 0.9.1 - Date: 2026-01-24
 
 <!-- pyml disable-next-line no-duplicate-heading-->
-### Fixed
+### Fixed and Added
 
-- [Improper parsing of TOML](https://github.com/jackdewinter/application_properties/issues/269)
-    - The `.` character is considered a separator character for keys, with the code
-      checking to prevent that character from being used within a key. As TOML
-      will already break the key on that character, a bypass was added to allow the
-      TOML keys to include a `.` character IF it is in quotes.
-- [Config flag fails to apply pyproject TOML](https://github.com/jackdewinter/application_properties/issues/318)
-    - If the `pyproject.toml` file was loaded implicitly, the file was loading
-      and processing the TOML file to only look at the "section header" that was
-      specified. If passed using `--config`, it was not. Added the `section_header_if_toml`
-      field to the `MultisourceConfigurationLoaderOptions` class to allow an optional
-      section header to be passed in when loading an "untyped" configuration file.
+- Added `py.typed` file to ensure that type hints are consumed by package.
+- Added `__all__` variable to `__init__.py` to resolve mypy error
+
+## Version 0.5.1 - Date: 2022-04-01
+
+<!-- pyml disable-next-line no-duplicate-heading-->
+### Fixed and Added
+
+- Adding Python typing hints
+- Cleaning up project infrastructure to current PyMarkdown standards.
+
+## Version 0.5.0 - Date: 2021-06-16
+
+<!-- pyml disable-next-line no-duplicate-heading-->
+### Fixed and Added
+
+- Initial release

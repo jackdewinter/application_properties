@@ -12,6 +12,28 @@ TEMP_FILE2=$(mktemp ./"${SCRIPT_NAME}".XXXXXXXXX.txt)
 
 SCRIPT_TITLE="Analyzing project dependencies"
 
+# shellcheck disable=SC2329
+detect_windows() {
+	local uname_out
+	uname_out="$(uname -s 2>/dev/null)"
+
+	case "${uname_out}" in
+	CYGWIN* | MINGW* | MSYS*)
+		echo "Windows (Native Bash via Cygwin/MSYS/Git Bash)"
+		return 0
+		;;
+	Linux*)
+		# Check if it's WSL
+		if grep -qi microsoft /proc/version 2>/dev/null; then
+			echo "Windows (WSL)"
+			return 0
+		fi
+		;;
+	esac
+
+	echo "Not Windows"
+	return 1
+}
 # Perform any cleanup required by the script.
 # shellcheck disable=SC2329
 cleanup_function() {
@@ -19,6 +41,12 @@ cleanup_function() {
 	if [[ ${VERBOSE_MODE} -ne 0 ]]; then
 		echo "{Performing clean up for script '${SCRIPT_NAME}'.}"
 	fi
+
+	# Restore the original code page if modified.
+	if [[ -n "${CODE_PAGE_NUM}" ]]; then
+		chcp.com "${CODE_PAGE_NUM}" >/dev/null 2>&1
+	fi
+	unset PYTHONIOENCODING
 
 	# If the temp file was used, get rid of it.
 	if [ -f "${TEMP_FILE}" ]; then
@@ -139,9 +167,14 @@ parse_command_line "$@"
 # Clean entrance into the script.
 start_process
 
+# Ensure UTF-8 code page on Windows and a way to get back to the original code page.
 # Both tools have issues with UTF-8 on Windows unless these are applied.
+CODE_PAGE_NUM=
+if detect_windows >/dev/null 2>&1; then
+	code_page=$(chcp.com)
+	CODE_PAGE_NUM=$(echo "${code_page}" | awk '{print $4}')
+fi
 export PYTHONIOENCODING=utf-8
-# set PYTHONIOENCODING=utf-8
 
 check_for_updates() {
 	local PACKAGE_TYPE=${1}
@@ -165,6 +198,10 @@ check_for_updates() {
 		complete_process 1 "Error occurred checking filtered Pipfile packages."
 	fi
 	if [[ "${PIPFILE_PACKAGES_NEEDING_UPDATING}" != "0" ]]; then
+		echo "---Requested Changes---"
+		cat "${TEMP_FILE}"
+		echo "-----------------------"
+
 		echo "      ${PIPFILE_PACKAGES_NEEDING_UPDATING} Pipfile packages are eligible for updating."
 		# shellcheck disable=SC2086  # Double quote to prevent splitting and globbing.
 		pipenv run python utils/count_remaining_pcu_packages.py ${DEV_FLAG} "${TEMP_FILE}" --list
@@ -205,6 +242,9 @@ if [[ ${CHECK_MODE} -eq 1 ]]; then
 	if ! pipenv run pre-commit-update --dry-run >"${TEMP_FILE}" 2>&1; then
 		echo "One or more Pre-Commit packages are eligible for updating."
 		NEED_UPDATE=1
+		echo "---Requested Changes---"
+		cat "${TEMP_FILE}"
+		echo "-----------------------"
 	fi
 
 	verbose_echo "Checking for Pipfile package updates..."
