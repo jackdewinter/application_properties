@@ -5,11 +5,16 @@ Tests for the ApplicationProperties class
 import io
 import os
 import sys
+from test.patches.patch_builtin_open import path_builtin_open_with_binary_content
 from test.pytest_helpers import ErrorResults, TestHelpers
 
 from application_properties import ApplicationProperties
 from application_properties.application_properties_toml_loader import (
     ApplicationPropertiesTomlLoader,
+)
+from application_properties.multisource_configuration_loader import (
+    MultisourceConfigurationLoader,
+    MultisourceConfigurationLoaderOptions,
 )
 
 
@@ -315,6 +320,7 @@ md999.test_value
         finally:
             sys.stdout = old_stdout
 
+        # Assert
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
         assert std_output.getvalue() is not None
@@ -358,6 +364,7 @@ tools.bar = "fred"
             "plugins.tools.bar", None, None
         )
 
+        # Assert
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
         assert expected_value == actual_value
@@ -405,6 +412,7 @@ tools.bar = "fred"
             "tools.bar", None, None
         )
 
+        # Assert
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
         assert expected_value == actual_value
@@ -452,6 +460,7 @@ tools.bar = "fred"
             "tools.bar", None, None
         )
 
+        # Assert
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
         assert expected_value == actual_value
@@ -498,6 +507,7 @@ tools.bar = "fred"
             "tools.bar", None, None
         )
 
+        # Assert
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
         assert expected_value == actual_value
@@ -546,6 +556,7 @@ tools.bar = "fred"
             "tools.bar", None, None
         )
 
+        # Assert
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
         assert expected_value == actual_value
@@ -591,6 +602,7 @@ bar = "barney"
             False,
         )
 
+        # Assert
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
         assert results.reported_error is not None
@@ -639,6 +651,7 @@ tools.bar = "fred"
             False,
         )
 
+        # Assert
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
         assert results.reported_error is not None
@@ -685,6 +698,7 @@ def test_toml_loader_toml_file_bad_toml_format_with_item_with_leading_period() -
             False,
         )
 
+        # Assert
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
         assert results.reported_error is not None
@@ -736,6 +750,7 @@ bar = "fred"
             False,
         )
 
+        # Assert
         assert expected_did_apply == actual_did_apply
         assert expected_did_error == actual_did_error
         assert results.reported_error is not None
@@ -743,6 +758,81 @@ bar = "fred"
             results.reported_error
             == f"Specified configuration file '{configuration_file}' is not a valid TOML file: Cannot declare ('plugins', 'tools') twice (at line 4, column 15)."
         )
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)
+
+
+def test_toml_loader_load_toml_implicitly_from_pyproject() -> None:
+    """
+    Test to make sure that we can load a toml file from an implied pyproject.toml file.
+    """
+
+    # Arrange
+    results = ErrorResults()
+    __pyproject_section_header = "tool.pymarkdown"
+    supplied_configuration = """[tool.pymarkdown]
+plugins.md013.enabled = true
+plugins.md013.line_length = 50
+"""
+    expected_value = 50
+
+    pyproject_toml_path = os.path.abspath("pyproject.toml")
+
+    application_properties = ApplicationProperties()
+
+    # Act
+    with path_builtin_open_with_binary_content(
+        pyproject_toml_path, supplied_configuration.encode("utf-8")
+    ):
+        loader = MultisourceConfigurationLoader()
+        loader.add_local_pyproject_toml_file(__pyproject_section_header)
+        loader.process(application_properties, results.keep_error)
+
+    actual_value = application_properties.get_integer_property(
+        "plugins.md013.line_length", -1
+    )
+
+    # Assert
+    assert expected_value == actual_value
+
+
+def test_toml_loader_load_toml_explicitly_from_configuration_file() -> None:
+    """
+    Test to make sure that we can load a toml file from an explicitly named configuration file.
+    """
+
+    # Arrange
+    results = ErrorResults()
+    __pyproject_section_header = "tool.pymarkdown"
+    supplied_configuration = """[tool.pymarkdown]
+plugins.md013.enabled = true
+plugins.md013.line_length = 50
+"""
+    expected_value = 50
+
+    configuration_file = None
+    try:
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
+        application_properties = ApplicationProperties()
+
+        # Act
+        options = MultisourceConfigurationLoaderOptions(
+            section_header_if_toml=__pyproject_section_header
+        )
+        loader = MultisourceConfigurationLoader(options)
+        loader.add_specified_configuration_file(configuration_file)
+        loader.process(application_properties, results.keep_error)
+
+        actual_value = application_properties.get_integer_property(
+            "plugins.md013.line_length", -1
+        )
+
+        # Assert
+        assert expected_value == actual_value
+
     finally:
         if configuration_file and os.path.exists(configuration_file):
             os.remove(configuration_file)

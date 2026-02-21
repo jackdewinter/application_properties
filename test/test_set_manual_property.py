@@ -235,7 +235,7 @@ def test_properties_set_manual_property_with_multiples() -> None:
     full_string_in_array: List[str] = [full_string]
 
     # Act
-    application_properties.set_manual_property(full_string_in_array)  # type: ignore
+    application_properties.set_manual_property(full_string_in_array)
 
     # Assert
     actual_value = application_properties.get_boolean_property(full_property_key)
