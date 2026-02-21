@@ -5,7 +5,7 @@ Module that provides for an encapsulation of properties for an application.
 import contextlib
 import copy
 import logging
-from typing import Any, Callable, Dict, List, Optional, Tuple, cast
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union, cast
 
 LOGGER = logging.getLogger(__name__)
 
@@ -27,7 +27,10 @@ class ApplicationProperties:
     """
 
     def __init__(
-        self, strict_mode: bool = False, convert_untyped_if_possible: bool = False
+        self,
+        strict_mode: bool = False,
+        convert_untyped_if_possible: bool = False,
+        allow_separator_in_keys: bool = False,
     ) -> None:
         """
         Initializes an new instance of the ApplicationProperties class.
@@ -35,6 +38,7 @@ class ApplicationProperties:
         self.__flat_property_map: Dict[str, Any] = {}
         self.__strict_mode: bool = strict_mode
         self.__convert_untyped_if_possible: bool = convert_untyped_if_possible
+        self.__allow_separator_in_keys = allow_separator_in_keys
 
     @property
     def separator(self) -> str:
@@ -94,7 +98,10 @@ class ApplicationProperties:
         self.__flat_property_map.clear()
 
     def load_from_dict(
-        self, config_map: Dict[Any, Any], clear_map: bool = True
+        self,
+        config_map: Dict[Any, Any],
+        clear_map: bool = True,
+        allow_periods_in_keys: bool = False,
     ) -> None:
         """
         Load the properties from a provided dictionary.
@@ -106,7 +113,9 @@ class ApplicationProperties:
         LOGGER.debug("Loading from dictionary: {%s}", str(config_map))
         if clear_map:
             self.clear()
-        self.__scan_map(config_map, "")
+        self.__scan_map(
+            config_map, "", allow_periods_in_keys and self.__allow_separator_in_keys
+        )
 
     @staticmethod
     def verify_full_part_form(property_key: str) -> str:
@@ -181,7 +190,7 @@ class ApplicationProperties:
         ApplicationProperties.verify_full_key_form(property_key)
         return string_to_verify
 
-    def set_manual_property(self, combined_string: str) -> None:
+    def set_manual_property(self, combined_string: Union[str, List[str]]) -> None:
         """
         Manually set a property for the object.
         """
@@ -365,7 +374,7 @@ class ApplicationProperties:
         default_value: Optional[bool] = None,
         is_required: bool = False,
         strict_mode: Optional[bool] = None,
-    ) -> bool:
+    ) -> Optional[bool]:
         """
         Get a boolean property from the configuration.
         """
@@ -389,7 +398,7 @@ class ApplicationProperties:
         valid_value_fn: Optional[Callable[[int], Any]] = None,
         is_required: bool = False,
         strict_mode: Optional[bool] = None,
-    ) -> int:
+    ) -> Optional[int]:
         """
         Get an integer property from the configuration.
         """
@@ -415,7 +424,7 @@ class ApplicationProperties:
         valid_value_fn: Optional[Callable[[str], Any]] = None,
         is_required: bool = False,
         strict_mode: Optional[bool] = None,
-    ) -> str:
+    ) -> Optional[str]:
         """
         Get a string property from the configuration.
         """
@@ -444,28 +453,41 @@ class ApplicationProperties:
             if next_key_name.startswith(key_name)
         ]
 
-    def __scan_map(self, config_map: Dict[Any, Any], current_prefix: str) -> None:
+    # pylint: disable=too-many-boolean-expressions
+    def __scan_map(
+        self,
+        config_map: Dict[Any, Any],
+        current_prefix: str,
+        allow_periods_in_keys: bool,
+    ) -> None:
         for next_key, next_value in config_map.items():
             if not isinstance(next_key, str):
                 raise ValueError(
-                    "All keys in the main dictionary and nested dictionaries must be strings."
+                    f"All keys in the main dictionary and nested dictionaries must be strings (not `{next_key}`)."
                 )
             if (
                 " " in next_key
                 or "\t" in next_key
                 or "\n" in next_key
                 or ApplicationProperties.__assignment_operator in next_key
-                or ApplicationProperties.__separator in next_key
+                or (
+                    ApplicationProperties.__separator in next_key
+                    and not allow_periods_in_keys
+                )
             ):
                 raise ValueError(
-                    "Key strings cannot contain a whitespace character, "
+                    f"Key string `{next_key}` cannot contain a whitespace character, "
                     + f"a '{ApplicationProperties.__assignment_operator}' character, or "
                     + f"a '{ApplicationProperties.__separator}' character."
                 )
+            if ApplicationProperties.__separator in next_key:
+                next_key = f"'{next_key}'"
 
             if isinstance(next_value, dict):
                 self.__scan_map(
-                    next_value, f"{current_prefix}{next_key}{self.__separator}"
+                    next_value,
+                    f"{current_prefix}{next_key}{self.__separator}",
+                    allow_periods_in_keys,
                 )
             else:
                 new_key = f"{current_prefix}{next_key}".lower()
@@ -473,3 +495,5 @@ class ApplicationProperties:
                 LOGGER.debug(
                     "Adding configuration '%s' : {%s}", new_key, str(next_value)
                 )
+
+    # pylint: enable=too-many-boolean-expressions

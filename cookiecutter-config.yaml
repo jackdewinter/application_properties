@@ -1,8 +1,8 @@
 default_context:
     project_name: "application_properties"
-    project_version: "0.8.3"
+    project_version: "0.9.0"
     project_src_additional_path: "" # , stubs
-    project_src_dependencies: "tomli, types-PyYAML"
+    project_src_dependencies: "tomli, types-PyYAML, pytest, pyjson5"
     pypi_package_name: "application_properties"
     github_organization: "jackdewinter"
     github_project_name: "application_properties"

@@ -1,3 +1,4 @@
 typing-extensions>=4.5.0
 tomli>=2.0.1
 pyyaml>=5.4.1
+pyjson5>=1.6.9

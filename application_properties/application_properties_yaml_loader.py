@@ -61,7 +61,9 @@ class ApplicationPropertiesYamlLoader:
             if configuration_map:
                 try:
                     properties_object.load_from_dict(
-                        configuration_map, clear_map=clear_property_map
+                        configuration_map,
+                        clear_map=clear_property_map,
+                        allow_periods_in_keys=True,
                     )
                     did_apply_map = True
                 except ValueError as this_exception:
@@ -99,7 +101,9 @@ class ApplicationPropertiesYamlLoader:
             did_have_one_error = True
             handle_error_fn(formatted_error, this_exception)
 
-        if not isinstance(configuration_map, dict):
+        if configuration_map is None:
+            configuration_map = {}
+        elif not isinstance(configuration_map, dict):
             formatted_error = f"Specified configuration file '{configuration_file}' is not a valid YAML file."
             did_have_one_error = True
             handle_error_fn(formatted_error, None)
