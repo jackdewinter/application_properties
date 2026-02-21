@@ -15,3 +15,5 @@ default_context:
     setup_package_data : "\"\": [\"*.typed\"]"
     rtd_site_name : "Application Properties"
     rtd_deploy_name : "application_properties"
+    pipfile_additional_packages: "pyyaml = \">=5.4.1\",tomli = \">=2.0.1\""
+    install_requirements_additional_packages: "tomli>=2.0.1,pyyaml>=5.4.1"
