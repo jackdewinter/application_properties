@@ -75,7 +75,7 @@ repos:
     -   id: mypy
         name: "Scan:   MyPy"
         args: [--warn-return-any, --strict, application_properties]
-        additional_dependencies: [tomli, types-PyYAML]
+        additional_dependencies: [tomli, types-PyYAML, pyjson5]
         pass_filenames: false
 -   repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.19.1
@@ -83,7 +83,7 @@ repos:
     -   id: mypy
         name: "Scan:   MyPy (test)"
         args: [--warn-return-any, --exclude, test/resources, --strict, test]
-        additional_dependencies: [tomli, types-PyYAML, pytest]
+        additional_dependencies: [tomli, types-PyYAML, pyjson5, pytest]
         pass_filenames: false
 -   repo: https://github.com/jackdewinter/pymarkdown
     rev: v0.9.35
