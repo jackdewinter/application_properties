@@ -1,1 +1,1 @@
-mkdocstrings==0.29.1
+mkdocstrings==1.0.3
