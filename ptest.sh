@@ -24,7 +24,7 @@ verbose_echo() {
 
 load_properties_from_file() {
 
-	verbose_echo "{Loading 'project.properties file'...}"
+	verbose_echo "{Loading 'project.properties' file...}"
 	while IFS='=' read -r key_value; do
 		if [[ ${key_value} == \#* ]]; then
 			continue
@@ -105,6 +105,8 @@ show_usage() {
 	echo "  -f,--full-report        Produce a full report for the executed tests instead of a 'changes only' report."
 	echo "  -w,--workers            Enabled testing with multiple workers."
 	echo "  -k,--keyword [keyword]  Execute only the tests matching the specified keyword."
+	echo "  -m,--markers [markers]  Execute only the tests matching the specified markers."
+	echo "  -i,--individual			Show a line for each test as it completed, for further processing."
 	echo "  -p,--publish            Publish the project summaries of previously executed tests."
 	echo "  -v,--test-verbose		Display a log debug information about each test execution."
 	echo "  -x,--debug              Display debug information about the script as it executes."
@@ -124,9 +126,11 @@ parse_command_line() {
 	PUBLISH_MODE=0
 	MULTIPLE_WORKER_ARGS=
 	KEYWORD_ARG=
+	MARKER_ARG=
 	TEST_VERBOSE_MODE=
 	FAILURE_ARGS="--maxfail=5"
 	GENERATE_HTML_MODE=1
+	INDIVIDUAL_MODE=0
 	PARAMS=()
 	while (("$#")); do
 		case "$1" in
@@ -136,6 +140,10 @@ parse_command_line() {
 			;;
 		-c | --coverage)
 			COVERAGE_MODE=1
+			shift
+			;;
+		-i | --individual)
+			INDIVIDUAL_MODE=1
 			shift
 			;;
 		-f | --full-report)
@@ -148,10 +156,19 @@ parse_command_line() {
 			;;
 		-k | --keyword)
 			if [ -z "${2:-}" ]; then
-				echo "Error: Argument ${1} must be followed by the keyword to use." >&2
+				echo "Error: Argument ${1} must be followed by the keyword or keyword expression to use." >&2
 				show_usage
 			fi
 			KEYWORD_ARG="${2}"
+			shift
+			shift
+			;;
+		-m | --markers)
+			if [ -z "${2:-}" ]; then
+				echo "Error: Argument ${1} must be followed by the marker expression to use." >&2
+				show_usage
+			fi
+			MARKER_ARG="${2}"
 			shift
 			shift
 			;;
@@ -222,6 +239,10 @@ set_test_variables() {
 		KEYWORD_ARG=(-k "${KEYWORD_ARG}")
 	fi
 
+	if [[ -n ${MARKER_ARG} ]]; then
+		MARKER_ARG=(-m "${MARKER_ARG}")
+	fi
+
 	# If we are not told to do a full report, only do the changes.
 	PYSCAN_OPTIONS=
 	if [[ ${PYSCAN_FULL_REPORT_MODE} -eq 0 ]]; then
@@ -249,19 +270,29 @@ execute_tests() {
 	TEST_EXECUTION_SUCCEEDED=1
 
 	# Setup the args to reflect the mode in which the tests are to be invoked.
-	if [[ -n ${KEYWORD_ARG[*]} ]]; then
-		echo "{Executing partial test suite...}"
-	else
-		pytest_args=(--strict-markers -ra --junitxml="${TEST_RESULTS_XML_PATH}")
+	pytest_args=(--strict-markers -ra --junitxml="${TEST_RESULTS_XML_PATH}")
+	if [[ ${INDIVIDUAL_MODE} -ne 0 ]]; then
+		pytest_args+=(-v)
+	fi
+	if [[ ${GENERATE_HTML_MODE} -ne 0 ]]; then
+		pytest_args+=(--html=report/report.html)
+	fi
+	if [[ ${COVERAGE_MODE} -ne 0 ]]; then
+		pytest_args+=(--cov --cov-branch --cov-report xml:"${TEST_COVERAGE_XML_PATH}")
 		if [[ ${GENERATE_HTML_MODE} -ne 0 ]]; then
-			pytest_args+=(--html=report/report.html)
+			pytest_args+=(--cov-report html:report/coverage)
 		fi
+	fi
+
+	if [[ -n ${KEYWORD_ARG[*]} ]] || [[ -n ${MARKER_ARG[*]} ]]; then
+		if [[ ${COVERAGE_MODE} -ne 0 ]]; then
+			echo "{Executing partial test suite with coverage...}"
+		else
+			echo "{Executing partial test suite...}"
+		fi
+	else
 		if [[ ${COVERAGE_MODE} -ne 0 ]]; then
 			echo "{Executing full test suite with coverage...}"
-			pytest_args+=(--cov --cov-branch --cov-report xml:"${TEST_COVERAGE_XML_PATH}")
-			if [[ ${GENERATE_HTML_MODE} -ne 0 ]]; then
-				pytest_args+=(--cov-report html:report/coverage)
-			fi
 		else
 			echo "{Executing full test suite...}"
 		fi
@@ -274,7 +305,7 @@ execute_tests() {
 			--log-format="%(asctime)s %(levelname)s %(message)s" \
 			--log-date-format="%Y-%m-%dT%H:%M:%S.%f" \
 			${TEST_VERBOSE_MODE} \
-			${MULTIPLE_WORKER_ARGS} ${FAILURE_ARGS} "${KEYWORD_ARG[@]}" "${pytest_args[@]}"; then
+			${MULTIPLE_WORKER_ARGS} ${FAILURE_ARGS} "${KEYWORD_ARG[@]}" "${MARKER_ARG[*]}" "${pytest_args[@]}"; then
 			TEST_EXECUTION_SUCCEEDED=0
 		fi
 	else
@@ -283,13 +314,13 @@ execute_tests() {
 			--log-format="%(asctime)s %(levelname)s %(message)s" \
 			--log-date-format="%Y-%m-%dT%H:%M:%S.%f" \
 			${TEST_VERBOSE_MODE} \
-			${MULTIPLE_WORKER_ARGS} ${FAILURE_ARGS} "${KEYWORD_ARG[@]}" "${pytest_args[@]}" >"${TEMP_FILE}" 2>&1; then
+			${MULTIPLE_WORKER_ARGS} ${FAILURE_ARGS} "${KEYWORD_ARG[@]}" "${MARKER_ARG[*]}" "${pytest_args[@]}" >"${TEMP_FILE}" 2>&1; then
 			TEST_EXECUTION_SUCCEEDED=0
 		fi
 	fi
 
 	# If there are "incomplete" testcases in the file, then we were interupted.
-	if grep "<testcase time=" report/tests.xml >"${TEMP_FILE}" 2>&1; then
+	if grep "<testcase time=" "${TEST_RESULTS_XML_PATH}" >"${TEMP_FILE}" 2>&1; then
 		complete_process 1 "{Execution of full tests was interupted. Additional processing skipped.}"
 	fi
 }
@@ -334,7 +365,7 @@ set_test_variables
 
 execute_tests
 
-if [[ -n ${KEYWORD_ARG} ]]; then
+if [[ -n ${KEYWORD_ARG} ]] || [[ -n ${MARKER_ARG} ]]; then
 	if [[ ${TEST_EXECUTION_SUCCEEDED} -eq 0 ]]; then
 		complete_process 1 "{Execution of partial test suite failed.}"
 	fi

@@ -8,6 +8,23 @@ docs_dir: src
 site_dir: site
 plugins:
   - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [..]
+          options:
+            docstring_style: google
+            docstring_section_style: list
+            members_order: source
+            show_source: false
+            group_by_category: false
+            show_symbol_type_heading: true
+            show_root_heading: true
+            show_root_full_path: true
+            show_category_heading: false
+            relative_crossrefs: true
+            signature_crossrefs: false
+
 nav:
   - "Introduction":
     - 'index.md'
@@ -24,17 +41,11 @@ nav:
 markdown_extensions:
   - toc:
       permalink: "#"
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
 theme:
-  name: readthedocs
-  navigation_depth: 2
-  # features:
-  #   - navigation.tabs
-  #   - navigation.top
-  #   - navigation.sections
-  #   - navigation.expand
-  #   - navigation.instant
-  #   - navigation.index
-  #   - navigation.search
-  #   - navigation.search.highlight
-  #   - navigation.search.suggest
-  #   - navigation.search.suggest.autocomplete  
+  name: material
+  features:
+    - content.tabs.link
+  navigation_depth: 5

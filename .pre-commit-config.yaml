@@ -108,6 +108,9 @@ repos:
         -   --config
         -   newdocs/clean.json
         -   scan
+        -   "-r"
+        -   --exclude
+        -   "draft-*.md"
         -   ./newdocs/src
 -   repo: https://github.com/koalaman/shellcheck-precommit
     rev: v0.11.0

@@ -12,7 +12,7 @@ VERBOSE_MODE=1
 load_properties_from_file() {
 
 	if [ "${VERBOSE_MODE}" -ne 0 ]; then
-		echo "{Loading 'project.properties file'...}"
+		echo "{Loading 'project.properties' file...}"
 	fi
 	while IFS='=' read -r key_value; do
 		if [[ ${key_value} == \#* ]]; then

@@ -85,6 +85,7 @@ show_usage() {
 	echo "  -np,--no-publish        Do not publish project summaries if successful."
 	echo "  -ns,--no-sourcery       Do not run any sourcery checks."
 	echo "  -nu,--no-upgrades       Do not run checks for upgrades."
+	echo "  -nw,--no-workers        Do not use multipel workers when executing tests."
 	echo "  -s,--sourcery-only      Only run sourcery checks and exit."
 	echo "  --perf                  Collect standard performance metrics."
 	echo "  --perf-only             Only collect standard performance metrics."
@@ -109,6 +110,7 @@ parse_command_line() {
 	NO_UPGRADE_MODE=0
 	FORCE_RESET_MODE=0
 	RESET_PYTHON_VERSION=
+	WORKERS_MODE=--workers
 	PARAMS=()
 	while (("$#")); do
 		case "$1" in
@@ -135,6 +137,10 @@ parse_command_line() {
 			;;
 		-nu | --no-upgrades)
 			NO_UPGRADE_MODE=1
+			shift
+			;;
+		-nw | --no-workers)
+			WORKERS_MODE=
 			shift
 			;;
 		-s | --sourcery-only)
@@ -189,7 +195,7 @@ parse_command_line() {
 
 load_properties_from_file() {
 
-	verbose_echo "{Loading 'project.properties file'...}"
+	verbose_echo "{Loading 'project.properties' file...}"
 	while IFS='=' read -r key_value; do
 		if [[ ${key_value} == \#* ]]; then
 			continue
@@ -372,7 +378,7 @@ execute_test_suite() {
 
 	echo ""
 	verbose_echo "{Executing unit tests on Python code.}"
-	if ! ./ptest.sh --coverage --workers; then
+	if ! ./ptest.sh --coverage ${WORKERS_MODE}; then
 		complete_process 1 "{Executing application tests failed.}"
 	fi
 }
@@ -439,10 +445,10 @@ if [[ ${PERFORMANCE_ONLY_MODE} -eq 0 ]]; then
 		complete_process 1 "{Packaging of the project failed.}"
 	fi
 
-	# if ! pipenv run pyroma -n 10 . >"${TEMP_FILE}" 2>&1; then
-	# 	cat "${TEMP_FILE}"
-	# 	complete_process 1 "{Executing pyroma on Python code failed.}"
-	# fi
+	if ! pipenv run pyroma -n 10 . >"${TEMP_FILE}" 2>&1; then
+		cat "${TEMP_FILE}"
+		complete_process 1 "{Executing pyroma on Python code failed.}"
+	fi
 fi
 
 if [[ ${PERFORMANCE_MODE} -ne 0 ]]; then

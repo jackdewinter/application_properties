@@ -87,7 +87,7 @@ verbose_echo() {
 
 load_properties_from_file() {
 
-	verbose_echo "{Loading 'project.properties file'...}"
+	verbose_echo "{Loading 'project.properties' file...}"
 	while IFS='=' read -r key_value; do
 		if [[ ${key_value} == \#* ]]; then
 			continue
