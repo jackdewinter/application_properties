@@ -85,7 +85,7 @@ show_usage() {
 	echo "  -np,--no-publish        Do not publish project summaries if successful."
 	echo "  -ns,--no-sourcery       Do not run any sourcery checks."
 	echo "  -nu,--no-upgrades       Do not run checks for upgrades."
-	echo "  -nw,--no-workers        Do not use multipel workers when executing tests."
+	echo "  -nw,--no-workers        Do not use multiple workers when executing tests."
 	echo "  -s,--sourcery-only      Only run sourcery checks and exit."
 	echo "  --perf                  Collect standard performance metrics."
 	echo "  --perf-only             Only collect standard performance metrics."
