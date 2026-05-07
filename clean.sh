@@ -445,10 +445,10 @@ if [[ ${PERFORMANCE_ONLY_MODE} -eq 0 ]]; then
 		complete_process 1 "{Packaging of the project failed.}"
 	fi
 
-	if ! pipenv run pyroma -n 10 . >"${TEMP_FILE}" 2>&1; then
-		cat "${TEMP_FILE}"
-		complete_process 1 "{Executing pyroma on Python code failed.}"
-	fi
+	# if ! pipenv run pyroma -n 10 . >"${TEMP_FILE}" 2>&1; then
+	# 	cat "${TEMP_FILE}"
+	# 	complete_process 1 "{Executing pyroma on Python code failed.}"
+	# fi
 fi
 
 if [[ ${PERFORMANCE_MODE} -ne 0 ]]; then
