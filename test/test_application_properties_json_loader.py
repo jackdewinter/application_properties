@@ -574,3 +574,216 @@ def test_json_loader_with_comments(load_as_json5_file: bool) -> None:
     finally:
         if configuration_file_first and os.path.exists(configuration_file_first):
             os.remove(configuration_file_first)
+
+
+@pytest.mark.parametrize("load_as_json5_file", [True, False])
+def test_json_loader_valid_json_string(load_as_json5_file: bool) -> None:
+    """
+    Test to make sure that we can load a valid Json file.
+    """
+
+    # Arrange
+    application_properties = ApplicationProperties()
+
+    supplied_configuration = {"plugins": {"md999": "value"}}
+
+    expected_value = "value"
+    expected_did_apply = True
+    expected_did_error = False
+
+    configuration_file = None
+    try:
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
+
+        # Act
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesJsonLoader.load_and_set(
+            application_properties,
+            configuration_file,
+            load_as_json5_file=load_as_json5_file,
+        )
+        actual_value = application_properties.get_string_property(
+            "plugins.md999", "bad"
+        )
+
+        # Assert
+        assert expected_value == actual_value
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)
+
+
+@pytest.mark.parametrize("load_as_json5_file", [True, False])
+def test_json_loader_valid_json_integer(load_as_json5_file: bool) -> None:
+    """
+    Test to make sure that we can load a valid Json file.
+    """
+
+    # Arrange
+    application_properties = ApplicationProperties()
+
+    supplied_configuration = {"plugins": {"md999": 100}}
+
+    expected_value = 100
+    expected_did_apply = True
+    expected_did_error = False
+
+    configuration_file = None
+    try:
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
+
+        # Act
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesJsonLoader.load_and_set(
+            application_properties,
+            configuration_file,
+            load_as_json5_file=load_as_json5_file,
+        )
+        actual_value = application_properties.get_integer_property("plugins.md999", -1)
+
+        # Assert
+        assert expected_value == actual_value
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)
+
+
+@pytest.mark.parametrize("load_as_json5_file", [True, False])
+def test_json_loader_valid_json_boolean(load_as_json5_file: bool) -> None:
+    """
+    Test to make sure that we can load a valid Json file.
+    """
+
+    # Arrange
+    application_properties = ApplicationProperties()
+
+    supplied_configuration = {"plugins": {"md999": True}}
+
+    expected_value = True
+    expected_did_apply = True
+    expected_did_error = False
+
+    configuration_file = None
+    try:
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
+
+        # Act
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesJsonLoader.load_and_set(
+            application_properties,
+            configuration_file,
+            load_as_json5_file=load_as_json5_file,
+        )
+        actual_value = application_properties.get_boolean_property(
+            "plugins.md999", False
+        )
+
+        # Assert
+        assert expected_value == actual_value
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)
+
+
+@pytest.mark.parametrize("load_as_json5_file", [True, False])
+def test_json_loader_valid_json_string_list_as_string(load_as_json5_file: bool) -> None:
+    """
+    Test to make sure that we can load a valid Json file.
+    """
+
+    # Arrange
+    application_properties = ApplicationProperties()
+
+    supplied_configuration = {"plugins": {"md999": "value1,value2"}}
+
+    expected_value = ["value1", "value2"]
+    expected_did_apply = True
+    expected_did_error = False
+
+    configuration_file = None
+    try:
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
+
+        # Act
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesJsonLoader.load_and_set(
+            application_properties,
+            configuration_file,
+            load_as_json5_file=load_as_json5_file,
+        )
+        actual_value = application_properties.get_string_list_property(
+            "plugins.md999", ","
+        )
+
+        # Assert
+        assert expected_value == actual_value
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)
+
+
+@pytest.mark.parametrize("load_as_json5_file", [True, False])
+def test_json_loader_valid_json_string_list_as_list(load_as_json5_file: bool) -> None:
+    """
+    Test to make sure that we can load a valid Json file.
+    """
+
+    # Arrange
+    application_properties = ApplicationProperties()
+
+    supplied_configuration = {"plugins": {"md999": ["value1", "value2"]}}
+
+    expected_value = ["value1", "value2"]
+    expected_did_apply = True
+    expected_did_error = False
+
+    configuration_file = None
+    try:
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
+
+        # Act
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesJsonLoader.load_and_set(
+            application_properties,
+            configuration_file,
+            load_as_json5_file=load_as_json5_file,
+        )
+        actual_value = application_properties.get_string_list_property(
+            "plugins.md999", ","
+        )
+
+        # Assert
+        assert expected_value == actual_value
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)

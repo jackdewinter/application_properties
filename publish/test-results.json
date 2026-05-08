@@ -28,7 +28,7 @@
         },
         {
             "name": "test.test_application_properties_json_loader",
-            "totalTests": 20,
+            "totalTests": 30,
             "failedTests": 0,
             "errorTests": 0,
             "skippedTests": 0,
@@ -36,7 +36,7 @@
         },
         {
             "name": "test.test_application_properties_toml_loader",
-            "totalTests": 19,
+            "totalTests": 24,
             "failedTests": 0,
             "errorTests": 0,
             "skippedTests": 0,
@@ -60,7 +60,7 @@
         },
         {
             "name": "test.test_application_properties_yaml_loader",
-            "totalTests": 14,
+            "totalTests": 21,
             "failedTests": 0,
             "errorTests": 0,
             "skippedTests": 0,
@@ -85,6 +85,14 @@
         {
             "name": "test.test_get_string",
             "totalTests": 9,
+            "failedTests": 0,
+            "errorTests": 0,
+            "skippedTests": 0,
+            "elapsedTimeInMilliseconds": 0
+        },
+        {
+            "name": "test.test_get_string_list",
+            "totalTests": 30,
             "failedTests": 0,
             "errorTests": 0,
             "skippedTests": 0,
