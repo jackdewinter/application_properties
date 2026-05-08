@@ -613,3 +613,292 @@ plugins:
     finally:
         if configuration_file and os.path.exists(configuration_file):
             os.remove(configuration_file)
+
+
+def test_yaml_loader_valid_yaml_string() -> None:
+    """
+    Test to make sure that we can load a valid yaml file.
+    """
+
+    # Arrange
+    supplied_configuration = """plugins:
+  md999:
+    test_value: "abc"
+"""
+    expected_value = "abc"
+    expected_did_apply = True
+    expected_did_error = False
+
+    configuration_file = None
+    try:
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
+        application_properties = ApplicationProperties()
+
+        # Act
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesYamlLoader.load_and_set(
+            application_properties, configuration_file, None, None, True, True
+        )
+        actual_value = application_properties.get_string_property(
+            "plugins.md999.test_value", "bad"
+        )
+
+        # Assert
+        assert expected_value == actual_value
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)
+
+
+def test_yaml_loader_valid_yaml_integer() -> None:
+    """
+    Test to make sure that we can load a valid yaml file.
+    """
+
+    # Arrange
+    supplied_configuration = """plugins:
+  md999:
+    test_value: 123
+"""
+    expected_value = 123
+    expected_did_apply = True
+    expected_did_error = False
+
+    configuration_file = None
+    try:
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
+        application_properties = ApplicationProperties()
+
+        # Act
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesYamlLoader.load_and_set(
+            application_properties, configuration_file, None, None, True, True
+        )
+        actual_value = application_properties.get_integer_property(
+            "plugins.md999.test_value", -1
+        )
+
+        # Assert
+        assert expected_value == actual_value
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)
+
+
+def test_yaml_loader_valid_yaml_boolean() -> None:
+    """
+    Test to make sure that we can load a valid yaml file.
+    """
+
+    # Arrange
+    supplied_configuration = """plugins:
+  md999:
+    test_value: True
+"""
+    expected_value = True
+    expected_did_apply = True
+    expected_did_error = False
+
+    configuration_file = None
+    try:
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
+        application_properties = ApplicationProperties()
+
+        # Act
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesYamlLoader.load_and_set(
+            application_properties, configuration_file, None, None, True, True
+        )
+        actual_value = application_properties.get_boolean_property(
+            "plugins.md999.test_value", False
+        )
+
+        # Assert
+        assert expected_value == actual_value
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)
+
+
+def test_yaml_loader_valid_yaml_string_list_as_string_with_quotes() -> None:
+    """
+    Test to make sure that we can load a valid yaml file.
+    """
+
+    # Arrange
+    supplied_configuration = """plugins:
+  md999:
+    test_value: "abc,def"
+"""
+    expected_value = ["abc", "def"]
+    expected_did_apply = True
+    expected_did_error = False
+
+    configuration_file = None
+    try:
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
+        application_properties = ApplicationProperties()
+
+        # Act
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesYamlLoader.load_and_set(
+            application_properties, configuration_file, None, None, True, True
+        )
+        actual_value = application_properties.get_string_list_property(
+            "plugins.md999.test_value", ","
+        )
+
+        # Assert
+        assert expected_value == actual_value
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)
+
+
+def test_yaml_loader_valid_yaml_string_list_as_string_without_quotes() -> None:
+    """
+    Test to make sure that we can load a valid yaml file.
+    """
+
+    # Arrange
+    supplied_configuration = """plugins:
+  md999:
+    test_value: abc,def
+"""
+    expected_value = ["abc", "def"]
+    expected_did_apply = True
+    expected_did_error = False
+
+    configuration_file = None
+    try:
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
+        application_properties = ApplicationProperties()
+
+        # Act
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesYamlLoader.load_and_set(
+            application_properties, configuration_file, None, None, True, True
+        )
+        actual_value = application_properties.get_string_list_property(
+            "plugins.md999.test_value", ","
+        )
+
+        # Assert
+        assert expected_value == actual_value
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)
+
+
+def test_yaml_loader_valid_yaml_string_list_as_list_block_style() -> None:
+    """
+    Test to make sure that we can load a valid yaml file.
+    """
+
+    # Arrange
+    supplied_configuration = """plugins:
+  md999:
+    test_value:
+    - abc
+    - def
+"""
+    expected_value = ["abc", "def"]
+    expected_did_apply = True
+    expected_did_error = False
+
+    configuration_file = None
+    try:
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
+        application_properties = ApplicationProperties()
+
+        # Act
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesYamlLoader.load_and_set(
+            application_properties, configuration_file, None, None, True, True
+        )
+        actual_value = application_properties.get_string_list_property(
+            "plugins.md999.test_value", ","
+        )
+
+        # Assert
+        assert expected_value == actual_value
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)
+
+
+def test_yaml_loader_valid_yaml_string_list_as_list_flow_style() -> None:
+    """
+    Test to make sure that we can load a valid yaml file.
+    """
+
+    # Arrange
+    supplied_configuration = """plugins:
+  md999:
+    test_value: [ abc, def ]
+"""
+    expected_value = ["abc", "def"]
+    expected_did_apply = True
+    expected_did_error = False
+
+    configuration_file = None
+    try:
+        configuration_file = TestHelpers.write_temporary_configuration(
+            supplied_configuration
+        )
+        application_properties = ApplicationProperties()
+
+        # Act
+        (
+            actual_did_apply,
+            actual_did_error,
+        ) = ApplicationPropertiesYamlLoader.load_and_set(
+            application_properties, configuration_file, None, None, True, True
+        )
+        actual_value = application_properties.get_string_list_property(
+            "plugins.md999.test_value", ","
+        )
+
+        # Assert
+        assert expected_value == actual_value
+        assert expected_did_apply == actual_did_apply
+        assert expected_did_error == actual_did_error
+    finally:
+        if configuration_file and os.path.exists(configuration_file):
+            os.remove(configuration_file)

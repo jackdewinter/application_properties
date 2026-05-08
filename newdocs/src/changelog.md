@@ -10,7 +10,10 @@
 <!-- pyml disable-next-line no-duplicate-heading-->
 ### Fixed and Added
 
-- None
+- [Add new `get_string_list_property` api](https://github.com/jackdewinter/application_properties/issues/343)
+    - Adding a new `get_string_list_property` function that transparently allows
+      both comma-separated string lists and configuration file native lists of
+      strings.
 
 ## Version 0.9.2 - Date: 2026-02-07
 

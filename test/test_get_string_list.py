@@ -61,6 +61,26 @@ def test_properties_get_string_list_with_found_string_value_multiple() -> None:
     assert expected_value == actual_value
 
 
+def test_properties_get_string_list_with_found_string_value_multiple_with_whitespace() -> (
+    None
+):
+    """
+    Test fetching a configuration value that is present and a simple string.
+    """
+
+    # Arrange
+    config_map = {"property": " me , you "}
+    application_properties = ApplicationProperties()
+    application_properties.load_from_dict(config_map)
+    expected_value = ["me", "you"]
+
+    # Act
+    actual_value = application_properties.get_string_list_property("property", ",")
+
+    # Assert
+    assert expected_value == actual_value
+
+
 def test_properties_get_string_list_with_found_list_value_multiple() -> None:
     """
     Test fetching a configuration value that is present and a simple string.
@@ -71,6 +91,26 @@ def test_properties_get_string_list_with_found_list_value_multiple() -> None:
     application_properties = ApplicationProperties()
     application_properties.load_from_dict(config_map)
     expected_value = ["me", "you"]
+
+    # Act
+    actual_value = application_properties.get_string_list_property("property", ",")
+
+    # Assert
+    assert expected_value == actual_value
+
+
+def test_properties_get_string_list_with_found_list_value_multiple_with_whitespace() -> (
+    None
+):
+    """
+    Test fetching a configuration value that is present and a simple string.
+    """
+
+    # Arrange
+    config_map = {"property": [" me ", " you ", " and them "]}
+    application_properties = ApplicationProperties()
+    application_properties.load_from_dict(config_map)
+    expected_value = ["me", "you", "and them"]
 
     # Act
     actual_value = application_properties.get_string_list_property("property", ",")
