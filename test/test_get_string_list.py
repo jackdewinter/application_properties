@@ -171,6 +171,58 @@ def test_properties_get_string_list_with_found_string_value_multiple_with_empty_
     assert expected_value == actual_value
 
 
+def test_properties_get_string_list_with_found_string_value_multiple_with_only_ws_strict_mode_on() -> (
+    None
+):
+    """
+    Test fetching a configuration value that is present and a simple string.
+    """
+
+    # Arrange
+    config_map = {"property": "me, ,you"}
+    application_properties = ApplicationProperties()
+    application_properties.load_from_dict(config_map)
+
+    # Act
+    raised_exception = None
+    try:
+        application_properties.get_string_list_property(
+            "property", ",", strict_mode=True
+        )
+        raise AssertionError("Should have raised an exception by now.")
+    except ValueError as this_exception:
+        raised_exception = this_exception
+
+    # Assert
+    assert raised_exception, "Expected exception was not raised."
+    assert (
+        str(raised_exception)
+        == "Configuration item 'property' contains at least one empty element."
+    ), "Expected message was not present in exception."
+
+
+def test_properties_get_string_list_with_found_string_value_multiple_with_only_ws_strict_mode_off() -> (
+    None
+):
+    """
+    Test fetching a configuration value that is present and a simple string.
+    """
+
+    # Arrange
+    config_map = {"property": "me, ,you"}
+    application_properties = ApplicationProperties()
+    application_properties.load_from_dict(config_map)
+    expected_value = None
+
+    # Act
+    actual_value = application_properties.get_string_list_property(
+        "property", ",", strict_mode=False
+    )
+
+    # Assert
+    assert expected_value == actual_value
+
+
 def test_properties_get_string_list_with_found_list_value_multiple_with_empty_strict_mode_on() -> (
     None
 ):
@@ -210,6 +262,58 @@ def test_properties_get_string_list_with_found_list_value_multiple_with_empty_st
 
     # Arrange
     config_map = {"property": ["me", "", "you"]}
+    application_properties = ApplicationProperties()
+    application_properties.load_from_dict(config_map)
+    expected_value = None
+
+    # Act
+    actual_value = application_properties.get_string_list_property(
+        "property", ",", strict_mode=False
+    )
+
+    # Assert
+    assert expected_value == actual_value
+
+
+def test_properties_get_string_list_with_found_list_value_multiple_with_only_ws_strict_mode_on() -> (
+    None
+):
+    """
+    Test fetching a configuration value that is present and a simple string.
+    """
+
+    # Arrange
+    config_map = {"property": ["me", " ", "you"]}
+    application_properties = ApplicationProperties()
+    application_properties.load_from_dict(config_map)
+
+    # Act
+    raised_exception = None
+    try:
+        application_properties.get_string_list_property(
+            "property", ",", strict_mode=True
+        )
+        raise AssertionError("Should have raised an exception by now.")
+    except ValueError as this_exception:
+        raised_exception = this_exception
+
+    # Assert
+    assert raised_exception, "Expected exception was not raised."
+    assert (
+        str(raised_exception)
+        == "Configuration item 'property' contains at least one empty element."
+    ), "Expected message was not present in exception."
+
+
+def test_properties_get_string_list_with_found_list_value_multiple_with_only_ws_strict_mode_off() -> (
+    None
+):
+    """
+    Test fetching a configuration value that is present and a simple string.
+    """
+
+    # Arrange
+    config_map = {"property": ["me", " ", "you"]}
     application_properties = ApplicationProperties()
     application_properties.load_from_dict(config_map)
     expected_value = None

@@ -265,7 +265,10 @@ class ApplicationProperties:
             raise ValueError("The propertyName argument must be a string.")
 
         ApplicationProperties.verify_full_key_form(property_name)
-        return property_name.lower(), bool(strict_mode or self.__strict_mode)
+        effective_strict_mode = (
+            self.__strict_mode if strict_mode is None else bool(strict_mode)
+        )
+        return property_name.lower(), effective_strict_mode
 
     # pylint: disable=too-many-arguments
     def get_property(
@@ -585,7 +588,7 @@ class ApplicationProperties:
 
         # Just do enough checking that we can determine if we need to handle this as a list of strings.
         found_value = self.__flat_property_map.get(property_name, None)
-        if not found_value and is_required:
+        if found_value is None and is_required:
             raise ValueError(
                 f"A value for property '{property_name}' must be provided."
             )
