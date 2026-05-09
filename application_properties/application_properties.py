@@ -258,11 +258,18 @@ class ApplicationProperties:
     def __get_property_prolog(
         self,
         property_name: str,
-        strict_mode: Optional[Any] = None,
+        default_value: Optional[List[str]],
+        is_required: bool,
+        strict_mode: Optional[Any],
     ) -> Tuple[str, bool]:
 
         if not isinstance(property_name, str):
             raise ValueError("The propertyName argument must be a string.")
+
+        if is_required and default_value is not None:
+            raise ValueError(
+                "The 'is_required' parameter cannot be set to 'True' with the 'default_value' parameter set to a value that is not None."
+            )
 
         ApplicationProperties.verify_full_key_form(property_name)
         effective_strict_mode = (
@@ -285,7 +292,7 @@ class ApplicationProperties:
         """
 
         property_name, new_strict_mode = self.__get_property_prolog(
-            property_name, strict_mode
+            property_name, default_value, is_required, strict_mode
         )
 
         if not isinstance(property_type, type):
@@ -583,7 +590,7 @@ class ApplicationProperties:
         Get a list of strings property from the configuration.
         """
         property_name, new_strict_mode = self.__get_property_prolog(
-            property_name, strict_mode
+            property_name, default_value, is_required, strict_mode
         )
 
         # Just do enough checking that we can determine if we need to handle this as a list of strings.

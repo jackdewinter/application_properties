@@ -2,12 +2,12 @@
     "projectName": "application_properties",
     "reportSource": "Unknown",
     "branchLevel": {
-        "totalMeasured": 214,
-        "totalCovered": 214
+        "totalMeasured": 216,
+        "totalCovered": 216
     },
     "lineLevel": {
-        "totalMeasured": 744,
-        "totalCovered": 744
+        "totalMeasured": 746,
+        "totalCovered": 746
     }
 }
 

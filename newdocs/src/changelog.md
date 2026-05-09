@@ -14,6 +14,9 @@
     - Adding a new `get_string_list_property` function that transparently allows
       both comma-separated string lists and configuration file native lists of
       strings.
+- [Fixed confusion about using is_required and default_value at same time](https://github.com/jackdewinter/application_properties/issues/345)
+    - If both are used, it is not clear which should win out. Fixed this by raising
+      a ValueError if both are used.
 
 ## Version 0.9.2 - Date: 2026-02-07
 
