@@ -99,6 +99,14 @@
             "elapsedTimeInMilliseconds": 0
         },
         {
+            "name": "test.test_get_string_list",
+            "totalTests": 30,
+            "failedTests": 0,
+            "errorTests": 0,
+            "skippedTests": 0,
+            "elapsedTimeInMilliseconds": 0
+        },
+        {
             "name": "test.test_multisource_configuration_loader",
             "totalTests": 37,
             "failedTests": 0,
