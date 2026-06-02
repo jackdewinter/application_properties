@@ -8,6 +8,8 @@ docs_dir: src
 site_dir: site
 plugins:
   - search
+  - mermaid2:
+      version: 10.0.2
   - mkdocstrings:
       handlers:
         python:
@@ -29,10 +31,25 @@ nav:
   - "Introduction":
     - 'index.md'
     - 'getting-started.md'
-    - 'file-types.md'
-    - 'command-line.md'
+  - "Quick Start":
+    - 'quick-starts/index.md'
+    - 'quick-starts/installation.md'
+    - 'quick-starts/loaders.md'
+    - 'quick-starts/getters.md'
+    - 'quick-starts/validation.md'
+    - 'quick-starts/layering.md'
+    - 'quick-starts/hierarchy.md'
+    - 'quick-starts/manual.md'
+    - 'quick-starts/advanced.md'
   - "User Guide":
     - 'user-guide.md'
+    - 'basic-concepts.md'
+    - 'file-types.md'
+    - 'layering.md'
+    - 'heavy.md'
+    - 'command-line.md'
+    - "API Listing": api/application_properties.md
+    - 'custom.md'
   - "Usual Project Stuff":
     - 'usual.md'
     - 'contribute.md'
@@ -41,7 +58,17 @@ nav:
 markdown_extensions:
   - toc:
       permalink: "#"
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid_custom
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
   - pymdownx.tabbed:
       alternate_style: true
 theme:

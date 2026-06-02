@@ -666,8 +666,7 @@ def test_properties_get_string_list_with_a_bad_separator() -> None:
     # Assert
     assert raised_exception, "Expected exception was not raised."
     assert (
-        str(raised_exception)
-        == "The value_separator_if_string argument must be a non-empty string."
+        str(raised_exception) == "The delimiter argument must be a non-empty string."
     ), "Expected message was not present in exception."
 
 
@@ -692,8 +691,7 @@ def test_properties_get_string_list_with_an_empty_separator() -> None:
     # Assert
     assert raised_exception, "Expected exception was not raised."
     assert (
-        str(raised_exception)
-        == "The value_separator_if_string argument must be a non-empty string."
+        str(raised_exception) == "The delimiter argument must be a non-empty string."
     ), "Expected message was not present in exception."
 
 

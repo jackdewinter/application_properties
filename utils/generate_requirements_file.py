@@ -92,5 +92,5 @@ if __name__ == "__main__":
     ):
         if package_name in tt:
             continue
-        print(f"{package_name}=={pipefile_map[package_name]}")
+        print(f"{package_name}=={pipefile_map.get(package_name)}")
     print("", flush=True)
