@@ -7,6 +7,8 @@
 
 - None
 
+## Version 0.9.3 - Date: 2026-06-01
+
 <!-- pyml disable-next-line no-duplicate-heading-->
 ### Fixed and Added
 
