@@ -169,6 +169,10 @@ def __abc():
                 f"Failed to read combined dependencies file: {str(this_exception)}"
             )
 
+        if "sourcery" in pipefile_map:
+            print("x")
+            del pipefile_map["sourcery"]
+
         print(f"old:{sorted_map}")
         sorted_map = {i: pipefile_map[i] for i in sorted(pipefile_map.keys())}
         print(f"new:{sorted_map}")
