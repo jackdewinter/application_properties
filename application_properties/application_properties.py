@@ -258,11 +258,18 @@ class ApplicationProperties:
     def __get_property_prolog(
         self,
         property_name: str,
-        strict_mode: Optional[Any] = None,
+        default_value: Optional[List[str]],
+        is_required: bool,
+        strict_mode: Optional[Any],
     ) -> Tuple[str, bool]:
 
         if not isinstance(property_name, str):
             raise ValueError("The propertyName argument must be a string.")
+
+        if is_required and default_value is not None:
+            raise ValueError(
+                "The 'is_required' parameter cannot be set to 'True' with the 'default_value' parameter set to a value that is not None."
+            )
 
         ApplicationProperties.verify_full_key_form(property_name)
         effective_strict_mode = (
@@ -285,7 +292,7 @@ class ApplicationProperties:
         """
 
         property_name, new_strict_mode = self.__get_property_prolog(
-            property_name, strict_mode
+            property_name, default_value, is_required, strict_mode
         )
 
         if not isinstance(property_type, type):
@@ -494,18 +501,13 @@ class ApplicationProperties:
     def __get_string_list_property_string(
         self,
         property_name: str,
-        value_separator_if_string: str,
+        delimiter: Optional[str],
         default_value: Optional[List[str]],
         valid_value_fn: Optional[Callable[[List[str]], Any]],
         strict_mode: bool,
     ) -> Optional[List[str]]:
-        if (
-            not isinstance(value_separator_if_string, str)
-            or not value_separator_if_string
-        ):
-            raise ValueError(
-                "The value_separator_if_string argument must be a non-empty string."
-            )
+        if not isinstance(delimiter, str) or not delimiter:
+            raise ValueError("The delimiter argument must be a non-empty string.")
         self.__validate_string_list_default_value_elements(property_name, default_value)
 
         try:
@@ -521,7 +523,7 @@ class ApplicationProperties:
             return default_value
 
         parsed_list: List[str] = []
-        for next_tag_part in raw_string_value.split(value_separator_if_string):
+        for next_tag_part in raw_string_value.split(delimiter):
             if next_tag_part := next_tag_part.strip(" "):
                 parsed_list.append(next_tag_part)
             elif strict_mode:
@@ -573,7 +575,7 @@ class ApplicationProperties:
     def get_string_list_property(
         self,
         property_name: str,
-        value_separator_if_string: str,
+        delimiter: Optional[str] = None,
         default_value: Optional[List[str]] = None,
         valid_value_fn: Optional[Callable[[List[str]], Any]] = None,
         is_required: bool = False,
@@ -583,7 +585,7 @@ class ApplicationProperties:
         Get a list of strings property from the configuration.
         """
         property_name, new_strict_mode = self.__get_property_prolog(
-            property_name, strict_mode
+            property_name, default_value, is_required, strict_mode
         )
 
         # Just do enough checking that we can determine if we need to handle this as a list of strings.
@@ -604,7 +606,7 @@ class ApplicationProperties:
             )
         return self.__get_string_list_property_string(
             property_name,
-            value_separator_if_string,
+            delimiter,
             default_value,
             valid_value_fn,
             new_strict_mode,

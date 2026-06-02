@@ -1,25 +1,37 @@
 # Command Line Support
 
+While [TBD explain that while it does not directly interface, it is useful to have
+parity between apps]
+
+## XX
+
 Provided as a default, the `ApplicationPropertiesUtilities` class
-includes the `add_default_command_line_arguments` function that provides
-three arguments to the command line:
+includes the `add_default_command_line_arguments` function that
+allows it to add three arguments to an `Argparse` command line:
 
 - `--config` to specify a single configuration file
 - `--set` to specify a single configuration item
 - `--strict-config` to enable strict mode
 
+[reword]
 While users are free to specify their own command line arguments and
 names, the following sections will use these arguments as a baseline.
+[reword]
+
+These three [reword]observqations, what we have seen[reword]
+
+[6](./quick-starts/manual.md)
 
 ## Command Line Configuration Files
 
 The most visible way to specify a configuration file is to use the
 command line `--config` argument.  That argument specifies a relative or absolute
 path to the configuration file to load.  The configuration file may be in any one
-of three formats discussed in the document on [configuration file types](./file-types.md#configuration-file-types).
+of three formats discussed in the [Configuration Files and File Types](./file-types.md#configuration-files-and-file-types)
+section.
 
-Keep in mind that configuration files are firmly in the middle when it comes
-to [configuration layers](./getting-started.md#configuration-ordering-layering)
+Keep in mind that configuration files are usually firmly in the middle when it comes
+to [data source layering](./layering.md#where-to-start)
 that the `application_properties` package supports.  Especially when debugging
 and focusing on other things, it can be easy to forget that there are other
 configuration layers that will override the configuration items in the configuration
@@ -87,7 +99,7 @@ criteria to give your team a good starting point for any discussions.
 General command line settings use the `-s` or `--set` argument to
 specify a single configuration property to set the value for.  The configuration
 item key is identified using
-its [flattened hierarchical format](./getting-started.md#flattened-hierarchical)
+its [flattened hierarchical format](./basic-concepts.md#flattened-hierarchical)
 and an optional [configuration type](./command-line.md#configuration-item-types)
 for the configuration item value. If no configuration type is provided, the property
 uses a default type of `string`.
@@ -134,7 +146,7 @@ table specifies the type behavior:
 The only two interpretations that likely require further explanation are
 the integer and the boolean types.  The integer type attempts to
 translate any characters past the prefix as a signed integer.  The
-boolean type compares any characters past the prefix in a [case-insensitive](./getting-started.md#case-insensitive)
+boolean type compares any characters past the prefix in a [case-insensitive](./basic-concepts.md#case-insensitive)
 manner against the sequence `true`, setting the configuration item's value to `True`
 only if that comparison is true.
 
@@ -211,7 +223,7 @@ that we assign are correct and that those values are not reverting to default va
 
 However, our team's desire for that level of exactness seemed to be at
 cross purposes to our decision to provide for a configuration manager that would
-[work by default](./getting-started.md#our-philosophy-of-work-by-default).  That
+[work by default](./basic-concepts.md#our-philosophy-of-work-by-default).  That
 is where the genesis of the idea
 that would become the configuration manager's strict mode was formed.
 

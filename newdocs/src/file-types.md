@@ -1,37 +1,31 @@
-# Configuration Files
+# Data Sources
 
-When you start building an application, you typically have a small set of configuration
-values to set. At that point, setting those values through command line arguments
-is
-usually the most efficient route to take for your development team. Those arguments
-are flexible
-and easy to control, providing quick feedback on your changes and how they affect
-your application.  At the start of building an application, that flexibility and
-quick
-reaction time is exactly what your team needs.  But as your application grows,
-that small set of configuration
-items grows according to the needs of your application.  For most applications,
-possessing the ability to also specify those configuration items using configuration
-files
-becomes necessary.
+When talking about configuration data, it is important to note that configuration
+data can come from a wide variety of data sources. While there are multiple
+types of data sources, the data sources that are most popular are the
+configuration file data source. The configuration files provide for a simple
+way to provide multiple confiuration items to the application bundled within
+an easiely editable and transportable container: a text file.
 
-Depending on the requirements of your application, your application may need the
-`application_properties`
-configuration manager to provide [strict adherence to typing](./command-line.md#strict-configuration-mode).
-As any application using the `application_properties` package may require it to
-adhere to strict typing,
-it only makes sense that each configuration file format that the package natively
-supports
-also supports typed values to allow for strict typing to occur.  Specifically,
-`application_properties` requires that
-any standard configuration file format support the ability the represent data as
-a string value, an integer value, or a boolean value.  All three of the configuration
-file types listed in the following section adhere to those requirements.
+After that, manually provided configuration items, both directly and indirectly,
+are next on
+the list in terms of popularity. These are both usually provided from the command
+line, and
+are typically used for between one and three configuration items, most often used
+for
+testing purposes. These serve as a great way to test some configuration out
+before promoting them to a given configuration file.
 
-## Configuration File Types
+## Configuration Files and File Types
 
 The `application_properties` package supports configuration files in three formats:
-JSON, YAML and TOML.
+JSON, YAML and TOML. This support was added as  we believe
+that over ninty percent of the applications use one of: JSON, YAML, or TOML.
+Which of these configuration file types your team chooses for your application
+is entirely dependant on your team and their preferences. Everything that we
+talk about in the following sections are informational, trying to provide
+you with our honest take on what the strengths and weeknesses of each of the
+file formats is. It is your team that has the final say.
 
 ### JSON
 
@@ -50,7 +44,7 @@ Here is an example of a JSON configuration file, using a simplified form of the
 configuration file used with the documentation for our
 [PyMarkdown](https://github.com/jackdewinter/pymarkdown) application:
 
-```json
+```json title="sample.json" linenums="1"
 {
     "plugins": {
         "md007": {
@@ -65,6 +59,8 @@ configuration file used with the documentation for our
     }
 }
 ```
+
+#### Details
 
 There are three important things to understand about the JSON configuration
 file format.  The first thing is that the values presented above are typed
@@ -97,18 +93,18 @@ example,
 a JSON file with a four-space indent at each level.  It can also be
 rendered in a condensed format with a zero-space indent as:
 
-```json
+```json title="sample-zero-indent.json" linenums="1"
 {
 "plugins": {
 "md007": {
 "enabled": true,
 "code_block_line_length" : 160
-},
+}
 },
 "extensions": {
 "front-matter" : {
 "enabled" : true
-},
+}
 }
 }
 ```
@@ -116,7 +112,7 @@ rendered in a condensed format with a zero-space indent as:
 or as a single line:
 
 ```json
-{"plugins":{"md007":{"enabled":true,"code_block_line_length":160},},"extensions":{"front-matter":{"enabled":true},}}
+{"plugins":{"md007":{"enabled":true,"code_block_line_length":160}},"extensions":{"front-matter":{"enabled":true}}}
 ```
 
 or with any indent you require without any loss of hierarchy or data.  While that
@@ -128,7 +124,7 @@ readable configuration file, simply because it is more readable.
 
 As of the [v0.9.0](https://github.com/jackdewinter/application_properties/releases/tag/v0.9.0)
 release, the `application_properties` package now supports the loading of JSON
-configuration files using the standard JSON5 library instead of the standard
+configuration files using the new JSON5 library instead of the standard
 JSON library.  While there are five main differences between JSON5 and JSON
 outlined in [this article](https://json-5.com/json-vs-json5), we feel that the
 most important of those five differences is support for comments.
@@ -137,7 +133,7 @@ Having been created in 2001 for the purpose of exchanging data, I doubt that
 the authors foresaw a future in which JSON was being used for the wide range
 of purposes that it is being used for today.  From a configuration file point
 of view, our team feels that one of JSON's weaknesses for representing configuration
-is the lack of comments.  While machines and protocols have little use for comments
+was the lack of comments.  While machines and protocols have little use for comments
 when exchanging data, having the ability to annotate a JSON file with comments
 regarding why a configuration item was set is priceless in terms of understanding
 the configuration and potential future debugging.  Given that viewpoint, we feel
@@ -151,7 +147,7 @@ represent hierarchical data. This acronym, standing for the recursive
 [YAML Ain't Markup Language](https://en.wikipedia.org/wiki/YAML), removes most
 markup characters in favor of a more simplistic approach:
 
-```yaml
+```yaml title="sample.yaml" linenums="1"
 plugins:
   md007:
     enabled: true
@@ -172,10 +168,13 @@ multiple documents by using a `---` separator to denote a new document. However,
 two things that YAML does have that are useful for configuration files are comments
 and the string-block character.
 
+<!-- pyml disable-next-line no-duplicate-heading-->
+#### Details
+
 Comments are a feature that is particularly useful in configuration files, as shown
 in the following example:
 
-```yaml
+```yaml title="sample-with-comments.yaml" linenums="1"
 # See organization standards at https://internal.org.com/standards
 plugins:
   md007:
@@ -192,7 +191,7 @@ Where the block character (`|`) comes into play is when defining strings that
 are long and span multiple lines.  If a string is long and spans multiple lines,
 instead of the following (for a made-up Rule Smt001):
 
-```YAML
+```YAML title="sample-one-line.yaml" linenums="1"
 plugins:
   SMT001:
     response: "Please send any questions\nto our organization mailbox\nat help@internal.org.com"
@@ -200,7 +199,7 @@ plugins:
 
 that string can be represented as:
 
-```YAML
+```YAML title="sample-multiple-lines.yaml" linenums="1"
 plugins:
   SMT001:
     response: |
@@ -212,38 +211,6 @@ at help@internal.org.com"
 While both forms of the `response` field are equal, the block character field
 value is the most readable.
 
-#### Comparison To JSON
-
-Between YAML having fewer moving parts and fewer format
-characters, we feel that YAML mostly wins when it comes to readability.  If you
-are a fan of using tab characters in configuration files, be aware that YAML
-does allow tab characters, but only in situations where indentation does not apply.
-
-The only issue our team has with YAML's readability (hence our statement that YAML
-"mostly wins when it comes to readability") is how its string values are interpreted.
-For example, in YAML:
-
-```YAML
-code_block_line_length: my string
-```
-
-is interpreted as a string, and:
-
-```YAML
-code_block_line_length: "160"
-```
-
-is interpreted as a string, but:
-
-```YAML
-code_block_line_length: 160
-```
-
-is interpreted as a number.  From our point of view, we would like to
-be able to look at YAML field values and to determine their value quickly.
-This could easily be mitigated by a team guideline that states that all YAML string
-fields must use the `'` or `"` characters to denote the string.
-
 ### TOML
 
 Rounding out our list of configuration file formats is the [TOML file format](https://toml.io/en/).
@@ -252,7 +219,7 @@ has gained support as an easy to read and understand file format.  Keeping with
 our established tradition, here is the same configuration presented in TOML
 format.
 
-```toml
+```toml title="sample.toml" linenums="1"
 [plugins.md007]
 enabled = true
 code_block_line_length = 160
@@ -268,27 +235,25 @@ middle ground reminiscent of the [Ini File Format](https://en.wikipedia.org/wiki
 used on Windows machines.
 
 <!-- pyml disable-next-line no-duplicate-heading-->
-#### Added Note
+#### Details
 
 While TOML does not normally support any visible hierarchical structure,
 the format of a TOML file does allow for empty sections and indented values.
 Those features of TOML allow the following TOML hierarchy to be valid:
 
-```toml
-[plugins]
-  [plugins.md007]
-    enabled = true
-    code_block_line_length = 160
+```toml title="sample-dotted-sections.toml" linenums="1"
+[plugins.md007]
+enabled = true
+code_block_line_length = 160
 
-[extensions]
-  [extensions.front-matter]
-    enabled = true
+[extensions.front-matter]
+enabled = true
 ```
 
 even if it is not enforced.  Along those same lines, since the `.` character is
 a valid part of a TOML property name, the following hierarchy is also possible:
 
-```toml
+```toml title="sample-dotted-keys.toml" linenums="1"
 [plugins]
 md007.enabled = true
 md007.code_block_line_length = 160
@@ -297,16 +262,66 @@ md007.code_block_line_length = 160
 front-matter.enabled = true
 ```
 
+#### Special Case: `pyproject.yaml`
+
+The `pyproject.toml` file is a standard TOML file that uses the `tool.application`
+section to contain any PyMarkdown configuration items.  The only difference between
+using the `pyproject.toml` and a normal TOML configuration file is that the user
+must place all configuration items within the `tool.pymarkdown` section.
+Therefore, in all cases, the [flattened hierarchical](./basic-concepts.md#flattened-hierarchical)
+form of the configuration item name must be used.
+
+above needs to be rewritten to specify user's application, not pymarkdown.
+
+```toml title="pyproject.toml" linenums="1"
+[tool.pymarkdown]
+plugins.md007.enabled = true
+plugins.md007.code_block_line_length = 160
+extensions.front-matter.enabled = true
+```
+
+### Manual Configuration Items
+
+Manual configuration items are the place that most configuration systems start.
+These
+items are usually passed on the command line and interpretted in some form before
+being passed to the configuration manager.
+
+These manual configuration items are present in one of two forms: direct and indirect.
+Direct configuration items are when the command-line allows for `key-value` pairs
+to
+be passed directly from the command line. These are flexible, but you can quickly
+get tired of typing in a command line with `--set my.configuration.console.value.first.name=Someone`
+every time you
+want to set that value.
+
+That is where indirect configuration items come into play. Instead of the long name
+specified in the last paragraph, you can provide a command-line option called
+`--console-name`. That option can then take the value provided after it, and add
+the
+proper mapping into a configuration item itself. This approach is recommended for
+options that are frequently used from the command line.
+
+While this option for configuration items is basic, it does keep things simple.
+Instead of complicated schemas for files and their parsers, these values are
+simple `key-value` pairs in the form `key=value`, passed to the configuration manager
+as a list of strings.
+While not an exact analogy, the manual configuration values boil down to the
+following example:
+
+```python title="string_list_sample.py" linenums="1"
+test_value_from_command_line = [
+  "my.configuration.console.value.first.name=Someone",
+  "my.configuration.console.value.last.name=Else"
+]
+```
+
+Because of this, they are often used for writing tests and for experimentation.
+This
+is because the effort taken to change a command-line to add a new argument is pretty
+low.
+
 <!-- pyml disable-next-line no-duplicate-heading-->
-#### Comparison To JSON
-
-After examining the JSON and YAML file formats, TOML is a decent compromise between
-the strictness of JSON and the ease of reading of YAML.  However, in our opinion,
-this tradeoff comes at the expense of a normal hierarchical
-structure.  This tradeoff can be mitigated by one of the examples shown in the last
-section, but that mitigation would have to be enforced by the team, not any TOML
-tooling.
-
 ### Which One Is Best?
 
 The honest answer is that it depends.  Each of the three file formats has its strengths
@@ -322,7 +337,7 @@ you can use for configuration.  The rest is up to you and your team.  And if you
 change your mind in the future, sites like [this one](https://transform.tools/yaml-to-toml)
 allow you to change the file format (with caveats) with ease.
 
-## History of Configuration File Support
+## History of Data Source Support
 
 For those that are interested, this is the journey that our team went on in
 providing expansive support for configuration files in multiple roles.
@@ -332,21 +347,48 @@ linter.  However, before making the decision to include that support into
 feature or a feature that could apply more generally to configuration requirements
 from other systems.
 
+This is presented to you as our recounting of our journey of
+supporting proper configuration data sources in the PyMarkdown project.
+Your journey may differ, but we hope that by telling you about our journey,
+it may offer some insights to your team on how to take a more efficient
+journey than we did!
+
 ### Starting Simple
 
 As with all projects, our team started simply when working on the "parent"
 of `application_properties`, the [PyMarkdown](https://github.com/jackdewinter/pymarkdown)
-application.  During initial development, we used simple flags and variables to
+application.
+During initial development, we used simple flags and variables to
 control what we worked on.  That soon became unwieldy, leading to the development
 of the first iteration of `application_properties`.  That is when we started
-moving those "flags and variables" into configuration files.
+moving those "flags and variables" into configuration files and manual configuration
+item settings.
+
+### Manual
+
+The first version of `application_properties` only supported the `--set` command
+line option. While not glamourous, this command-line option allowed us to start
+moving configuration information out of the application, making it accessable from
+the command line. However, we soon notices that these were easy to use, but they
+were bulky to use in quantities of five or more.
+
+Our first attempt to address this was to suppliment the "direct" command-line `--set`
+option with indirect command-line options, such as `--log-file`. The `--set log.file=mylog.log`
+argument
+quickly became `--log-file mylog.log`. While essentially
+the same, thse indirect options provided a short-cut or short-hand that made setting
+those configuration items slightly less painful. But that win only lasted for a
+short amount of time. As variables and flags were moved into configuration items,
+a way to handle more configuration items in one go was needed. It was time to add
+support for configuration files.
 
 ### Specified Configuration Files
 
-The first version of `application_properties` only supported the `--set` command
-line option and a single JSON configuration file specified using `--config` on
+Next, the `application_properties` package supported a single JSON configuration
+file specified using `--config` on
 the command line.  On all projects that our team has worked on, this is
-usually the first step towards a more complex configuration system.  The `--set`
+usually the first step towards a more complex configuration system. At this point,
+the `--set`
 option allowed for command line overrides and the `--config` option allowed for
 a baseline configuration that could be easily shared.  This also made testing
 easier, as we were able to reuse the setup and keep our command lines shorter.
@@ -391,17 +433,3 @@ file
 and you are using ten or more tools, your project will contain at least five tool-based
 configuration files.  At that point, an alternative project level configuration
 file starts to look attractive.
-
-The `pyproject.toml` file is a standard TOML file that uses the `tool.pymarkdown`
-section to contain any PyMarkdown configuration items.  The only difference between
-using the `pyproject.toml` and a normal TOML configuration file is that the user
-must place all configuration items within the `tool.pymarkdown` section.
-Therefore, in all cases, the [flattened hierarchical](./getting-started.md#flattened-hierarchical)
-form of the configuration item name must be used.
-
-```toml
-[tool.pymarkdown]
-plugins.md007.enabled = true
-plugins.md007.code_block_line_length = 160
-extensions.front-matter.enabled = true
-```

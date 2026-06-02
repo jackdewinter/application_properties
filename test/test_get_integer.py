@@ -2,6 +2,8 @@
 Tests for the get_integer* functions of the ApplicationProperties class
 """
 
+import pytest
+
 from application_properties import ApplicationProperties
 
 
@@ -124,4 +126,57 @@ def test_properties_get_integer_with_a_bad_default() -> None:
     assert (
         str(raised_exception)
         == "The default value for property 'property' must either be None or a 'int' value."
+    ), "Expected message was not present in exception."
+
+
+def test_properties_get_integer_with_is_required_and_default_value() -> None:
+    """
+    Test fetching a configuration value with a default value that is not an integer.
+    """
+
+    # Arrange
+    config_map = {"property": True}
+    application_properties = ApplicationProperties()
+    application_properties.load_from_dict(config_map)
+
+    # Act
+    raised_exception = None
+    try:
+        application_properties.get_integer_property("property", -1, is_required=True)
+        raise AssertionError("Should have raised an exception by now.")
+    except ValueError as this_exception:
+        raised_exception = this_exception
+
+    # Assert
+    assert raised_exception, "Expected exception was not raised."
+    assert (
+        str(raised_exception)
+        == "The 'is_required' parameter cannot be set to 'True' with the 'default_value' parameter set to a value that is not None."
+    ), "Expected message was not present in exception."
+
+
+@pytest.mark.skip
+def test_properties_get_integer_with_is_required_and_null() -> None:
+    """
+    Test fetching a configuration value with a default value that is not an integer.
+    """
+
+    # Arrange
+    config_map = {"property": None}
+    application_properties = ApplicationProperties()
+    application_properties.load_from_dict(config_map)
+
+    # Act
+    raised_exception = None
+    try:
+        application_properties.get_integer_property("property", is_required=True)
+        raise AssertionError("Should have raised an exception by now.")
+    except ValueError as this_exception:
+        raised_exception = this_exception
+
+    # Assert
+    assert raised_exception, "Expected exception was not raised."
+    assert (
+        str(raised_exception)
+        == "The 'is_required' parameter cannot be set to 'True' with the 'default_value' parameter set to a value that is not None."
     ), "Expected message was not present in exception."

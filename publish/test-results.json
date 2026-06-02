@@ -68,7 +68,7 @@
         },
         {
             "name": "test.test_get_boolean",
-            "totalTests": 6,
+            "totalTests": 7,
             "failedTests": 0,
             "errorTests": 0,
             "skippedTests": 0,
@@ -76,15 +76,15 @@
         },
         {
             "name": "test.test_get_integer",
-            "totalTests": 6,
+            "totalTests": 8,
             "failedTests": 0,
             "errorTests": 0,
-            "skippedTests": 0,
+            "skippedTests": 1,
             "elapsedTimeInMilliseconds": 0
         },
         {
             "name": "test.test_get_string",
-            "totalTests": 9,
+            "totalTests": 10,
             "failedTests": 0,
             "errorTests": 0,
             "skippedTests": 0,
@@ -92,7 +92,7 @@
         },
         {
             "name": "test.test_get_string_list",
-            "totalTests": 30,
+            "totalTests": 31,
             "failedTests": 0,
             "errorTests": 0,
             "skippedTests": 0,
